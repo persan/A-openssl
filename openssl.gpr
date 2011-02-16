@@ -1,0 +1,73 @@
+-- ---------------------------------------------
+--
+--
+--
+--
+-- ---------------------------------------------
+project OPenSSL is
+   for Source_Dirs use ("src","src/gen");
+
+   for Object_Dir use ".obj";
+   type Library_Kind_Type is ("static","relocateble");
+   Library_Kind  : Library_Kind_Type := External ("LIBRARY_TYPE", "static");
+   for Library_Dir use "lib/" & project'Name & "/" & Library_Kind;
+
+   for Object_Dir use Project'Object_Dir & "/" & Library_Kind;
+   for Library_Kind use Library_Kind;
+   for Library_Auto_Init use "True";
+   for Library_Name use project'Name;
+
+   -- ========================================================================
+   -- BUILDER
+   -- ========================================================================
+
+   package Builder is
+      for Default_Switches ("Ada") use
+        ("-C", -- Cache source mappings
+         "-k", -- Keep going after compilation errors
+         "-s", -- Recompile if compiler switches have changed
+         "-j" &  External ("NUMBER_OF_PROCESSORS", "1"));
+      for Default_Switches ("C") use Builder'Default_Switches ("Ada");
+      for Default_Switches ("C++") use Builder'Default_Switches ("Ada");
+
+   end Builder;
+
+   package Compiler is
+      for Default_Switches ("Ada") use
+        ("-gnatf",  -- Full source path in brief error messages
+         "-gnatq",  -- Don't quit, try semantics, even if parse errors
+         "-gnatQ",  -- Don't quit, write ali/tree file even if compile errors
+         "-gnat05", -- Full Ada05
+         "-gnato",  -- Overflow checking enabled.
+                  "-gnaty" &
+                      "3" & --  check indentation
+                      "a"  & --  check attribute casing
+                      "A"  & --  check array attribute indexes
+                      "b"  & --  check no blanks at end of lines
+                      "c"  & --  check comment format
+                      "e"  & --  check end/exit labels present
+                      "f"  & --  check no form feeds/vertical tabs in source
+                      "h"  & --  check no horizontal tabs in source
+                      "i"  & --  check if-then layout
+                      "I"  & --  check mode in
+                      "k"  & --  check casing rules for keywords
+                      "l"  & --  check reference manual layout
+                      "n"  & --  check casing of package Standard identifiers
+                      "M4096" &  -- check line length <= nn  characters
+                      "p"  & --  check pragma casing
+                      "r"  & --  check casing for identifier references
+                      "s"  & --  check separate subprogram specs present
+                      "t"  & --  check token separation rules
+                      "x"  & -- check extra parens around conditionals
+         "");
+
+      for Default_Switches ("c") use ();
+      for Default_Switches ("c++") use ();
+   end Compiler;
+
+   package Binder is
+      for Default_Switches ("Ada") use
+        ("-E"); -- Include Stack traceback in Exception message.
+   end Binder;
+
+end OPenSSL;

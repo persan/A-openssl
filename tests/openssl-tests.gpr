@@ -1,0 +1,35 @@
+-- ---------------------------------------------
+--
+--
+--
+--
+-- ---------------------------------------------
+with "../openssl.gpr";
+with "aunit.gpr";
+Project OpenSSL.Tests is
+   for Main use ("openssl-tests-testharnesses-test_all.adb");
+
+   for Source_Dirs use (".",
+                        "testcases");
+
+   for Object_Dir use OpenSSL'Object_Dir;
+   for Exec_Dir use OpenSSL'Exec_Dir;
+
+   for Library_Dir use OpenSSL'Library_Dir;
+
+   package Builder is
+      for Default_Switches ("ada") use
+        OpenSSL.Builder'Default_Switches ("ada");
+   end Builder;
+
+   package Compiler is
+      for Default_Switches ("ada") use
+        OpenSSL.Compiler'Default_Switches ("ada") & ("-gnaty-s");
+   end Compiler;
+
+   package Binder is
+      for Default_Switches ("ada") use
+        OpenSSL.Binder'Default_Switches ("ada");
+   end Binder;
+
+end OpenSSL.Tests;

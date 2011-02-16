@@ -1,0 +1,5 @@
+PREFIX=/opt/GNAT/6.5.0w-20101015/bin/..
+OBJECT_DIR=.obj
+PROJECT=openssl
+export LIBDIR=/lib/ProtoBuff
+export INCLUDEDIR=/include/ProtoBuff

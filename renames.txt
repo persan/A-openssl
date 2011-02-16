@@ -1,0 +1,221 @@
+openssl_aes_h => OpenSSL.Low_Level.aes_h
+openssl_asn1_h => OpenSSL.Low_Level.asn1_h
+openssl_asn1_mac_h => OpenSSL.Low_Level.asn1_mac_h
+openssl_asn1t_h => OpenSSL.Low_Level.asn1t_h
+openssl_bio_h => OpenSSL.Low_Level.bio_h
+openssl_blowfish_h => OpenSSL.Low_Level.blowfish_h
+openssl_buffer_h => OpenSSL.Low_Level.buffer_h
+openssl_camellia_h => OpenSSL.Low_Level.camellia_h
+openssl_cast_h => OpenSSL.Low_Level.cast_h
+openssl_cms_h => OpenSSL.Low_Level.cms_h
+openssl_comp_h => OpenSSL.Low_Level.comp_h
+openssl_conf_api_h => OpenSSL.Low_Level.conf_api_h
+openssl_conf_h => OpenSSL.Low_Level.conf_h
+openssl_crypto_h => OpenSSL.Low_Level.crypto_h
+openssl_des_h => OpenSSL.Low_Level.des_h
+openssl_des_old_h => OpenSSL.Low_Level.des_old_h
+openssl_dh_h => OpenSSL.Low_Level.dh_h
+openssl_dsa_h => OpenSSL.Low_Level.dsa_h
+openssl_dso_h => OpenSSL.Low_Level.dso_h
+openssl_dtls1_h => OpenSSL.Low_Level.dtls1_h
+openssl_ebcdic_h => OpenSSL.Low_Level.ebcdic_h
+openssl_engine_h => OpenSSL.Low_Level.engine_h
+openssl_err_h => OpenSSL.Low_Level.err_h
+openssl_evp_h => OpenSSL.Low_Level.evp_h
+openssl_fips_h => OpenSSL.Low_Level.fips_h
+openssl_fips_rand_h => OpenSSL.Low_Level.fips_rand_h
+openssl_hmac_h => OpenSSL.Low_Level.hmac_h
+openssl_krb5_asn_h => OpenSSL.Low_Level.krb5_asn_h
+openssl_kssl_h => OpenSSL.Low_Level.kssl_h
+openssl_lhash_h => OpenSSL.Low_Level.lhash_h
+openssl_md2_h => OpenSSL.Low_Level.md2_h
+openssl_md4_h => OpenSSL.Low_Level.md4_h
+openssl_md5_h => OpenSSL.Low_Level.md5_h
+openssl_modes_h => OpenSSL.Low_Level.modes_h
+openssl_objects_h => OpenSSL.Low_Level.objects_h
+openssl_ocsp_h => OpenSSL.Low_Level.ocsp_h
+openssl_ossl_typ_h => OpenSSL.Low_Level.ossl_typ_h
+openssl_pem_h => OpenSSL.Low_Level.pem_h
+openssl_pkcs12_h => OpenSSL.Low_Level.pkcs12_h
+openssl_pkcs7_h => OpenSSL.Low_Level.pkcs7_h
+openssl_pqueue_h => OpenSSL.Low_Level.pqueue_h
+openssl_rand_h => OpenSSL.Low_Level.rand_h
+openssl_rc2_h => OpenSSL.Low_Level.rc2_h
+openssl_rc4_h => OpenSSL.Low_Level.rc4_h
+openssl_ripemd_h => OpenSSL.Low_Level.ripemd_h
+openssl_rsa_h => OpenSSL.Low_Level.rsa_h
+openssl_safestack_h => OpenSSL.Low_Level.safestack_h
+openssl_seed_h => OpenSSL.Low_Level.seed_h
+openssl_sha_h => OpenSSL.Low_Level.sha_h
+openssl_ssl2_h => OpenSSL.Low_Level.ssl2_h
+openssl_ssl3_h => OpenSSL.Low_Level.ssl3_h
+openssl_ssl_h => OpenSSL.Low_Level.ssl_h
+openssl_stack_h => OpenSSL.Low_Level.stack_h
+openssl_tls1_h => OpenSSL.Low_Level.tls1_h
+openssl_ts_h => OpenSSL.Low_Level.ts_h
+openssl_txt_db_h => OpenSSL.Low_Level.txt_db_h
+openssl_ui_compat_h => OpenSSL.Low_Level.ui_compat_h
+openssl_ui_h => OpenSSL.Low_Level.ui_h
+openssl_whrlpool_h => OpenSSL.Low_Level.whrlpool_h
+openssl_x509_h => OpenSSL.Low_Level.x509_h
+openssl_x509v3_h => OpenSSL.Low_Level.x509v3_h
+openssl_x509_vfy_h => OpenSSL.Low_Level.x509_vfy_h
+
+__ => _
+
+/usr/include/ =>
+
+limited with cpp_4_5_3_bits_stringfwd_h; => --  limited with cpp_4_5_3_bits_stringfwd_h;
+with cpp_4_5_3_bits_stringfwd_h; => --  with cpp_4_5_3_bits_stringfwd_h;
+
+limited with cpp_4_5_3_bits_stl_map_h;   => --  limited with cpp_4_5_3_bits_stl_map_h;
+with cpp_4_5_3_bits_stl_map_h;   => --  with cpp_4_5_3_bits_stl_map_h;
+
+limited with cpp_4_5_3_bits_basic_string_h; => --  limited with cpp_4_5_3_bits_basic_string_h;
+with cpp_4_5_3_bits_basic_string_h; => --  with cpp_4_5_3_bits_basic_string_h;
+
+limited with cpp_4_5_3_i686_pc_linux_gnu_bits_atomic_word_h; => --  limited with cpp_4_5_3_i686_pc_linux_gnu_bits_atomic_word_h;
+with cpp_4_5_3_i686_pc_linux_gnu_bits_atomic_word_h; => --  with cpp_4_5_3_i686_pc_linux_gnu_bits_atomic_word_h;
+
+
+limited with cpp_4_5_3_bits_stl_vector_h; => --  limited with cpp_4_5_3_bits_stl_vector_h;
+with cpp_4_5_3_bits_stl_vector_h; => --  with cpp_4_5_3_bits_stl_vector_h;
+
+limited with cpp_4_5_3_bits_stl_vector_h; => --  limited with cpp_4_5_3_bits_stl_vector_h;
+with cpp_4_5_3_bits_stl_vector_h; => --  with cpp_4_5_3_bits_stl_vector_h;
+
+limited with cpp_4_5_3_bits_stl_pair_h; => --  limited with cpp_4_5_3_bits_stl_pair_h;
+with cpp_4_5_3_bits_stl_pair_h; => --  with cpp_4_5_3_bits_stl_pair_h;
+
+limited with cpp_4_5_3_iosfwd; => --  limited with cpp_4_5_3_iosfwd;
+with cpp_4_5_3_iosfwd; => --  with cpp_4_5_3_iosfwd;
+
+limited with sys_types_h; => --  limited with sys_types_h;
+with sys_types_h; => --  with sys_types_h;
+
+limited with stdint_h; => --  limited with stdint_h;
+with stdint_h; => --  with stdint_h;
+
+limited with stddef_h; => --  limited with stddef_h;
+with stddef_h; => --  with stddef_h;
+
+limited with cpp_4_5_3_bits_stl_function_h; => --  limited with cpp_4_5_3_bits_stl_function_h;
+with cpp_4_5_3_bits_stl_function_h; => --  with cpp_4_5_3_bits_stl_function_h;
+
+limited with cpp_4_5_3_bits_allocator_h;    => --  limited with cpp_4_5_3_bits_allocator_h;
+with cpp_4_5_3_bits_allocator_h;    => --  with cpp_4_5_3_bits_allocator_h;
+
+limited with cpp_4_5_3_bits_stl_tree_h;     => --  limited with cpp_4_5_3_bits_stl_tree_h;
+with cpp_4_5_3_bits_stl_tree_h;     => --  with cpp_4_5_3_bits_stl_tree_h;
+
+
+limited with bits_pthreadtypes_h; => --  limited with bits_pthreadtypes_h;
+with bits_pthreadtypes_h; => --  with bits_pthreadtypes_h;
+
+limited with cpp_4_5_3_bits_stl_map_h; => --  limited with cpp_4_5_3_bits_stl_map_h;
+with cpp_4_5_3_bits_stl_map_h; => --  with cpp_4_5_3_bits_stl_map_h;
+
+limited with stdio_h; => --  limited with stdio_h;
+with stdio_h; => --  with stdio_h;
+
+limited with time_h; => --  limited with time_h;
+with time_h; => --  with time_h;
+
+
+with bn_h; => --  with bn_h;
+
+stddef_h.size_t      => size_t
+sys_types_h.int8_t   => Interfaces.C.char
+sys_types_h.int16_t  => Interfaces.C.short
+sys_types_h.int32_t  => Interfaces.C.int
+sys_types_h.int64_t  => Interfaces.C.long
+stdint_h.uint8_t     => Interfaces.C.char
+stdint_h.uint16_t    => Interfaces.C.short
+stdint_h.uint32_t    => Interfaces.C.int
+stdint_h.uint64_t    => Interfaces.C.long
+
+stdio_h.FILE         => Interfaces.C_Streams.FILEs
+with stdio_h;        => with Interfaces.C_Streams;
+
+limited with OpenSSL.Low_Level.ossl_typ_h; => --  limited with OpenSSL.Low_Level.ossl_typ_h;
+with OpenSSL.Low_Level.ossl_typ_h; => --  with OpenSSL.Low_Level.ossl_typ_h;
+
+OpenSSL.Low_Level.ossl_typ_h.ASN1_INTEGER => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_ENUMERATED => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_BIT_STRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_OCTET_STRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_PRINTABLESTRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_T61STRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_IA5STRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_GENERALSTRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_UNIVERSALSTRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_BMPSTRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_UTCTIME => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_TIME => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_GENERALIZEDTIME => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_VISIBLESTRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_UTF8STRING => OpenSSL.Low_Level.asn1_h.asn1_string_st
+OpenSSL.Low_Level.ossl_typ_h.ASN1_BOOLEAN => Interfaces.C.int
+OpenSSL.Low_Level.ossl_typ_h.ASN1_NULL => Interfaces.C.int
+
+OpenSSL.Low_Level.ossl_typ_h.BUF_MEM => OpenSSL.Low_Level.buffer_h.buf_mem_st
+OpenSSL.Low_Level.ossl_typ_h.EVP_CIPHER_CTX => OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st
+OpenSSL.Low_Level.ossl_typ_h.EVP_CIPHER => OpenSSL.Low_Level.evp_h.evp_cipher_st
+
+OpenSSL.Low_Level.ossl_typ_h.EVP_MD_CTX => OpenSSL.Low_Level.evp_h.env_md_ctx_st
+OpenSSL.Low_Level.ossl_typ_h.EVP_PKEY => OpenSSL.Low_Level.evp_h.evp_pkey_st
+OpenSSL.Low_Level.ossl_typ_h.EVP_MD => OpenSSL.Low_Level.evp_h.env_md_st
+OpenSSL.Low_Level.ossl_typ_h.DH => OpenSSL.Low_Level.dh_h.dh_st
+OpenSSL.Low_Level.ossl_typ_h.DSA => OpenSSL.Low_Level.dsa_h.dsa_st
+OpenSSL.Low_Level.ossl_typ_h.RSA => OpenSSL.Low_Level.rsa_h.rsa_st
+OpenSSL.Low_Level.ossl_typ_h.RSA_METHOD => OpenSSL.Low_Level.rsa_h.rsa_meth_st
+OpenSSL.Low_Level.ossl_typ_h.RAND_METHOD => is OpenSSL.Low_Level.rand_h.rand_meth_st
+OpenSSL.Low_Level.ossl_typ_h.X509_ALGOR => OpenSSL.Low_Level.x509_h.X509_algor_st
+OpenSSL.Low_Level.ossl_typ_h.X509_CRL => OpenSSL.Low_Level.x509_h.X509_crl_st
+OpenSSL.Low_Level.ossl_typ_h.X509_REVOKED => OpenSSL.Low_Level.x509_h.x509_revoked_st
+OpenSSL.Low_Level.ossl_typ_h.X509_NAME => OpenSSL.Low_Level.x509_h.X509_name_st
+OpenSSL.Low_Level.ossl_typ_h.X509_PUBKEY => OpenSSL.Low_Level.x509_h.X509_pubkey_st
+OpenSSL.Low_Level.ossl_typ_h.X509_STORE => OpenSSL.Low_Level.x509_vfy_h.x509_store_st
+OpenSSL.Low_Level.ossl_typ_h.X509_STORE_CTX => OpenSSL.Low_Level.x509_vfy_h.x509_store_ctx_st
+OpenSSL.Low_Level.ossl_typ_h.X509 => OpenSSL.Low_Level.x509_h.x509_st
+OpenSSL.Low_Level.ossl_typ_h.PKCS8_PRIV_KEY_INFO => OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st
+OpenSSL.Low_Level.ossl_typ_h.X509V3_CTX => OpenSSL.Low_Level.x509v3_h.v3_ext_ctx
+OpenSSL.Low_Level.ossl_typ_h.CONF => OpenSSL.Low_Level.conf_h.conf_st
+OpenSSL.Low_Level.ossl_typ_h.SSL_CTX => OpenSSL.Low_Level.ssl_h.ssl_ctx_st
+OpenSSL.Low_Level.ossl_typ_h.SSL => OpenSSL.Low_Level.ssl_h.ssl_st
+OpenSSL.Low_Level.ossl_typ_h.AUTHORITY_KEYID => OpenSSL.Low_Level.x509v3_h.AUTHORITY_KEYID_st
+OpenSSL.Low_Level.ossl_typ_h.DIST_POINT => OpenSSL.Low_Level.x509v3_h.DIST_POINT_st
+OpenSSL.Low_Level.ossl_typ_h.ISSUING_DIST_POINT => OpenSSL.Low_Level.x509v3_h.ISSUING_DIST_POINT_st
+OpenSSL.Low_Level.ossl_typ_h.NAME_CONSTRAINTS => OpenSSL.Low_Level.x509v3_h.NAME_CONSTRAINTS_st
+OpenSSL.Low_Level.ossl_typ_h.CRYPTO_EX_DATA => OpenSSL.Low_Level.crypto_h.crypto_ex_data_st
+OpenSSL.Low_Level.ossl_typ_h.OCSP_RESPONSE => OpenSSL.Low_Level.ocsp_h.ocsp_response_st
+OpenSSL.Low_Level.ossl_typ_h.OCSP_RESPID => OpenSSL.Low_Level.ocsp_h.ocsp_responder_id_st
+
+
+
+
+(1or16#0400#)  => 1 + 16#0400#
+(2or16#0400#)  => 2 + 16#0400#
+(4or16#0400#or16#0100#)  => 4 + 16#0400# + 16#0100#
+(5or16#0400#or16#0100#)  => 5 + 16#0400# + 16#0100#
+(6or16#0400#)  => 6 + 16#0400#
+(7or16#0200#)  => 7 + 16#0200#
+(8or16#0200#)  => 8 + 16#0200#
+(9or16#0200#)  => 9 + 16#0200#
+(10or16#0200#)  => 10 + 16#0200#
+(11or16#0200#)  => 11 + 16#0200#
+(12or16#0400#or16#0100#)  => 12 + 16#0400# + 16#0100#
+(13or16#0400#or16#0100#)  => 13 + 16#0400# + 16#0100#
+(14or16#0200#)  => 14 + 16#0200#
+(15or16#0200#)  => 15 + 16#0200#
+(16or16#0200#)  => 16 + 16#0200#
+(17or16#0200#)  => 17 + 16#0200#
+(18or16#0200#)  => 18 + 16#0200#
+(19or16#0400#)  => 19 + 16#0400#
+(20or16#0200#)  => 20 + 16#0200#
+(21or16#0400#or16#0100#)  => 21 + 16#0400# + 16#0100#
+(22or16#0200#)  => 22 + 16#0200#
+(23or16#0200#)  => 23 + 16#0200#
+
+access constant is OpenSSL.Low_Level.rand_h.rand_meth_st => access constant OpenSSL.Low_Level.rand_h.rand_meth_st
+return access is OpenSSL.Low_Level.rand_h.rand_meth_st => return access OpenSSL.Low_Level.rand_h.rand_meth_st

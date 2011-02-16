@@ -1,0 +1,5 @@
+.gen
+.obj
+lib
+tests/obj
+

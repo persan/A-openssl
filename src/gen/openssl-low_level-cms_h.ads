@@ -7,6 +7,8 @@ with Interfaces.C.Strings;
 with OpenSSL.Low_Level.x509_h;
 with Interfaces.C_Streams;
 with OpenSSL.Low_Level.evp_h;
+with OpenSSL.Low_Level.x509_vfy_h;
+with OpenSSL.Low_Level.asn1t_h;
 --  with stddef_h;
 
 package OpenSSL.Low_Level.cms_h is
@@ -224,7 +226,7 @@ package OpenSSL.Low_Level.cms_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_GENERAL_NAMES);  -- openssl/cms.h:78
 
-   CMS_ContentInfo_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/cms.h:79
+   CMS_ContentInfo_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/cms.h:79
    pragma Import (C, CMS_ContentInfo_it, "CMS_ContentInfo_it");
 
    function i2d_CMS_ContentInfo (a : System.Address; c_out : System.Address) return int;  -- openssl/cms.h:79
@@ -242,7 +244,7 @@ package OpenSSL.Low_Level.cms_h is
    function CMS_ContentInfo_new return System.Address;  -- openssl/cms.h:79
    pragma Import (C, CMS_ContentInfo_new, "CMS_ContentInfo_new");
 
-   CMS_ReceiptRequest_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/cms.h:80
+   CMS_ReceiptRequest_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/cms.h:80
    pragma Import (C, CMS_ReceiptRequest_it, "CMS_ReceiptRequest_it");
 
    function i2d_CMS_ReceiptRequest (a : System.Address; c_out : System.Address) return int;  -- openssl/cms.h:80

@@ -3,7 +3,7 @@ with Interfaces.C; use Interfaces.C;
 with OpenSSL.Low_Level.stack_h;
 with OpenSSL.Low_Level.asn1_h;
 with System;
-
+with OpenSSL.Low_Level.asn1t_h;
 package OpenSSL.Low_Level.krb5_asn_h is
 
    type krb5_encdata_st is record
@@ -132,7 +132,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_KRB5_AUTHENTBODY);  -- openssl/krb5_asn.h:220
 
-   KRB5_ENCDATA_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:233
+   KRB5_ENCDATA_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:233
    pragma Import (C, KRB5_ENCDATA_it, "KRB5_ENCDATA_it");
 
    function i2d_KRB5_ENCDATA (a : access KRB5_ENCDATA; c_out : System.Address) return int;  -- openssl/krb5_asn.h:233
@@ -150,7 +150,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_ENCDATA_new return access KRB5_ENCDATA;  -- openssl/krb5_asn.h:233
    pragma Import (C, KRB5_ENCDATA_new, "KRB5_ENCDATA_new");
 
-   KRB5_PRINCNAME_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:234
+   KRB5_PRINCNAME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:234
    pragma Import (C, KRB5_PRINCNAME_it, "KRB5_PRINCNAME_it");
 
    function i2d_KRB5_PRINCNAME (a : access KRB5_PRINCNAME; c_out : System.Address) return int;  -- openssl/krb5_asn.h:234
@@ -168,7 +168,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_PRINCNAME_new return access KRB5_PRINCNAME;  -- openssl/krb5_asn.h:234
    pragma Import (C, KRB5_PRINCNAME_new, "KRB5_PRINCNAME_new");
 
-   KRB5_TKTBODY_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:235
+   KRB5_TKTBODY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:235
    pragma Import (C, KRB5_TKTBODY_it, "KRB5_TKTBODY_it");
 
    function i2d_KRB5_TKTBODY (a : access KRB5_TKTBODY; c_out : System.Address) return int;  -- openssl/krb5_asn.h:235
@@ -186,7 +186,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_TKTBODY_new return access KRB5_TKTBODY;  -- openssl/krb5_asn.h:235
    pragma Import (C, KRB5_TKTBODY_new, "KRB5_TKTBODY_new");
 
-   KRB5_APREQBODY_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:236
+   KRB5_APREQBODY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:236
    pragma Import (C, KRB5_APREQBODY_it, "KRB5_APREQBODY_it");
 
    function i2d_KRB5_APREQBODY (a : access KRB5_APREQBODY; c_out : System.Address) return int;  -- openssl/krb5_asn.h:236
@@ -204,7 +204,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_APREQBODY_new return access KRB5_APREQBODY;  -- openssl/krb5_asn.h:236
    pragma Import (C, KRB5_APREQBODY_new, "KRB5_APREQBODY_new");
 
-   KRB5_TICKET_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:237
+   KRB5_TICKET_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:237
    pragma Import (C, KRB5_TICKET_it, "KRB5_TICKET_it");
 
    function i2d_KRB5_TICKET (a : access KRB5_TICKET; c_out : System.Address) return int;  -- openssl/krb5_asn.h:237
@@ -222,7 +222,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_TICKET_new return access KRB5_TICKET;  -- openssl/krb5_asn.h:237
    pragma Import (C, KRB5_TICKET_new, "KRB5_TICKET_new");
 
-   KRB5_APREQ_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:238
+   KRB5_APREQ_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:238
    pragma Import (C, KRB5_APREQ_it, "KRB5_APREQ_it");
 
    function i2d_KRB5_APREQ (a : access KRB5_APREQ; c_out : System.Address) return int;  -- openssl/krb5_asn.h:238
@@ -240,7 +240,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_APREQ_new return access KRB5_APREQ;  -- openssl/krb5_asn.h:238
    pragma Import (C, KRB5_APREQ_new, "KRB5_APREQ_new");
 
-   KRB5_CHECKSUM_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:240
+   KRB5_CHECKSUM_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:240
    pragma Import (C, KRB5_CHECKSUM_it, "KRB5_CHECKSUM_it");
 
    function i2d_KRB5_CHECKSUM (a : access KRB5_CHECKSUM; c_out : System.Address) return int;  -- openssl/krb5_asn.h:240
@@ -258,7 +258,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_CHECKSUM_new return access KRB5_CHECKSUM;  -- openssl/krb5_asn.h:240
    pragma Import (C, KRB5_CHECKSUM_new, "KRB5_CHECKSUM_new");
 
-   KRB5_ENCKEY_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:241
+   KRB5_ENCKEY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:241
    pragma Import (C, KRB5_ENCKEY_it, "KRB5_ENCKEY_it");
 
    function i2d_KRB5_ENCKEY (a : access KRB5_ENCKEY; c_out : System.Address) return int;  -- openssl/krb5_asn.h:241
@@ -276,7 +276,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_ENCKEY_new return access KRB5_ENCKEY;  -- openssl/krb5_asn.h:241
    pragma Import (C, KRB5_ENCKEY_new, "KRB5_ENCKEY_new");
 
-   KRB5_AUTHDATA_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:242
+   KRB5_AUTHDATA_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:242
    pragma Import (C, KRB5_AUTHDATA_it, "KRB5_AUTHDATA_it");
 
    function i2d_KRB5_AUTHDATA (a : access KRB5_AUTHDATA; c_out : System.Address) return int;  -- openssl/krb5_asn.h:242
@@ -294,7 +294,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_AUTHDATA_new return access KRB5_AUTHDATA;  -- openssl/krb5_asn.h:242
    pragma Import (C, KRB5_AUTHDATA_new, "KRB5_AUTHDATA_new");
 
-   KRB5_AUTHENTBODY_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:243
+   KRB5_AUTHENTBODY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:243
    pragma Import (C, KRB5_AUTHENTBODY_it, "KRB5_AUTHENTBODY_it");
 
    function i2d_KRB5_AUTHENTBODY (a : access KRB5_AUTHENTBODY; c_out : System.Address) return int;  -- openssl/krb5_asn.h:243
@@ -312,7 +312,7 @@ package OpenSSL.Low_Level.krb5_asn_h is
    function KRB5_AUTHENTBODY_new return access KRB5_AUTHENTBODY;  -- openssl/krb5_asn.h:243
    pragma Import (C, KRB5_AUTHENTBODY_new, "KRB5_AUTHENTBODY_new");
 
-   KRB5_AUTHENT_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/krb5_asn.h:244
+   KRB5_AUTHENT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/krb5_asn.h:244
    pragma Import (C, KRB5_AUTHENT_it, "KRB5_AUTHENT_it");
 
    function i2d_KRB5_AUTHENT (a : access KRB5_AUTHENT; c_out : System.Address) return int;  -- openssl/krb5_asn.h:244

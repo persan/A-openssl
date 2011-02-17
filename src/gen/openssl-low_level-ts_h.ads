@@ -8,6 +8,9 @@ with System;
 with OpenSSL.Low_Level.bio_h;
 with Interfaces.C.Strings;
 with OpenSSL.Low_Level.conf_h;
+with Interfaces.C_Streams;
+with OpenSSL.Low_Level.x509_vfy_h;
+with OpenSSL.Low_Level.evp_h;
 package OpenSSL.Low_Level.ts_h is
 
    package defs is
@@ -180,7 +183,7 @@ package OpenSSL.Low_Level.ts_h is
       accuracy    : access TS_ACCURACY;  -- openssl/ts.h:179
       ordering    : aliased Interfaces.C.int;  -- openssl/ts.h:180
       nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:181
-      tsa         : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:182
+      tsa         : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:182
       extensions  : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:183
    end record;
    pragma Convention (C_Pass_By_Copy, TS_tst_info_st);  -- openssl/ts.h:172
@@ -219,7 +222,7 @@ package OpenSSL.Low_Level.ts_h is
 
    type ESS_cert_id is record
       hash          : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:266
-      issuer_serial : access ESS_ISSUER_SERIAL;  -- openssl/ts.h:267
+      issuer_serial : access ESS_issuer_serial;  -- openssl/ts.h:267
    end record;
    pragma Convention (C_Pass_By_Copy, ESS_cert_id);  -- openssl/ts.h:264
 
@@ -393,10 +396,10 @@ package OpenSSL.Low_Level.ts_h is
    function TS_ACCURACY_dup (a : access TS_ACCURACY) return access TS_ACCURACY;  -- openssl/ts.h:348
    pragma Import (C, TS_ACCURACY_dup, "TS_ACCURACY_dup");
 
-   function ESS_ISSUER_SERIAL_new return access ESS_ISSUER_SERIAL;  -- openssl/ts.h:350
+   function ESS_ISSUER_SERIAL_new return access ESS_issuer_serial;  -- openssl/ts.h:350
    pragma Import (C, ESS_ISSUER_SERIAL_new, "ESS_ISSUER_SERIAL_new");
 
-   procedure ESS_ISSUER_SERIAL_free (a : access ESS_ISSUER_SERIAL);  -- openssl/ts.h:351
+   procedure ESS_ISSUER_SERIAL_free (a : access ESS_issuer_serial);  -- openssl/ts.h:351
    pragma Import (C, ESS_ISSUER_SERIAL_free, "ESS_ISSUER_SERIAL_free");
 
    function i2d_ESS_ISSUER_SERIAL (a : System.Address; pp : System.Address) return int;  -- openssl/ts.h:352
@@ -405,16 +408,16 @@ package OpenSSL.Low_Level.ts_h is
    function d2i_ESS_ISSUER_SERIAL
      (a      : System.Address;
       pp     : System.Address;
-      length : long) return access ESS_ISSUER_SERIAL;  -- openssl/ts.h:354
+      length : long) return access ESS_issuer_serial;  -- openssl/ts.h:354
    pragma Import (C, d2i_ESS_ISSUER_SERIAL, "d2i_ESS_ISSUER_SERIAL");
 
-   function ESS_ISSUER_SERIAL_dup (a : access ESS_ISSUER_SERIAL) return access ESS_ISSUER_SERIAL;  -- openssl/ts.h:356
+   function ESS_ISSUER_SERIAL_dup (a : access ESS_issuer_serial) return access ESS_issuer_serial;  -- openssl/ts.h:356
    pragma Import (C, ESS_ISSUER_SERIAL_dup, "ESS_ISSUER_SERIAL_dup");
 
-   function ESS_CERT_ID_new return access ESS_CERT_ID;  -- openssl/ts.h:358
+   function ESS_CERT_ID_new return access ESS_cert_id;  -- openssl/ts.h:358
    pragma Import (C, ESS_CERT_ID_new, "ESS_CERT_ID_new");
 
-   procedure ESS_CERT_ID_free (a : access ESS_CERT_ID);  -- openssl/ts.h:359
+   procedure ESS_CERT_ID_free (a : access ESS_cert_id);  -- openssl/ts.h:359
    pragma Import (C, ESS_CERT_ID_free, "ESS_CERT_ID_free");
 
    function i2d_ESS_CERT_ID (a : System.Address; pp : System.Address) return int;  -- openssl/ts.h:360
@@ -423,16 +426,16 @@ package OpenSSL.Low_Level.ts_h is
    function d2i_ESS_CERT_ID
      (a      : System.Address;
       pp     : System.Address;
-      length : long) return access ESS_CERT_ID;  -- openssl/ts.h:361
+      length : long) return access ESS_cert_id;  -- openssl/ts.h:361
    pragma Import (C, d2i_ESS_CERT_ID, "d2i_ESS_CERT_ID");
 
-   function ESS_CERT_ID_dup (a : access ESS_CERT_ID) return access ESS_CERT_ID;  -- openssl/ts.h:363
+   function ESS_CERT_ID_dup (a : access ESS_cert_id) return access ESS_cert_id;  -- openssl/ts.h:363
    pragma Import (C, ESS_CERT_ID_dup, "ESS_CERT_ID_dup");
 
-   function ESS_SIGNING_CERT_new return access ESS_SIGNING_CERT;  -- openssl/ts.h:365
+   function ESS_SIGNING_CERT_new return access ESS_signing_cert;  -- openssl/ts.h:365
    pragma Import (C, ESS_SIGNING_CERT_new, "ESS_SIGNING_CERT_new");
 
-   procedure ESS_SIGNING_CERT_free (a : access ESS_SIGNING_CERT);  -- openssl/ts.h:366
+   procedure ESS_SIGNING_CERT_free (a : access ESS_signing_cert);  -- openssl/ts.h:366
    pragma Import (C, ESS_SIGNING_CERT_free, "ESS_SIGNING_CERT_free");
 
    function i2d_ESS_SIGNING_CERT (a : System.Address; pp : System.Address) return int;  -- openssl/ts.h:367
@@ -441,10 +444,10 @@ package OpenSSL.Low_Level.ts_h is
    function d2i_ESS_SIGNING_CERT
      (a      : System.Address;
       pp     : System.Address;
-      length : long) return access ESS_SIGNING_CERT;  -- openssl/ts.h:369
+      length : long) return access ESS_signing_cert;  -- openssl/ts.h:369
    pragma Import (C, d2i_ESS_SIGNING_CERT, "d2i_ESS_SIGNING_CERT");
 
-   function ESS_SIGNING_CERT_dup (a : access ESS_SIGNING_CERT) return access ESS_SIGNING_CERT;  -- openssl/ts.h:371
+   function ESS_SIGNING_CERT_dup (a : access ESS_signing_cert) return access ESS_signing_cert;  -- openssl/ts.h:371
    pragma Import (C, ESS_SIGNING_CERT_dup, "ESS_SIGNING_CERT_dup");
 
    function TS_REQ_set_version (a : access TS_REQ; version : long) return int;  -- openssl/ts.h:375
@@ -519,15 +522,15 @@ package OpenSSL.Low_Level.ts_h is
       lastpos : int) return int;  -- openssl/ts.h:401
    pragma Import (C, TS_REQ_get_ext_by_critical, "TS_REQ_get_ext_by_critical");
 
-   function TS_REQ_get_ext (a : access TS_REQ; loc : int) return access OpenSSL.Low_Level.x509_h.X509_EXTENSION;  -- openssl/ts.h:402
+   function TS_REQ_get_ext (a : access TS_REQ; loc : int) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/ts.h:402
    pragma Import (C, TS_REQ_get_ext, "TS_REQ_get_ext");
 
-   function TS_REQ_delete_ext (a : access TS_REQ; loc : int) return access OpenSSL.Low_Level.x509_h.X509_EXTENSION;  -- openssl/ts.h:403
+   function TS_REQ_delete_ext (a : access TS_REQ; loc : int) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/ts.h:403
    pragma Import (C, TS_REQ_delete_ext, "TS_REQ_delete_ext");
 
    function TS_REQ_add_ext
      (a   : access TS_REQ;
-      ex  : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+      ex  : access OpenSSL.Low_Level.x509_h.X509_extension_st;
       loc : int) return int;  -- openssl/ts.h:404
    pragma Import (C, TS_REQ_add_ext, "TS_REQ_add_ext");
 
@@ -625,10 +628,10 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_get_nonce (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:452
    pragma Import (C, TS_TST_INFO_get_nonce, "TS_TST_INFO_get_nonce");
 
-   function TS_TST_INFO_set_tsa (a : access TS_TST_INFO; tsa : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME) return int;  -- openssl/ts.h:454
+   function TS_TST_INFO_set_tsa (a : access TS_TST_INFO; tsa : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME) return int;  -- openssl/ts.h:454
    pragma Import (C, TS_TST_INFO_set_tsa, "TS_TST_INFO_set_tsa");
 
-   function TS_TST_INFO_get_tsa (a : access TS_TST_INFO) return access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:455
+   function TS_TST_INFO_get_tsa (a : access TS_TST_INFO) return access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:455
    pragma Import (C, TS_TST_INFO_get_tsa, "TS_TST_INFO_get_tsa");
 
    function TS_TST_INFO_get_exts (a : access TS_TST_INFO) return access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:457
@@ -658,15 +661,15 @@ package OpenSSL.Low_Level.ts_h is
       lastpos : int) return int;  -- openssl/ts.h:462
    pragma Import (C, TS_TST_INFO_get_ext_by_critical, "TS_TST_INFO_get_ext_by_critical");
 
-   function TS_TST_INFO_get_ext (a : access TS_TST_INFO; loc : int) return access OpenSSL.Low_Level.x509_h.X509_EXTENSION;  -- openssl/ts.h:463
+   function TS_TST_INFO_get_ext (a : access TS_TST_INFO; loc : int) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/ts.h:463
    pragma Import (C, TS_TST_INFO_get_ext, "TS_TST_INFO_get_ext");
 
-   function TS_TST_INFO_delete_ext (a : access TS_TST_INFO; loc : int) return access OpenSSL.Low_Level.x509_h.X509_EXTENSION;  -- openssl/ts.h:464
+   function TS_TST_INFO_delete_ext (a : access TS_TST_INFO; loc : int) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/ts.h:464
    pragma Import (C, TS_TST_INFO_delete_ext, "TS_TST_INFO_delete_ext");
 
    function TS_TST_INFO_add_ext
      (a   : access TS_TST_INFO;
-      ex  : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+      ex  : access OpenSSL.Low_Level.x509_h.X509_extension_st;
       loc : int) return int;  -- openssl/ts.h:465
    pragma Import (C, TS_TST_INFO_add_ext, "TS_TST_INFO_add_ext");
 
@@ -687,7 +690,7 @@ package OpenSSL.Low_Level.ts_h is
 
    type TS_extension_cb is access function
      (arg1 : System.Address;
-      arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+      arg2 : access OpenSSL.Low_Level.x509_h.X509_extension_st;
       arg3 : System.Address) return int;  -- openssl/ts.h:501
 
    type stack_st_EVP_MD;
@@ -713,7 +716,7 @@ package OpenSSL.Low_Level.ts_h is
       time_cb_data           : System.Address;  -- openssl/ts.h:523
       extension_cb           : access function
         (arg1 : access TS_resp_ctx;
-         arg2                   : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+         arg2                   : access OpenSSL.Low_Level.x509_h.X509_extension_st;
          arg3                   : System.Address) return int;  -- openssl/ts.h:525
       extension_cb_data      : System.Address;  -- openssl/ts.h:526
       request                : access TS_REQ;  -- openssl/ts.h:529
@@ -784,7 +787,7 @@ package OpenSSL.Low_Level.ts_h is
      (ctx  : access TS_RESP_CTX;
       cb   : access function
         (arg1 : access TS_resp_ctx;
-         arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+         arg2 : access OpenSSL.Low_Level.x509_h.X509_extension_st;
          arg3 : System.Address) return int;
       data : System.Address);  -- openssl/ts.h:584
    pragma Import (C, TS_RESP_CTX_set_extension_cb, "TS_RESP_CTX_set_extension_cb");
@@ -830,29 +833,29 @@ package OpenSSL.Low_Level.ts_h is
       imprint_len : aliased unsigned;  -- openssl/ts.h:671
       data        : access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ts.h:674
       nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:677
-      tsa_name    : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:680
+      tsa_name    : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:680
    end record;
    pragma Convention (C_Pass_By_Copy, TS_verify_ctx);  -- openssl/ts.h:655
 
-   function TS_RESP_verify_response (ctx : access TS_VERIFY_CTX; response : access TS_RESP) return int;  -- openssl/ts.h:683
+   function TS_RESP_verify_response (ctx : access TS_verify_ctx; response : access TS_RESP) return int;  -- openssl/ts.h:683
    pragma Import (C, TS_RESP_verify_response, "TS_RESP_verify_response");
 
-   function TS_RESP_verify_token (ctx : access TS_VERIFY_CTX; token : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st) return int;  -- openssl/ts.h:684
+   function TS_RESP_verify_token (ctx : access TS_verify_ctx; token : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st) return int;  -- openssl/ts.h:684
    pragma Import (C, TS_RESP_verify_token, "TS_RESP_verify_token");
 
-   function TS_VERIFY_CTX_new return access TS_VERIFY_CTX;  -- openssl/ts.h:692
+   function TS_VERIFY_CTX_new return access TS_verify_ctx;  -- openssl/ts.h:692
    pragma Import (C, TS_VERIFY_CTX_new, "TS_VERIFY_CTX_new");
 
-   procedure TS_VERIFY_CTX_init (ctx : access TS_VERIFY_CTX);  -- openssl/ts.h:693
+   procedure TS_VERIFY_CTX_init (ctx : access TS_verify_ctx);  -- openssl/ts.h:693
    pragma Import (C, TS_VERIFY_CTX_init, "TS_VERIFY_CTX_init");
 
-   procedure TS_VERIFY_CTX_free (ctx : access TS_VERIFY_CTX);  -- openssl/ts.h:694
+   procedure TS_VERIFY_CTX_free (ctx : access TS_verify_ctx);  -- openssl/ts.h:694
    pragma Import (C, TS_VERIFY_CTX_free, "TS_VERIFY_CTX_free");
 
-   procedure TS_VERIFY_CTX_cleanup (ctx : access TS_VERIFY_CTX);  -- openssl/ts.h:695
+   procedure TS_VERIFY_CTX_cleanup (ctx : access TS_verify_ctx);  -- openssl/ts.h:695
    pragma Import (C, TS_VERIFY_CTX_cleanup, "TS_VERIFY_CTX_cleanup");
 
-   function TS_REQ_to_TS_VERIFY_CTX (req : access TS_REQ; ctx : access TS_VERIFY_CTX) return access TS_VERIFY_CTX;  -- openssl/ts.h:713
+   function TS_REQ_to_TS_VERIFY_CTX (req : access TS_REQ; ctx : access TS_verify_ctx) return access TS_verify_ctx;  -- openssl/ts.h:713
    pragma Import (C, TS_REQ_to_TS_VERIFY_CTX, "TS_REQ_to_TS_VERIFY_CTX");
 
    function TS_RESP_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_RESP) return int;  -- openssl/ts.h:717

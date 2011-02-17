@@ -1,11 +1,13 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
---  with OpenSSL.Low_Level.ossl_typ_h;
 with OpenSSL.Low_Level.asn1_h;
---  limited --  with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.bio_h;
-
+with Interfaces.C_Streams;
+with OpenSSL.Low_Level.bn_h;
+with OpenSSL.Low_Level.crypto_h;
+with OpenSSL.Low_Level.evp_h;
+with OpenSSL.Low_Level.asn1t_h;
 package OpenSSL.Low_Level.rsa_h is
    package defs is
 
@@ -172,6 +174,7 @@ package OpenSSL.Low_Level.rsa_h is
       RSA_R_VALUE_MISSING  : constant := 147;  --  openssl/rsa.h:525
       RSA_R_WRONG_SIGNATURE_LENGTH : constant := 119;  --  openssl/rsa.h:526
    end defs;
+   type rsa_st;
    type rsa_meth_st is record
       name         : Interfaces.C.Strings.chars_ptr;  -- openssl/rsa.h:102
       rsa_pub_enc  : access function
@@ -220,14 +223,14 @@ package OpenSSL.Low_Level.rsa_h is
          arg3         : unsigned;
          arg4         : access unsigned_char;
          arg5         : access unsigned;
-         arg6         : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:132
+         arg6         : access constant  rsa_st) return int;  -- openssl/rsa.h:132
       rsa_verify   : access function
         (arg1 : int;
          arg2         : access unsigned_char;
          arg3         : unsigned;
          arg4         : access unsigned_char;
          arg5         : unsigned;
-         arg6         : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:136
+         arg6         : access constant  rsa_st) return int;  -- openssl/rsa.h:136
       rsa_keygen   : access function
         (arg1 : System.Address;
          arg2         : int;
@@ -239,7 +242,7 @@ package OpenSSL.Low_Level.rsa_h is
    type rsa_st is record
       pad            : aliased int;  -- openssl/rsa.h:148
       version        : aliased long;  -- openssl/rsa.h:149
-      meth           : access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/rsa.h:150
+      meth           : access constant  rsa_meth_st;  -- openssl/rsa.h:150
       the_engine     : System.Address;  -- openssl/rsa.h:152
       n              : access OpenSSL.Low_Level.bn_h.bignum_st;  -- openssl/rsa.h:153
       e              : access OpenSSL.Low_Level.bn_h.bignum_st;  -- openssl/rsa.h:154
@@ -261,13 +264,13 @@ package OpenSSL.Low_Level.rsa_h is
    end record;
    pragma Convention (C_Pass_By_Copy, rsa_st);  -- openssl/rsa.h:144
 
-   function RSA_new return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:275
+   function RSA_new return access  rsa_st;  -- openssl/rsa.h:275
    pragma Import (C, RSA_new, "RSA_new");
 
-   function RSA_new_method (the_engine : System.Address) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:276
+   function RSA_new_method (the_engine : System.Address) return access  rsa_st;  -- openssl/rsa.h:276
    pragma Import (C, RSA_new_method, "RSA_new_method");
 
-   function RSA_size (arg1 : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:277
+   function RSA_size (arg1 : access constant  rsa_st) return int;  -- openssl/rsa.h:277
    pragma Import (C, RSA_size, "RSA_size");
 
    function RSA_generate_key
@@ -277,18 +280,18 @@ package OpenSSL.Low_Level.rsa_h is
         (arg1 : int;
          arg2 : int;
          arg3 : System.Address);
-      cb_arg   : System.Address) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:281
+      cb_arg   : System.Address) return access  rsa_st;  -- openssl/rsa.h:281
    pragma Import (C, RSA_generate_key, "RSA_generate_key");
 
    function RSA_generate_key_ex
-     (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (the_rsa : access  rsa_st;
       bits    : int;
       e       : access OpenSSL.Low_Level.bn_h.bignum_st;
       cb      : access OpenSSL.Low_Level.bn_h.bn_gencb_st) return int;  -- openssl/rsa.h:286
    pragma Import (C, RSA_generate_key_ex, "RSA_generate_key_ex");
 
    function RSA_X931_derive_ex
-     (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (the_rsa : access  rsa_st;
       p1      : access OpenSSL.Low_Level.bn_h.bignum_st;
       p2      : access OpenSSL.Low_Level.bn_h.bignum_st;
       q1      : access OpenSSL.Low_Level.bn_h.bignum_st;
@@ -304,20 +307,20 @@ package OpenSSL.Low_Level.rsa_h is
    pragma Import (C, RSA_X931_derive_ex, "RSA_X931_derive_ex");
 
    function RSA_X931_generate_key_ex
-     (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (the_rsa : access  rsa_st;
       bits    : int;
       e       : access constant OpenSSL.Low_Level.bn_h.bignum_st;
       cb      : access OpenSSL.Low_Level.bn_h.bn_gencb_st) return int;  -- openssl/rsa.h:291
    pragma Import (C, RSA_X931_generate_key_ex, "RSA_X931_generate_key_ex");
 
-   function RSA_check_key (arg1 : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:293
+   function RSA_check_key (arg1 : access constant  rsa_st) return int;  -- openssl/rsa.h:293
    pragma Import (C, RSA_check_key, "RSA_check_key");
 
    function RSA_public_encrypt
      (flen    : int;
       from    : access unsigned_char;
       to      : access unsigned_char;
-      the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+      the_rsa : access  rsa_st;
       padding : int) return int;  -- openssl/rsa.h:295
    pragma Import (C, RSA_public_encrypt, "RSA_public_encrypt");
 
@@ -325,7 +328,7 @@ package OpenSSL.Low_Level.rsa_h is
      (flen    : int;
       from    : access unsigned_char;
       to      : access unsigned_char;
-      the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+      the_rsa : access  rsa_st;
       padding : int) return int;  -- openssl/rsa.h:297
    pragma Import (C, RSA_private_encrypt, "RSA_private_encrypt");
 
@@ -333,7 +336,7 @@ package OpenSSL.Low_Level.rsa_h is
      (flen    : int;
       from    : access unsigned_char;
       to      : access unsigned_char;
-      the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+      the_rsa : access  rsa_st;
       padding : int) return int;  -- openssl/rsa.h:299
    pragma Import (C, RSA_public_decrypt, "RSA_public_decrypt");
 
@@ -341,78 +344,78 @@ package OpenSSL.Low_Level.rsa_h is
      (flen    : int;
       from    : access unsigned_char;
       to      : access unsigned_char;
-      the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+      the_rsa : access  rsa_st;
       padding : int) return int;  -- openssl/rsa.h:301
    pragma Import (C, RSA_private_decrypt, "RSA_private_decrypt");
 
-   procedure RSA_free (r : access OpenSSL.Low_Level.rsa_h.rsa_st);  -- openssl/rsa.h:303
+   procedure RSA_free (r : access  rsa_st);  -- openssl/rsa.h:303
    pragma Import (C, RSA_free, "RSA_free");
 
-   function RSA_up_ref (r : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:305
+   function RSA_up_ref (r : access  rsa_st) return int;  -- openssl/rsa.h:305
    pragma Import (C, RSA_up_ref, "RSA_up_ref");
 
-   function RSA_flags (r : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:307
+   function RSA_flags (r : access constant  rsa_st) return int;  -- openssl/rsa.h:307
    pragma Import (C, RSA_flags, "RSA_flags");
 
-   procedure RSA_set_default_method (meth : access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st);  -- openssl/rsa.h:309
+   procedure RSA_set_default_method (meth : access constant  rsa_meth_st);  -- openssl/rsa.h:309
    pragma Import (C, RSA_set_default_method, "RSA_set_default_method");
 
-   function RSA_get_default_method return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/rsa.h:310
+   function RSA_get_default_method return access constant  rsa_meth_st;  -- openssl/rsa.h:310
    pragma Import (C, RSA_get_default_method, "RSA_get_default_method");
 
-   function RSA_get_method (the_rsa : access constant OpenSSL.Low_Level.rsa_h.rsa_st) return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/rsa.h:311
+   function RSA_get_method (the_rsa : access constant  rsa_st) return access constant  rsa_meth_st;  -- openssl/rsa.h:311
    pragma Import (C, RSA_get_method, "RSA_get_method");
 
-   function RSA_set_method (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st; meth : access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st) return int;  -- openssl/rsa.h:312
+   function RSA_set_method (the_rsa : access  rsa_st; meth : access constant  rsa_meth_st) return int;  -- openssl/rsa.h:312
    pragma Import (C, RSA_set_method, "RSA_set_method");
 
-   function RSA_memory_lock (r : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:315
+   function RSA_memory_lock (r : access  rsa_st) return int;  -- openssl/rsa.h:315
    pragma Import (C, RSA_memory_lock, "RSA_memory_lock");
 
-   function RSA_PKCS1_SSLeay return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/rsa.h:318
+   function RSA_PKCS1_SSLeay return access constant  rsa_meth_st;  -- openssl/rsa.h:318
    pragma Import (C, RSA_PKCS1_SSLeay, "RSA_PKCS1_SSLeay");
 
-   function RSA_null_method return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/rsa.h:320
+   function RSA_null_method return access constant  rsa_meth_st;  -- openssl/rsa.h:320
    pragma Import (C, RSA_null_method, "RSA_null_method");
 
-   RSAPublicKey_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/rsa.h:322
+   RSAPublicKey_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/rsa.h:322
    pragma Import (C, RSAPublicKey_it, "RSAPublicKey_it");
 
-   function i2d_RSAPublicKey (a : access constant OpenSSL.Low_Level.rsa_h.rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:322
+   function i2d_RSAPublicKey (a : access constant  rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:322
    pragma Import (C, i2d_RSAPublicKey, "i2d_RSAPublicKey");
 
    function d2i_RSAPublicKey
      (a    : System.Address;
       c_in : System.Address;
-      len  : long) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:322
+      len  : long) return access  rsa_st;  -- openssl/rsa.h:322
    pragma Import (C, d2i_RSAPublicKey, "d2i_RSAPublicKey");
 
-   RSAPrivateKey_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/rsa.h:323
+   RSAPrivateKey_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/rsa.h:323
    pragma Import (C, RSAPrivateKey_it, "RSAPrivateKey_it");
 
-   function i2d_RSAPrivateKey (a : access constant OpenSSL.Low_Level.rsa_h.rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:323
+   function i2d_RSAPrivateKey (a : access constant  rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:323
    pragma Import (C, i2d_RSAPrivateKey, "i2d_RSAPrivateKey");
 
    function d2i_RSAPrivateKey
      (a    : System.Address;
       c_in : System.Address;
-      len  : long) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:323
+      len  : long) return access  rsa_st;  -- openssl/rsa.h:323
    pragma Import (C, d2i_RSAPrivateKey, "d2i_RSAPrivateKey");
 
    function RSA_print_fp
      (fp     : access Interfaces.C_Streams.FILEs;
-      r      : access constant OpenSSL.Low_Level.rsa_h.rsa_st;
+      r      : access constant  rsa_st;
       offset : int) return int;  -- openssl/rsa.h:326
    pragma Import (C, RSA_print_fp, "RSA_print_fp");
 
    function RSA_print
      (bp     : access OpenSSL.Low_Level.bio_h.bio_st;
-      r      : access constant OpenSSL.Low_Level.rsa_h.rsa_st;
+      r      : access constant  rsa_st;
       offset : int) return int;  -- openssl/rsa.h:330
    pragma Import (C, RSA_print, "RSA_print");
 
    function i2d_RSA_NET
-     (a      : access constant OpenSSL.Low_Level.rsa_h.rsa_st;
+     (a      : access constant  rsa_st;
       pp     : System.Address;
       cb     : access function
         (arg1 : Interfaces.C.Strings.chars_ptr;
@@ -431,11 +434,11 @@ package OpenSSL.Low_Level.rsa_h is
          arg2 : int;
          arg3 : Interfaces.C.Strings.chars_ptr;
          arg4 : int) return int;
-      sgckey : int) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:337
+      sgckey : int) return access  rsa_st;  -- openssl/rsa.h:337
    pragma Import (C, d2i_RSA_NET, "d2i_RSA_NET");
 
    function i2d_Netscape_RSA
-     (a  : access constant OpenSSL.Low_Level.rsa_h.rsa_st;
+     (a  : access constant  rsa_st;
       pp : System.Address;
       cb : access function
         (arg1 : Interfaces.C.Strings.chars_ptr;
@@ -452,7 +455,7 @@ package OpenSSL.Low_Level.rsa_h is
         (arg1 : Interfaces.C.Strings.chars_ptr;
          arg2 : int;
          arg3 : Interfaces.C.Strings.chars_ptr;
-         arg4 : int) return int) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:344
+         arg4 : int) return int) return access  rsa_st;  -- openssl/rsa.h:344
    pragma Import (C, d2i_Netscape_RSA, "d2i_Netscape_RSA");
 
    function RSA_sign
@@ -461,7 +464,7 @@ package OpenSSL.Low_Level.rsa_h is
       m_length : unsigned;
       sigret   : access unsigned_char;
       siglen   : access unsigned;
-      the_rsa  : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:351
+      the_rsa  : access  rsa_st) return int;  -- openssl/rsa.h:351
    pragma Import (C, RSA_sign, "RSA_sign");
 
    function RSA_verify
@@ -470,7 +473,7 @@ package OpenSSL.Low_Level.rsa_h is
       m_length : unsigned;
       sigbuf   : access unsigned_char;
       siglen   : unsigned;
-      the_rsa  : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:353
+      the_rsa  : access  rsa_st) return int;  -- openssl/rsa.h:353
    pragma Import (C, RSA_verify, "RSA_verify");
 
    function RSA_sign_ASN1_OCTET_STRING
@@ -479,7 +482,7 @@ package OpenSSL.Low_Level.rsa_h is
       m_length : unsigned;
       sigret   : access unsigned_char;
       siglen   : access unsigned;
-      the_rsa  : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:358
+      the_rsa  : access  rsa_st) return int;  -- openssl/rsa.h:358
    pragma Import (C, RSA_sign_ASN1_OCTET_STRING, "RSA_sign_ASN1_OCTET_STRING");
 
    function RSA_verify_ASN1_OCTET_STRING
@@ -488,16 +491,16 @@ package OpenSSL.Low_Level.rsa_h is
       m_length : unsigned;
       sigbuf   : access unsigned_char;
       siglen   : unsigned;
-      the_rsa  : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/rsa.h:361
+      the_rsa  : access  rsa_st) return int;  -- openssl/rsa.h:361
    pragma Import (C, RSA_verify_ASN1_OCTET_STRING, "RSA_verify_ASN1_OCTET_STRING");
 
-   function RSA_blinding_on (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st; ctx : System.Address) return int;  -- openssl/rsa.h:365
+   function RSA_blinding_on (the_rsa : access  rsa_st; ctx : System.Address) return int;  -- openssl/rsa.h:365
    pragma Import (C, RSA_blinding_on, "RSA_blinding_on");
 
-   procedure RSA_blinding_off (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st);  -- openssl/rsa.h:366
+   procedure RSA_blinding_off (the_rsa : access  rsa_st);  -- openssl/rsa.h:366
    pragma Import (C, RSA_blinding_off, "RSA_blinding_off");
 
-   function RSA_setup_blinding (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st; ctx : System.Address) return System.Address;  -- openssl/rsa.h:367
+   function RSA_setup_blinding (the_rsa : access  rsa_st; ctx : System.Address) return System.Address;  -- openssl/rsa.h:367
    pragma Import (C, RSA_setup_blinding, "RSA_setup_blinding");
 
    function RSA_padding_add_PKCS1_type_1
@@ -606,7 +609,7 @@ package OpenSSL.Low_Level.rsa_h is
    pragma Import (C, RSA_X931_hash_id, "RSA_X931_hash_id");
 
    function RSA_verify_PKCS1_PSS
-     (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (the_rsa : access  rsa_st;
       mHash   : access unsigned_char;
       Hash    : access constant OpenSSL.Low_Level.evp_h.env_md_st;
       EM      : access unsigned_char;
@@ -614,7 +617,7 @@ package OpenSSL.Low_Level.rsa_h is
    pragma Import (C, RSA_verify_PKCS1_PSS, "RSA_verify_PKCS1_PSS");
 
    function RSA_padding_add_PKCS1_PSS
-     (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (the_rsa : access  rsa_st;
       EM      : access unsigned_char;
       mHash   : access unsigned_char;
       Hash    : access constant OpenSSL.Low_Level.evp_h.env_md_st;
@@ -648,18 +651,18 @@ package OpenSSL.Low_Level.rsa_h is
    pragma Import (C, RSA_get_ex_new_index, "RSA_get_ex_new_index");
 
    function RSA_set_ex_data
-     (r   : access OpenSSL.Low_Level.rsa_h.rsa_st;
+     (r   : access  rsa_st;
       idx : int;
       arg : System.Address) return int;  -- openssl/rsa.h:407
    pragma Import (C, RSA_set_ex_data, "RSA_set_ex_data");
 
-   function RSA_get_ex_data (r : access constant OpenSSL.Low_Level.rsa_h.rsa_st; idx : int) return System.Address;  -- openssl/rsa.h:408
+   function RSA_get_ex_data (r : access constant  rsa_st; idx : int) return System.Address;  -- openssl/rsa.h:408
    pragma Import (C, RSA_get_ex_data, "RSA_get_ex_data");
 
-   function RSAPublicKey_dup (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:410
+   function RSAPublicKey_dup (the_rsa : access  rsa_st) return access  rsa_st;  -- openssl/rsa.h:410
    pragma Import (C, RSAPublicKey_dup, "RSAPublicKey_dup");
 
-   function RSAPrivateKey_dup (the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return access OpenSSL.Low_Level.rsa_h.rsa_st;  -- openssl/rsa.h:411
+   function RSAPrivateKey_dup (the_rsa : access  rsa_st) return access  rsa_st;  -- openssl/rsa.h:411
    pragma Import (C, RSAPrivateKey_dup, "RSAPrivateKey_dup");
 
    procedure ERR_load_RSA_strings;  -- openssl/rsa.h:417

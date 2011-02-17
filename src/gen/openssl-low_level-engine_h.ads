@@ -8,6 +8,7 @@ with OpenSSL.Low_Level.dsa_h;
 with OpenSSL.Low_Level.dh_h;
 with OpenSSL.Low_Level.rand_h;
 with OpenSSL.Low_Level.crypto_h;
+with OpenSSL.Low_Level.rsa_h;
 package OpenSSL.Low_Level.engine_h is
    package defs is
 

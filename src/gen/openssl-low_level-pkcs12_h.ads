@@ -7,8 +7,10 @@ with OpenSSL.Low_Level.stack_h;
 with System;
 with Interfaces.C.Strings;
 limited with OpenSSL.Low_Level.bio_h;
+with Interfaces.C_Streams;
+with OpenSSL.Low_Level.asn1t_h;
 --  limited --  with Interfaces.C_Streams;
-
+with OpenSSL.Low_Level.evp_h;
 package OpenSSL.Low_Level.pkcs12_h is
 
    package defs is
@@ -176,7 +178,7 @@ package OpenSSL.Low_Level.pkcs12_h is
 
    function PKCS12_item_pack_safebag
      (obj : System.Address;
-      it : access constant OpenSSL.Low_Level.asn1_h.ASN1_ITEM;
+      it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
       nid1 : int;
       nid2 : int) return access PKCS12_SAFEBAG;  -- openssl/pkcs12.h:175
    pragma Import (C, PKCS12_item_pack_safebag, "PKCS12_item_pack_safebag");
@@ -291,7 +293,7 @@ package OpenSSL.Low_Level.pkcs12_h is
 
    function PKCS12_item_decrypt_d2i
      (algor : access OpenSSL.Low_Level.x509_h.X509_algor_st;
-      it : access constant OpenSSL.Low_Level.asn1_h.ASN1_ITEM;
+      it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
       pass : Interfaces.C.Strings.chars_ptr;
       passlen : int;
       oct : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
@@ -300,7 +302,7 @@ package OpenSSL.Low_Level.pkcs12_h is
 
    function PKCS12_item_i2d_encrypt
      (algor : access OpenSSL.Low_Level.x509_h.X509_algor_st;
-      it : access constant OpenSSL.Low_Level.asn1_h.ASN1_ITEM;
+      it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
       pass : Interfaces.C.Strings.chars_ptr;
       passlen : int;
       obj : System.Address;
@@ -386,7 +388,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    function OPENSSL_uni2asc (uni : access unsigned_char; unilen : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/pkcs12.h:234
    pragma Import (C, OPENSSL_uni2asc, "OPENSSL_uni2asc");
 
-   PKCS12_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:236
+   PKCS12_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:236
    pragma Import (C, PKCS12_it, "PKCS12_it");
 
    function i2d_PKCS12 (a : access PKCS12; c_out : System.Address) return int;  -- openssl/pkcs12.h:236
@@ -404,7 +406,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS12_new return access PKCS12;  -- openssl/pkcs12.h:236
    pragma Import (C, PKCS12_new, "PKCS12_new");
 
-   PKCS12_MAC_DATA_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:237
+   PKCS12_MAC_DATA_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:237
    pragma Import (C, PKCS12_MAC_DATA_it, "PKCS12_MAC_DATA_it");
 
    function i2d_PKCS12_MAC_DATA (a : access PKCS12_MAC_DATA; c_out : System.Address) return int;  -- openssl/pkcs12.h:237
@@ -422,7 +424,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS12_MAC_DATA_new return access PKCS12_MAC_DATA;  -- openssl/pkcs12.h:237
    pragma Import (C, PKCS12_MAC_DATA_new, "PKCS12_MAC_DATA_new");
 
-   PKCS12_SAFEBAG_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:238
+   PKCS12_SAFEBAG_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:238
    pragma Import (C, PKCS12_SAFEBAG_it, "PKCS12_SAFEBAG_it");
 
    function i2d_PKCS12_SAFEBAG (a : access PKCS12_SAFEBAG; c_out : System.Address) return int;  -- openssl/pkcs12.h:238
@@ -440,7 +442,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS12_SAFEBAG_new return access PKCS12_SAFEBAG;  -- openssl/pkcs12.h:238
    pragma Import (C, PKCS12_SAFEBAG_new, "PKCS12_SAFEBAG_new");
 
-   PKCS12_BAGS_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:239
+   PKCS12_BAGS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:239
    pragma Import (C, PKCS12_BAGS_it, "PKCS12_BAGS_it");
 
    function i2d_PKCS12_BAGS (a : access PKCS12_BAGS; c_out : System.Address) return int;  -- openssl/pkcs12.h:239
@@ -458,10 +460,10 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS12_BAGS_new return access PKCS12_BAGS;  -- openssl/pkcs12.h:239
    pragma Import (C, PKCS12_BAGS_new, "PKCS12_BAGS_new");
 
-   PKCS12_SAFEBAGS_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:241
+   PKCS12_SAFEBAGS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:241
    pragma Import (C, PKCS12_SAFEBAGS_it, "PKCS12_SAFEBAGS_it");
 
-   PKCS12_AUTHSAFES_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs12.h:242
+   PKCS12_AUTHSAFES_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs12.h:242
    pragma Import (C, PKCS12_AUTHSAFES_it, "PKCS12_AUTHSAFES_it");
 
    procedure PKCS12_PBE_add;  -- openssl/pkcs12.h:244

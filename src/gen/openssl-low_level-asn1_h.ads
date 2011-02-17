@@ -2,7 +2,7 @@ with Interfaces.C; use Interfaces.C;
 with OpenSSL.Low_Level.stack_h;
 with System;
 with Interfaces.C.Strings;
-limited with OpenSSL.Low_Level.asn1t_h;
+with OpenSSL.Low_Level.asn1t_h;
 with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.safestack_h;
 with Interfaces.C_Streams;
@@ -803,7 +803,7 @@ package OpenSSL.Low_Level.asn1_h is
 
    subtype ASN1_SEQUENCE_ANY is stack_st_ASN1_TYPE;
 
-   ASN1_SEQUENCE_ANY_it : aliased ASN1_ITEM;  -- openssl/asn1.h:557
+   ASN1_SEQUENCE_ANY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:557
    pragma Import (C, ASN1_SEQUENCE_ANY_it, "ASN1_SEQUENCE_ANY_it");
 
    function i2d_ASN1_SEQUENCE_ANY (a : System.Address; c_out : System.Address) return int;  -- openssl/asn1.h:557
@@ -815,7 +815,7 @@ package OpenSSL.Low_Level.asn1_h is
       len  : long) return access ASN1_SEQUENCE_ANY;  -- openssl/asn1.h:557
    pragma Import (C, d2i_ASN1_SEQUENCE_ANY, "d2i_ASN1_SEQUENCE_ANY");
 
-   ASN1_SET_ANY_it : aliased ASN1_ITEM;  -- openssl/asn1.h:558
+   ASN1_SET_ANY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:558
    pragma Import (C, ASN1_SET_ANY_it, "ASN1_SET_ANY_it");
 
    function i2d_ASN1_SET_ANY (a : System.Address; c_out : System.Address) return int;  -- openssl/asn1.h:558
@@ -844,7 +844,7 @@ package OpenSSL.Low_Level.asn1_h is
 
    subtype BIT_STRING_BITNAME is BIT_STRING_BITNAME_st;
 
-   ASN1_ANY_it : aliased ASN1_ITEM;  -- openssl/asn1.h:775
+   ASN1_ANY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:775
    pragma Import (C, ASN1_ANY_it, "ASN1_ANY_it");
 
    function i2d_ASN1_TYPE (a : access ASN1_TYPE; c_out : System.Address) return int;  -- openssl/asn1.h:775
@@ -901,7 +901,7 @@ package OpenSSL.Low_Level.asn1_h is
       length : long) return access ASN1_OBJECT;  -- openssl/asn1.h:787
    pragma Import (C, d2i_ASN1_OBJECT, "d2i_ASN1_OBJECT");
 
-   ASN1_OBJECT_it : aliased ASN1_ITEM;  -- openssl/asn1.h:790
+   ASN1_OBJECT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:790
    pragma Import (C, ASN1_OBJECT_it, "ASN1_OBJECT_it");
 
    type stack_st_ASN1_OBJECT is record
@@ -951,7 +951,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_STRING_data (x : access ASN1_STRING) return access unsigned_char;  -- openssl/asn1.h:808
    pragma Import (C, ASN1_STRING_data, "ASN1_STRING_data");
 
-   ASN1_BIT_STRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:810
+   ASN1_BIT_STRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:810
    pragma Import (C, ASN1_BIT_STRING_it, "ASN1_BIT_STRING_it");
 
    function i2d_ASN1_BIT_STRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:810
@@ -1025,7 +1025,7 @@ package OpenSSL.Low_Level.asn1_h is
       length : long) return int;  -- openssl/asn1.h:830
    pragma Import (C, d2i_ASN1_BOOLEAN, "d2i_ASN1_BOOLEAN");
 
-   ASN1_INTEGER_it : aliased ASN1_ITEM;  -- openssl/asn1.h:832
+   ASN1_INTEGER_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:832
    pragma Import (C, ASN1_INTEGER_it, "ASN1_INTEGER_it");
 
    function i2d_ASN1_INTEGER (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:832
@@ -1064,7 +1064,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_INTEGER_cmp (x : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st; y : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/asn1.h:839
    pragma Import (C, ASN1_INTEGER_cmp, "ASN1_INTEGER_cmp");
 
-   ASN1_ENUMERATED_it : aliased ASN1_ITEM;  -- openssl/asn1.h:841
+   ASN1_ENUMERATED_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:841
    pragma Import (C, ASN1_ENUMERATED_it, "ASN1_ENUMERATED_it");
 
    function i2d_ASN1_ENUMERATED (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:841
@@ -1117,7 +1117,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_GENERALIZEDTIME_set_string (s : access OpenSSL.Low_Level.asn1_h.asn1_string_st; str : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/asn1.h:857
    pragma Import (C, ASN1_GENERALIZEDTIME_set_string, "ASN1_GENERALIZEDTIME_set_string");
 
-   ASN1_OCTET_STRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:859
+   ASN1_OCTET_STRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:859
    pragma Import (C, ASN1_OCTET_STRING_it, "ASN1_OCTET_STRING_it");
 
    function i2d_ASN1_OCTET_STRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:859
@@ -1147,7 +1147,7 @@ package OpenSSL.Low_Level.asn1_h is
       len  : int) return int;  -- openssl/asn1.h:862
    pragma Import (C, ASN1_OCTET_STRING_set, "ASN1_OCTET_STRING_set");
 
-   ASN1_VISIBLESTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:864
+   ASN1_VISIBLESTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:864
    pragma Import (C, ASN1_VISIBLESTRING_it, "ASN1_VISIBLESTRING_it");
 
    function i2d_ASN1_VISIBLESTRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:864
@@ -1165,7 +1165,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_VISIBLESTRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:864
    pragma Import (C, ASN1_VISIBLESTRING_new, "ASN1_VISIBLESTRING_new");
 
-   ASN1_UNIVERSALSTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:865
+   ASN1_UNIVERSALSTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:865
    pragma Import (C, ASN1_UNIVERSALSTRING_it, "ASN1_UNIVERSALSTRING_it");
 
    function i2d_ASN1_UNIVERSALSTRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:865
@@ -1183,7 +1183,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_UNIVERSALSTRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:865
    pragma Import (C, ASN1_UNIVERSALSTRING_new, "ASN1_UNIVERSALSTRING_new");
 
-   ASN1_UTF8STRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:866
+   ASN1_UTF8STRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:866
    pragma Import (C, ASN1_UTF8STRING_it, "ASN1_UTF8STRING_it");
 
    function i2d_ASN1_UTF8STRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:866
@@ -1201,7 +1201,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_UTF8STRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:866
    pragma Import (C, ASN1_UTF8STRING_new, "ASN1_UTF8STRING_new");
 
-   ASN1_NULL_it : aliased ASN1_ITEM;  -- openssl/asn1.h:867
+   ASN1_NULL_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:867
    pragma Import (C, ASN1_NULL_it, "ASN1_NULL_it");
 
    function i2d_ASN1_NULL (a : access Interfaces.C.int; c_out : System.Address) return int;  -- openssl/asn1.h:867
@@ -1219,7 +1219,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_NULL_new return access Interfaces.C.int;  -- openssl/asn1.h:867
    pragma Import (C, ASN1_NULL_new, "ASN1_NULL_new");
 
-   ASN1_BMPSTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:868
+   ASN1_BMPSTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:868
    pragma Import (C, ASN1_BMPSTRING_it, "ASN1_BMPSTRING_it");
 
    function i2d_ASN1_BMPSTRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:868
@@ -1249,7 +1249,7 @@ package OpenSSL.Low_Level.asn1_h is
       value : unsigned_long) return int;  -- openssl/asn1.h:871
    pragma Import (C, UTF8_putc, "UTF8_putc");
 
-   ASN1_PRINTABLE_it : aliased ASN1_ITEM;  -- openssl/asn1.h:873
+   ASN1_PRINTABLE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:873
    pragma Import (C, ASN1_PRINTABLE_it, "ASN1_PRINTABLE_it");
 
    function i2d_ASN1_PRINTABLE (a : access ASN1_STRING; c_out : System.Address) return int;  -- openssl/asn1.h:873
@@ -1267,7 +1267,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_PRINTABLE_new return access ASN1_STRING;  -- openssl/asn1.h:873
    pragma Import (C, ASN1_PRINTABLE_new, "ASN1_PRINTABLE_new");
 
-   DIRECTORYSTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:875
+   DIRECTORYSTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:875
    pragma Import (C, DIRECTORYSTRING_it, "DIRECTORYSTRING_it");
 
    function i2d_DIRECTORYSTRING (a : access ASN1_STRING; c_out : System.Address) return int;  -- openssl/asn1.h:875
@@ -1285,7 +1285,7 @@ package OpenSSL.Low_Level.asn1_h is
    function DIRECTORYSTRING_new return access ASN1_STRING;  -- openssl/asn1.h:875
    pragma Import (C, DIRECTORYSTRING_new, "DIRECTORYSTRING_new");
 
-   DISPLAYTEXT_it : aliased ASN1_ITEM;  -- openssl/asn1.h:876
+   DISPLAYTEXT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:876
    pragma Import (C, DISPLAYTEXT_it, "DISPLAYTEXT_it");
 
    function i2d_DISPLAYTEXT (a : access ASN1_STRING; c_out : System.Address) return int;  -- openssl/asn1.h:876
@@ -1303,7 +1303,7 @@ package OpenSSL.Low_Level.asn1_h is
    function DISPLAYTEXT_new return access ASN1_STRING;  -- openssl/asn1.h:876
    pragma Import (C, DISPLAYTEXT_new, "DISPLAYTEXT_new");
 
-   ASN1_PRINTABLESTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:877
+   ASN1_PRINTABLESTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:877
    pragma Import (C, ASN1_PRINTABLESTRING_it, "ASN1_PRINTABLESTRING_it");
 
    function i2d_ASN1_PRINTABLESTRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:877
@@ -1321,7 +1321,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_PRINTABLESTRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:877
    pragma Import (C, ASN1_PRINTABLESTRING_new, "ASN1_PRINTABLESTRING_new");
 
-   ASN1_T61STRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:878
+   ASN1_T61STRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:878
    pragma Import (C, ASN1_T61STRING_it, "ASN1_T61STRING_it");
 
    function i2d_ASN1_T61STRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:878
@@ -1339,7 +1339,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_T61STRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:878
    pragma Import (C, ASN1_T61STRING_new, "ASN1_T61STRING_new");
 
-   ASN1_IA5STRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:879
+   ASN1_IA5STRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:879
    pragma Import (C, ASN1_IA5STRING_it, "ASN1_IA5STRING_it");
 
    function i2d_ASN1_IA5STRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:879
@@ -1357,7 +1357,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_IA5STRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:879
    pragma Import (C, ASN1_IA5STRING_new, "ASN1_IA5STRING_new");
 
-   ASN1_GENERALSTRING_it : aliased ASN1_ITEM;  -- openssl/asn1.h:880
+   ASN1_GENERALSTRING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:880
    pragma Import (C, ASN1_GENERALSTRING_it, "ASN1_GENERALSTRING_it");
 
    function i2d_ASN1_GENERALSTRING (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:880
@@ -1375,7 +1375,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_GENERALSTRING_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:880
    pragma Import (C, ASN1_GENERALSTRING_new, "ASN1_GENERALSTRING_new");
 
-   ASN1_UTCTIME_it : aliased ASN1_ITEM;  -- openssl/asn1.h:881
+   ASN1_UTCTIME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:881
    pragma Import (C, ASN1_UTCTIME_it, "ASN1_UTCTIME_it");
 
    function i2d_ASN1_UTCTIME (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:881
@@ -1393,7 +1393,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_UTCTIME_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:881
    pragma Import (C, ASN1_UTCTIME_new, "ASN1_UTCTIME_new");
 
-   ASN1_GENERALIZEDTIME_it : aliased ASN1_ITEM;  -- openssl/asn1.h:882
+   ASN1_GENERALIZEDTIME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:882
    pragma Import (C, ASN1_GENERALIZEDTIME_it, "ASN1_GENERALIZEDTIME_it");
 
    function i2d_ASN1_GENERALIZEDTIME (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:882
@@ -1411,7 +1411,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_GENERALIZEDTIME_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:882
    pragma Import (C, ASN1_GENERALIZEDTIME_new, "ASN1_GENERALIZEDTIME_new");
 
-   ASN1_TIME_it : aliased ASN1_ITEM;  -- openssl/asn1.h:883
+   ASN1_TIME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:883
    pragma Import (C, ASN1_TIME_it, "ASN1_TIME_it");
 
    function i2d_ASN1_TIME (a : access OpenSSL.Low_Level.asn1_h.asn1_string_st; c_out : System.Address) return int;  -- openssl/asn1.h:883
@@ -1429,7 +1429,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_TIME_new return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:883
    pragma Import (C, ASN1_TIME_new, "ASN1_TIME_new");
 
-   ASN1_OCTET_STRING_NDEF_it : aliased ASN1_ITEM;  -- openssl/asn1.h:885
+   ASN1_OCTET_STRING_NDEF_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:885
    pragma Import (C, ASN1_OCTET_STRING_NDEF_it, "ASN1_OCTET_STRING_NDEF_it");
 
    function ASN1_TIME_set (s : access OpenSSL.Low_Level.asn1_h.asn1_string_st; t : time_h.time_t) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/asn1.h:887
@@ -1740,7 +1740,7 @@ package OpenSSL.Low_Level.asn1_h is
    function ASN1_tag2str (tag : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/asn1.h:1036
    pragma Import (C, ASN1_tag2str, "ASN1_tag2str");
 
-   NETSCAPE_X509_it : aliased ASN1_ITEM;  -- openssl/asn1.h:1040
+   NETSCAPE_X509_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1.h:1040
    pragma Import (C, NETSCAPE_X509_it, "NETSCAPE_X509_it");
 
    function i2d_NETSCAPE_X509 (a : access NETSCAPE_X509; c_out : System.Address) return int;  -- openssl/asn1.h:1040

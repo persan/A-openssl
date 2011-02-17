@@ -7,6 +7,10 @@ with System;
 --  limited --  with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.bio_h;
 with Interfaces.C.Strings;
+with OpenSSL.Low_Level.evp_h;
+with Interfaces.C_Streams;
+with OpenSSL.Low_Level.asn1t_h;
+with OpenSSL.Low_Level.x509_vfy_h;
 
 package OpenSSL.Low_Level.pkcs7_h is
 
@@ -286,7 +290,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_PKCS7);  -- openssl/pkcs7.h:219
 
-   PKCS7_ISSUER_AND_SERIAL_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:279
+   PKCS7_ISSUER_AND_SERIAL_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:279
    pragma Import (C, PKCS7_ISSUER_AND_SERIAL_it, "PKCS7_ISSUER_AND_SERIAL_it");
 
    function i2d_PKCS7_ISSUER_AND_SERIAL (a : access PKCS7_ISSUER_AND_SERIAL; c_out : System.Address) return int;  -- openssl/pkcs7.h:279
@@ -340,7 +344,7 @@ package OpenSSL.Low_Level.pkcs7_h is
       flags : int) return int;  -- openssl/pkcs7.h:291
    pragma Import (C, PEM_write_bio_PKCS7_stream, "PEM_write_bio_PKCS7_stream");
 
-   PKCS7_SIGNER_INFO_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:293
+   PKCS7_SIGNER_INFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:293
    pragma Import (C, PKCS7_SIGNER_INFO_it, "PKCS7_SIGNER_INFO_it");
 
    function i2d_PKCS7_SIGNER_INFO (a : access PKCS7_SIGNER_INFO; c_out : System.Address) return int;  -- openssl/pkcs7.h:293
@@ -358,7 +362,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_SIGNER_INFO_new return access PKCS7_SIGNER_INFO;  -- openssl/pkcs7.h:293
    pragma Import (C, PKCS7_SIGNER_INFO_new, "PKCS7_SIGNER_INFO_new");
 
-   PKCS7_RECIP_INFO_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:294
+   PKCS7_RECIP_INFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:294
    pragma Import (C, PKCS7_RECIP_INFO_it, "PKCS7_RECIP_INFO_it");
 
    function i2d_PKCS7_RECIP_INFO (a : access PKCS7_RECIP_INFO; c_out : System.Address) return int;  -- openssl/pkcs7.h:294
@@ -376,7 +380,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_RECIP_INFO_new return access PKCS7_RECIP_INFO;  -- openssl/pkcs7.h:294
    pragma Import (C, PKCS7_RECIP_INFO_new, "PKCS7_RECIP_INFO_new");
 
-   PKCS7_SIGNED_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:295
+   PKCS7_SIGNED_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:295
    pragma Import (C, PKCS7_SIGNED_it, "PKCS7_SIGNED_it");
 
    function i2d_PKCS7_SIGNED (a : access PKCS7_SIGNED; c_out : System.Address) return int;  -- openssl/pkcs7.h:295
@@ -394,7 +398,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_SIGNED_new return access PKCS7_SIGNED;  -- openssl/pkcs7.h:295
    pragma Import (C, PKCS7_SIGNED_new, "PKCS7_SIGNED_new");
 
-   PKCS7_ENC_CONTENT_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:296
+   PKCS7_ENC_CONTENT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:296
    pragma Import (C, PKCS7_ENC_CONTENT_it, "PKCS7_ENC_CONTENT_it");
 
    function i2d_PKCS7_ENC_CONTENT (a : access PKCS7_ENC_CONTENT; c_out : System.Address) return int;  -- openssl/pkcs7.h:296
@@ -412,7 +416,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_ENC_CONTENT_new return access PKCS7_ENC_CONTENT;  -- openssl/pkcs7.h:296
    pragma Import (C, PKCS7_ENC_CONTENT_new, "PKCS7_ENC_CONTENT_new");
 
-   PKCS7_ENVELOPE_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:297
+   PKCS7_ENVELOPE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:297
    pragma Import (C, PKCS7_ENVELOPE_it, "PKCS7_ENVELOPE_it");
 
    function i2d_PKCS7_ENVELOPE (a : access PKCS7_ENVELOPE; c_out : System.Address) return int;  -- openssl/pkcs7.h:297
@@ -430,7 +434,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_ENVELOPE_new return access PKCS7_ENVELOPE;  -- openssl/pkcs7.h:297
    pragma Import (C, PKCS7_ENVELOPE_new, "PKCS7_ENVELOPE_new");
 
-   PKCS7_SIGN_ENVELOPE_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:298
+   PKCS7_SIGN_ENVELOPE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:298
    pragma Import (C, PKCS7_SIGN_ENVELOPE_it, "PKCS7_SIGN_ENVELOPE_it");
 
    function i2d_PKCS7_SIGN_ENVELOPE (a : access PKCS7_SIGN_ENVELOPE; c_out : System.Address) return int;  -- openssl/pkcs7.h:298
@@ -448,7 +452,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_SIGN_ENVELOPE_new return access PKCS7_SIGN_ENVELOPE;  -- openssl/pkcs7.h:298
    pragma Import (C, PKCS7_SIGN_ENVELOPE_new, "PKCS7_SIGN_ENVELOPE_new");
 
-   PKCS7_DIGEST_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:299
+   PKCS7_DIGEST_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:299
    pragma Import (C, PKCS7_DIGEST_it, "PKCS7_DIGEST_it");
 
    function i2d_PKCS7_DIGEST (a : access PKCS7_DIGEST; c_out : System.Address) return int;  -- openssl/pkcs7.h:299
@@ -466,7 +470,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_DIGEST_new return access PKCS7_DIGEST;  -- openssl/pkcs7.h:299
    pragma Import (C, PKCS7_DIGEST_new, "PKCS7_DIGEST_new");
 
-   PKCS7_ENCRYPT_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:300
+   PKCS7_ENCRYPT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:300
    pragma Import (C, PKCS7_ENCRYPT_it, "PKCS7_ENCRYPT_it");
 
    function i2d_PKCS7_ENCRYPT (a : access PKCS7_ENCRYPT; c_out : System.Address) return int;  -- openssl/pkcs7.h:300
@@ -484,7 +488,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_ENCRYPT_new return access PKCS7_ENCRYPT;  -- openssl/pkcs7.h:300
    pragma Import (C, PKCS7_ENCRYPT_new, "PKCS7_ENCRYPT_new");
 
-   PKCS7_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:301
+   PKCS7_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:301
    pragma Import (C, PKCS7_it, "PKCS7_it");
 
    function i2d_PKCS7 (a : access PKCS7; c_out : System.Address) return int;  -- openssl/pkcs7.h:301
@@ -502,10 +506,10 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_new return access PKCS7;  -- openssl/pkcs7.h:301
    pragma Import (C, PKCS7_new, "PKCS7_new");
 
-   PKCS7_ATTR_SIGN_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:303
+   PKCS7_ATTR_SIGN_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:303
    pragma Import (C, PKCS7_ATTR_SIGN_it, "PKCS7_ATTR_SIGN_it");
 
-   PKCS7_ATTR_VERIFY_it : aliased OpenSSL.Low_Level.asn1_h.ASN1_ITEM;  -- openssl/pkcs7.h:304
+   PKCS7_ATTR_VERIFY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/pkcs7.h:304
    pragma Import (C, PKCS7_ATTR_VERIFY_it, "PKCS7_ATTR_VERIFY_it");
 
    function i2d_PKCS7_NDEF (a : access PKCS7; c_out : System.Address) return int;  -- openssl/pkcs7.h:306
@@ -697,12 +701,12 @@ package OpenSSL.Low_Level.pkcs7_h is
       flags : int) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/pkcs7.h:369
    pragma Import (C, PKCS7_get0_signers, "PKCS7_get0_signers");
 
-   function PKCS7_encrypt
+   function PKCS7_encrypt_2
      (certs  : access OpenSSL.Low_Level.x509_h.stack_st_X509;
       c_in   : access OpenSSL.Low_Level.bio_h.bio_st;
       cipher : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
       flags  : int) return access PKCS7;  -- openssl/pkcs7.h:370
-   pragma Import (C, PKCS7_encrypt, "PKCS7_encrypt");
+   pragma Import (C, PKCS7_encrypt_2, "PKCS7_encrypt");
 
    function PKCS7_decrypt
      (p7    : access PKCS7;

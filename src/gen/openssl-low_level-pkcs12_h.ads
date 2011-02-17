@@ -105,7 +105,7 @@ package OpenSSL.Low_Level.pkcs12_h is
       PKCS12_R_UNSUPPORTED_PKCS12_MODE : constant := 119;  --  openssl/pkcs12.h:326
    end defs;
    type PKCS12_MAC_DATA is record
-      dinfo : access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pkcs12.h:100
+      dinfo : access OpenSSL.Low_Level.x509_h.X509_sig_st;  -- openssl/pkcs12.h:100
       salt : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/pkcs12.h:101
       iter : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/pkcs12.h:102
    end record;
@@ -116,7 +116,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    type PKCS12 is record
       version : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/pkcs12.h:106
       mac : access PKCS12_MAC_DATA;  -- openssl/pkcs12.h:107
-      authsafes : access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/pkcs12.h:108
+      authsafes : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;  -- openssl/pkcs12.h:108
    end record;
    pragma Convention (C_Pass_By_Copy, PKCS12);  -- openssl/pkcs12.h:109
 
@@ -131,17 +131,17 @@ package OpenSSL.Low_Level.pkcs12_h is
          when 1 =>
             keybag : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st;  -- openssl/pkcs12.h:115
          when 2 =>
-            shkeybag : access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pkcs12.h:116
+            shkeybag : access OpenSSL.Low_Level.x509_h.X509_sig_st;  -- openssl/pkcs12.h:116
          when 3 =>
             safes : access stack_st_PKCS12_SAFEBAG;  -- openssl/pkcs12.h:117
          when others =>
-            other : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/pkcs12.h:118
+            other : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/pkcs12.h:118
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_56);
    pragma Unchecked_Union (anon_56);
    type PKCS12_SAFEBAG is record
-      c_type : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/pkcs12.h:112
+      c_type : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/pkcs12.h:112
       value : anon_56;  -- openssl/pkcs12.h:119
       attrib : access OpenSSL.Low_Level.x509_h.stack_st_X509_ATTRIBUTE;  -- openssl/pkcs12.h:120
    end record;
@@ -155,7 +155,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    pragma Convention (C_Pass_By_Copy, stack_st_PKCS12_SAFEBAG);  -- openssl/pkcs12.h:123
 
    type pkcs12_bag_st is record
-      c_type : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/pkcs12.h:128
+      c_type : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/pkcs12.h:128
       value : anon_57;  -- openssl/pkcs12.h:135
    end record;
    pragma Convention (C_Pass_By_Copy, pkcs12_bag_st);  -- openssl/pkcs12.h:127
@@ -185,7 +185,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    pragma Import (C, PKCS12_MAKE_KEYBAG, "PKCS12_MAKE_KEYBAG");
 
    function PKCS8_decrypt
-     (p8 : access OpenSSL.Low_Level.x509_h.X509_SIG;
+     (p8 : access OpenSSL.Low_Level.x509_h.X509_sig_st;
       pass : Interfaces.C.Strings.chars_ptr;
       passlen : int) return access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st;  -- openssl/pkcs12.h:178
    pragma Import (C, PKCS8_decrypt, "PKCS8_decrypt");
@@ -204,7 +204,7 @@ package OpenSSL.Low_Level.pkcs12_h is
       salt : access unsigned_char;
       saltlen : int;
       iter : int;
-      p8 : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st) return access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pkcs12.h:181
+      p8 : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st) return access OpenSSL.Low_Level.x509_h.X509_sig_st;  -- openssl/pkcs12.h:181
    pragma Import (C, PKCS8_encrypt, "PKCS8_encrypt");
 
    function PKCS12_MAKE_SHKEYBAG
@@ -217,10 +217,10 @@ package OpenSSL.Low_Level.pkcs12_h is
       p8 : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st) return access PKCS12_SAFEBAG;  -- openssl/pkcs12.h:185
    pragma Import (C, PKCS12_MAKE_SHKEYBAG, "PKCS12_MAKE_SHKEYBAG");
 
-   function PKCS12_pack_p7data (sk : access stack_st_PKCS12_SAFEBAG) return access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/pkcs12.h:189
+   function PKCS12_pack_p7data (sk : access stack_st_PKCS12_SAFEBAG) return access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;  -- openssl/pkcs12.h:189
    pragma Import (C, PKCS12_pack_p7data, "PKCS12_pack_p7data");
 
-   function PKCS12_unpack_p7data (p7 : access OpenSSL.Low_Level.pkcs7_h.PKCS7) return access stack_st_PKCS12_SAFEBAG;  -- openssl/pkcs12.h:190
+   function PKCS12_unpack_p7data (p7 : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st) return access stack_st_PKCS12_SAFEBAG;  -- openssl/pkcs12.h:190
    pragma Import (C, PKCS12_unpack_p7data, "PKCS12_unpack_p7data");
 
    function PKCS12_pack_p7encdata
@@ -230,11 +230,11 @@ package OpenSSL.Low_Level.pkcs12_h is
       salt : access unsigned_char;
       saltlen : int;
       iter : int;
-      bags : access stack_st_PKCS12_SAFEBAG) return access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/pkcs12.h:191
+      bags : access stack_st_PKCS12_SAFEBAG) return access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;  -- openssl/pkcs12.h:191
    pragma Import (C, PKCS12_pack_p7encdata, "PKCS12_pack_p7encdata");
 
    function PKCS12_unpack_p7encdata
-     (p7 : access OpenSSL.Low_Level.pkcs7_h.PKCS7;
+     (p7 : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;
       pass : Interfaces.C.Strings.chars_ptr;
       passlen : int) return access stack_st_PKCS12_SAFEBAG;  -- openssl/pkcs12.h:194
    pragma Import (C, PKCS12_unpack_p7encdata, "PKCS12_unpack_p7encdata");
@@ -272,7 +272,7 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS8_add_keyusage (p8 : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st; usage : int) return int;  -- openssl/pkcs12.h:206
    pragma Import (C, PKCS8_add_keyusage, "PKCS8_add_keyusage");
 
-   function PKCS12_get_attr_gen (attrs : access OpenSSL.Low_Level.x509_h.stack_st_X509_ATTRIBUTE; attr_nid : int) return access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/pkcs12.h:207
+   function PKCS12_get_attr_gen (attrs : access OpenSSL.Low_Level.x509_h.stack_st_X509_ATTRIBUTE; attr_nid : int) return access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/pkcs12.h:207
    pragma Import (C, PKCS12_get_attr_gen, "PKCS12_get_attr_gen");
 
    function PKCS12_get_friendlyname (bag : access PKCS12_SAFEBAG) return Interfaces.C.Strings.chars_ptr;  -- openssl/pkcs12.h:208
@@ -338,7 +338,7 @@ package OpenSSL.Low_Level.pkcs12_h is
      (ctx : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
       pass : Interfaces.C.Strings.chars_ptr;
       passlen : int;
-      param : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+      param : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
       cipher : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
       md_type : access constant OpenSSL.Low_Level.evp_h.env_md_st;
       en_de : int) return int;  -- openssl/pkcs12.h:222

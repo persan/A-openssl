@@ -9,28 +9,28 @@ package OpenSSL.Low_Level.rand_h is
    --  unsupported macro: FIPS_RAND_SIZE_T size_t
    package defs is
 
-   RAND_F_ENG_RAND_GET_RAND_METHOD : constant := 108;  --  openssl/rand.h:131
-   RAND_F_FIPS_RAND : constant := 103;  --  openssl/rand.h:132
-   RAND_F_FIPS_RAND_BYTES : constant := 102;  --  openssl/rand.h:133
-   RAND_F_FIPS_RAND_SET_DT : constant := 106;  --  openssl/rand.h:134
-   RAND_F_FIPS_SET_DT : constant := 104;  --  openssl/rand.h:135
-   RAND_F_FIPS_SET_PRNG_SEED : constant := 107;  --  openssl/rand.h:136
-   RAND_F_FIPS_SET_TEST_MODE : constant := 105;  --  openssl/rand.h:137
-   RAND_F_RAND_GET_RAND_METHOD : constant := 101;  --  openssl/rand.h:138
-   RAND_F_SSLEAY_RAND_BYTES : constant := 100;  --  openssl/rand.h:139
+      RAND_F_ENG_RAND_GET_RAND_METHOD : constant := 108;  --  openssl/rand.h:131
+      RAND_F_FIPS_RAND                : constant := 103;  --  openssl/rand.h:132
+      RAND_F_FIPS_RAND_BYTES          : constant := 102;  --  openssl/rand.h:133
+      RAND_F_FIPS_RAND_SET_DT         : constant := 106;  --  openssl/rand.h:134
+      RAND_F_FIPS_SET_DT              : constant := 104;  --  openssl/rand.h:135
+      RAND_F_FIPS_SET_PRNG_SEED       : constant := 107;  --  openssl/rand.h:136
+      RAND_F_FIPS_SET_TEST_MODE       : constant := 105;  --  openssl/rand.h:137
+      RAND_F_RAND_GET_RAND_METHOD     : constant := 101;  --  openssl/rand.h:138
+      RAND_F_SSLEAY_RAND_BYTES        : constant := 100;  --  openssl/rand.h:139
 
-   RAND_R_NON_FIPS_METHOD : constant := 105;  --  openssl/rand.h:142
-   RAND_R_NOT_IN_TEST_MODE : constant := 106;  --  openssl/rand.h:143
-   RAND_R_NO_KEY_SET : constant := 107;  --  openssl/rand.h:144
-   RAND_R_PRNG_ASKING_FOR_TOO_MUCH : constant := 101;  --  openssl/rand.h:145
-   RAND_R_PRNG_ERROR : constant := 108;  --  openssl/rand.h:146
-   RAND_R_PRNG_KEYED : constant := 109;  --  openssl/rand.h:147
-   RAND_R_PRNG_NOT_REKEYED : constant := 102;  --  openssl/rand.h:148
-   RAND_R_PRNG_NOT_RESEEDED : constant := 103;  --  openssl/rand.h:149
-   RAND_R_PRNG_NOT_SEEDED : constant := 100;  --  openssl/rand.h:150
-   RAND_R_PRNG_SEED_MUST_NOT_MATCH_KEY : constant := 110;  --  openssl/rand.h:151
-   RAND_R_PRNG_STUCK : constant := 104;  --  openssl/rand.h:152
-end;
+      RAND_R_NON_FIPS_METHOD          : constant := 105;  --  openssl/rand.h:142
+      RAND_R_NOT_IN_TEST_MODE         : constant := 106;  --  openssl/rand.h:143
+      RAND_R_NO_KEY_SET               : constant := 107;  --  openssl/rand.h:144
+      RAND_R_PRNG_ASKING_FOR_TOO_MUCH : constant := 101;  --  openssl/rand.h:145
+      RAND_R_PRNG_ERROR               : constant := 108;  --  openssl/rand.h:146
+      RAND_R_PRNG_KEYED               : constant := 109;  --  openssl/rand.h:147
+      RAND_R_PRNG_NOT_REKEYED         : constant := 102;  --  openssl/rand.h:148
+      RAND_R_PRNG_NOT_RESEEDED        : constant := 103;  --  openssl/rand.h:149
+      RAND_R_PRNG_NOT_SEEDED          : constant := 100;  --  openssl/rand.h:150
+      RAND_R_PRNG_SEED_MUST_NOT_MATCH_KEY : constant := 110;  --  openssl/rand.h:151
+      RAND_R_PRNG_STUCK               : constant := 104;  --  openssl/rand.h:152
+   end defs;
    type rand_meth_st is record
       seed : access procedure (arg1 : System.Address; arg2 : int);  -- openssl/rand.h:83
       bytes : access function (arg1 : access unsigned_char; arg2 : int) return int;  -- openssl/rand.h:84

@@ -4,12 +4,12 @@ package OpenSSL.Low_Level.rc2_h is
 
    package defs is
 
-   RC2_ENCRYPT : constant := 1;  --  openssl/rc2.h:67
-   RC2_DECRYPT : constant := 0;  --  openssl/rc2.h:68
+      RC2_ENCRYPT : constant := 1;  --  openssl/rc2.h:67
+      RC2_DECRYPT : constant := 0;  --  openssl/rc2.h:68
 
-   RC2_BLOCK : constant := 8;  --  openssl/rc2.h:70
-   RC2_KEY_LENGTH : constant := 16;  --  openssl/rc2.h:71
-end;
+      RC2_BLOCK   : constant := 8;  --  openssl/rc2.h:70
+      RC2_KEY_LENGTH : constant := 16;  --  openssl/rc2.h:71
+   end defs;
    type rc2_key_st_data_array is array (0 .. 63) of aliased unsigned;
    type rc2_key_st is record
       data : aliased rc2_key_st_data_array;  -- openssl/rc2.h:79

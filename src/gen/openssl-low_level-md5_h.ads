@@ -7,11 +7,11 @@ package OpenSSL.Low_Level.md5_h is
    --  unsupported macro: MD5_LONG unsigned int
    package defs is
 
-   MD5_CBLOCK : constant := 64;  --  openssl/md5.h:96
+      MD5_CBLOCK : constant := 64;  --  openssl/md5.h:96
    --  unsupported macro: MD5_LBLOCK (MD5_CBLOCK/4)
 
-   MD5_DIGEST_LENGTH : constant := 16;  --  openssl/md5.h:98
-end;
+      MD5_DIGEST_LENGTH : constant := 16;  --  openssl/md5.h:98
+   end defs;
    type MD5state_st_data_array is array (0 .. 15) of aliased unsigned;
    type MD5state_st is record
       A : aliased unsigned;  -- openssl/md5.h:102

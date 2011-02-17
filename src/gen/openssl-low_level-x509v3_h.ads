@@ -393,7 +393,7 @@ package OpenSSL.Low_Level.x509v3_h is
       flags        : aliased int;  -- openssl/x509v3.h:131
       issuer_cert  : access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509v3.h:132
       subject_cert : access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509v3.h:133
-      subject_req  : access OpenSSL.Low_Level.x509_h.X509_REQ;  -- openssl/x509v3.h:134
+      subject_req  : access OpenSSL.Low_Level.x509_h.X509_req_st;  -- openssl/x509v3.h:134
       crl          : access OpenSSL.Low_Level.x509_h.X509_crl_st;  -- openssl/x509v3.h:135
       db_meth      : access X509V3_CONF_METHOD;  -- openssl/x509v3.h:136
       db           : System.Address;  -- openssl/x509v3.h:137
@@ -426,8 +426,8 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype PKEY_USAGE_PERIOD is PKEY_USAGE_PERIOD_st;
 
    type otherName_st is record
-      type_id : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:164
-      value   : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/x509v3.h:165
+      type_id : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:164
+      value   : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:165
    end record;
    pragma Convention (C_Pass_By_Copy, otherName_st);  -- openssl/x509v3.h:163
 
@@ -452,7 +452,7 @@ package OpenSSL.Low_Level.x509v3_h is
          when 3 =>
             dNSName                   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:190
          when 4 =>
-            x400Address               : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/x509v3.h:191
+            x400Address               : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:191
          when 5 =>
             directoryName             : access OpenSSL.Low_Level.x509_h.X509_name_st;  -- openssl/x509v3.h:192
          when 6 =>
@@ -462,7 +462,7 @@ package OpenSSL.Low_Level.x509v3_h is
          when 8 =>
             iPAddress                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:195
          when 9 =>
-            registeredID              : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:196
+            registeredID              : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:196
          when 10 =>
             ip                        : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:199
          when 11 =>
@@ -470,9 +470,9 @@ package OpenSSL.Low_Level.x509v3_h is
          when 12 =>
             ia5                       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:201
          when 13 =>
-            rid                       : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:202
+            rid                       : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:202
          when others =>
-            other                     : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/x509v3.h:203
+            other                     : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:203
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_44);
@@ -489,7 +489,7 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype GENERAL_NAMES is stack_st_GENERAL_NAME;
 
    type ACCESS_DESCRIPTION_st is record
-      method   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:210
+      method   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:210
       location : access GENERAL_NAME;  -- openssl/x509v3.h:211
    end record;
    pragma Convention (C_Pass_By_Copy, ACCESS_DESCRIPTION_st);  -- openssl/x509v3.h:209
@@ -597,13 +597,13 @@ package OpenSSL.Low_Level.x509v3_h is
          when 1 =>
             the_usernotice : access USERNOTICE;  -- openssl/x509v3.h:295
          when others =>
-            other          : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/x509v3.h:296
+            other          : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:296
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_46);
    pragma Unchecked_Union (anon_46);
    type POLICYQUALINFO_st is record
-      pqualid : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:292
+      pqualid : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:292
       d       : anon_46;  -- openssl/x509v3.h:297
    end record;
    pragma Convention (C_Pass_By_Copy, POLICYQUALINFO_st);  -- openssl/x509v3.h:291
@@ -616,7 +616,7 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_POLICYQUALINFO);  -- openssl/x509v3.h:300
 
    type POLICYINFO_st is record
-      policyid   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:304
+      policyid   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:304
       qualifiers : access stack_st_POLICYQUALINFO;  -- openssl/x509v3.h:305
    end record;
    pragma Convention (C_Pass_By_Copy, POLICYINFO_st);  -- openssl/x509v3.h:303
@@ -632,8 +632,8 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_POLICYINFO);  -- openssl/x509v3.h:310
 
    type POLICY_MAPPING_st is record
-      issuerDomainPolicy  : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:314
-      subjectDomainPolicy : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:315
+      issuerDomainPolicy  : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:314
+      subjectDomainPolicy : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:315
    end record;
    pragma Convention (C_Pass_By_Copy, POLICY_MAPPING_st);  -- openssl/x509v3.h:313
 
@@ -675,7 +675,7 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype POLICY_CONSTRAINTS is POLICY_CONSTRAINTS_st;
 
    type PROXY_POLICY_st is record
-      policyLanguage : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509v3.h:343
+      policyLanguage : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:343
       policy         : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:344
    end record;
    pragma Convention (C_Pass_By_Copy, PROXY_POLICY_st);  -- openssl/x509v3.h:341
@@ -1002,8 +1002,8 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function GENERAL_NAME_set0_othername
      (gen   : access GENERAL_NAME;
-      oid   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
-      value : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/x509v3.h:551
+      oid   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      value : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/x509v3.h:551
    pragma Import (C, GENERAL_NAME_set0_othername, "GENERAL_NAME_set0_othername");
 
    function GENERAL_NAME_get0_otherName
@@ -1343,7 +1343,7 @@ package OpenSSL.Low_Level.x509v3_h is
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
       ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
       section  : Interfaces.C.Strings.chars_ptr;
-      req      : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/x509v3.h:609
+      req      : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/x509v3.h:609
    pragma Import (C, X509V3_EXT_REQ_add_nconf, "X509V3_EXT_REQ_add_nconf");
 
    function X509V3_EXT_CRL_add_nconf
@@ -1378,7 +1378,7 @@ package OpenSSL.Low_Level.x509v3_h is
      (conf    : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
       ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
       section : Interfaces.C.Strings.chars_ptr;
-      req     : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/x509v3.h:618
+      req     : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/x509v3.h:618
    pragma Import (C, X509V3_EXT_REQ_add_conf, "X509V3_EXT_REQ_add_conf");
 
    function X509V3_EXT_CRL_add_conf
@@ -1425,7 +1425,7 @@ package OpenSSL.Low_Level.x509v3_h is
      (ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
       issuer  : access OpenSSL.Low_Level.x509_h.x509_st;
       subject : access OpenSSL.Low_Level.x509_h.x509_st;
-      req     : access OpenSSL.Low_Level.x509_h.X509_REQ;
+      req     : access OpenSSL.Low_Level.x509_h.X509_req_st;
       crl     : access OpenSSL.Low_Level.x509_h.X509_crl_st;
       flags   : int);  -- openssl/x509v3.h:635
    pragma Import (C, X509V3_set_ctx, "X509V3_set_ctx");
@@ -1616,7 +1616,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function X509_get1_email (x : access OpenSSL.Low_Level.x509_h.x509_st) return access OpenSSL.Low_Level.safestack_h.stack_st_OPENSSL_STRING;  -- openssl/x509v3.h:696
    pragma Import (C, X509_get1_email, "X509_get1_email");
 
-   function X509_REQ_get1_email (x : access OpenSSL.Low_Level.x509_h.X509_REQ) return access OpenSSL.Low_Level.safestack_h.stack_st_OPENSSL_STRING;  -- openssl/x509v3.h:697
+   function X509_REQ_get1_email (x : access OpenSSL.Low_Level.x509_h.X509_req_st) return access OpenSSL.Low_Level.safestack_h.stack_st_OPENSSL_STRING;  -- openssl/x509v3.h:697
    pragma Import (C, X509_REQ_get1_email, "X509_REQ_get1_email");
 
    procedure X509_email_free (sk : access OpenSSL.Low_Level.safestack_h.stack_st_OPENSSL_STRING);  -- openssl/x509v3.h:698
@@ -1990,10 +1990,10 @@ package OpenSSL.Low_Level.x509v3_h is
    function v3_addr_subset (a : access IPAddrBlocks; b : access IPAddrBlocks) return int;  -- openssl/x509v3.h:843
    pragma Import (C, v3_addr_subset, "v3_addr_subset");
 
-   function v3_asid_validate_path (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509v3.h:848
+   function v3_asid_validate_path (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509v3.h:848
    pragma Import (C, v3_asid_validate_path, "v3_asid_validate_path");
 
-   function v3_addr_validate_path (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509v3.h:849
+   function v3_addr_validate_path (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509v3.h:849
    pragma Import (C, v3_addr_validate_path, "v3_addr_validate_path");
 
    function v3_asid_validate_resource_set

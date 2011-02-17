@@ -193,7 +193,7 @@ package OpenSSL.Low_Level.ocsp_h is
    subtype OCSP_REQUEST is ocsp_request_st;
 
    type ocsp_resp_bytes_st is record
-      responseType : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ocsp.h:182
+      responseType : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ocsp.h:182
       response     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:183
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_resp_bytes_st);  -- openssl/ocsp.h:180
@@ -524,7 +524,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_REQUEST_get_ext_by_OBJ
      (x       : access OCSP_REQUEST;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:491
    pragma Import (C, OCSP_REQUEST_get_ext_by_OBJ, "OCSP_REQUEST_get_ext_by_OBJ");
 
@@ -572,7 +572,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_ONEREQ_get_ext_by_OBJ
      (x       : access OCSP_ONEREQ;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:502
    pragma Import (C, OCSP_ONEREQ_get_ext_by_OBJ, "OCSP_ONEREQ_get_ext_by_OBJ");
 
@@ -620,7 +620,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_BASICRESP_get_ext_by_OBJ
      (x       : access OCSP_BASICRESP;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:513
    pragma Import (C, OCSP_BASICRESP_get_ext_by_OBJ, "OCSP_BASICRESP_get_ext_by_OBJ");
 
@@ -668,7 +668,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_SINGLERESP_get_ext_by_OBJ
      (x       : access OCSP_SINGLERESP;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:524
    pragma Import (C, OCSP_SINGLERESP_get_ext_by_OBJ, "OCSP_SINGLERESP_get_ext_by_OBJ");
 

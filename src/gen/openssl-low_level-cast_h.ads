@@ -5,13 +5,13 @@ package OpenSSL.Low_Level.cast_h is
 
    package defs is
 
-   CAST_ENCRYPT : constant := 1;  --  openssl/cast.h:72
-   CAST_DECRYPT : constant := 0;  --  openssl/cast.h:73
+      CAST_ENCRYPT : constant := 1;  --  openssl/cast.h:72
+      CAST_DECRYPT : constant := 0;  --  openssl/cast.h:73
    --  unsupported macro: CAST_LONG unsigned int
 
-   CAST_BLOCK : constant := 8;  --  openssl/cast.h:77
-   CAST_KEY_LENGTH : constant := 16;  --  openssl/cast.h:78
-end;
+      CAST_BLOCK   : constant := 8;  --  openssl/cast.h:77
+      CAST_KEY_LENGTH : constant := 16;  --  openssl/cast.h:78
+   end defs;
    type cast_key_st_data_array is array (0 .. 31) of aliased unsigned;
    type cast_key_st is record
       data : aliased cast_key_st_data_array;  -- openssl/cast.h:82

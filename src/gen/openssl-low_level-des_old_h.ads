@@ -111,7 +111,7 @@ package OpenSSL.Low_Level.des_old_h is
    --  unsupported macro: quad_cksum des_quad_cksum
    --  unsupported macro: check_parity des_check_key_parity
    --  unsupported macro: des_fixup_key_parity DES_fixup_key_parity
-   end;
+   end defs;
    type u_ossl_old_des_cblock is array (0 .. 7) of aliased unsigned_char;  -- openssl/des_old.h:123
 
    type u_ossl_old_des_ks_struct_pad_array is array (0 .. 1) of aliased unsigned_long;

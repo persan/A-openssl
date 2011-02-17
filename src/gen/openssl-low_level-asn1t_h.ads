@@ -1,10 +1,9 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
-with OpenSSL.Low_Level.asn1_h;
 with System;
 with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.stack_h;
-with OpenSSL.Low_Level.asn1_h;
+limited with OpenSSL.Low_Level.asn1_h;
 package OpenSSL.Low_Level.asn1t_h is
    package defs is
 

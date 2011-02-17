@@ -267,7 +267,7 @@ package OpenSSL.Low_Level.cms_h is
       pctx   : System.Address) return int;  -- openssl/cms.h:81
    pragma Import (C, CMS_ContentInfo_print_ctx, "CMS_ContentInfo_print_ctx");
 
-   function CMS_get0_type (cms : System.Address) return access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/cms.h:115
+   function CMS_get0_type (cms : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/cms.h:115
    pragma Import (C, CMS_get0_type, "CMS_get0_type");
 
    function CMS_dataInit (cms : System.Address; icont : access OpenSSL.Low_Level.bio_h.bio_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/cms.h:117
@@ -513,8 +513,8 @@ package OpenSSL.Low_Level.cms_h is
       id          : access unsigned_char;
       idlen       : size_t;
       date        : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      otherTypeId : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
-      otherType   : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return System.Address;  -- openssl/cms.h:202
+      otherTypeId : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      otherType   : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return System.Address;  -- openssl/cms.h:202
    pragma Import (C, CMS_add0_recipient_key, "CMS_add0_recipient_key");
 
    function CMS_RecipientInfo_kekri_get0_id
@@ -554,10 +554,10 @@ package OpenSSL.Low_Level.cms_h is
       flags    : unsigned) return System.Address;  -- openssl/cms.h:226
    pragma Import (C, CMS_compress, "CMS_compress");
 
-   function CMS_set1_eContentType (cms : System.Address; oid : access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT) return int;  -- openssl/cms.h:228
+   function CMS_set1_eContentType (cms : System.Address; oid : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/cms.h:228
    pragma Import (C, CMS_set1_eContentType, "CMS_set1_eContentType");
 
-   function CMS_get0_eContentType (cms : System.Address) return access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/cms.h:229
+   function CMS_get0_eContentType (cms : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/cms.h:229
    pragma Import (C, CMS_get0_eContentType, "CMS_get0_eContentType");
 
    function CMS_add0_CertificateChoices (cms : System.Address) return System.Address;  -- openssl/cms.h:231
@@ -657,7 +657,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_signed_get_attr_by_OBJ
      (si      : System.Address;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/cms.h:268
    pragma Import (C, CMS_signed_get_attr_by_OBJ, "CMS_signed_get_attr_by_OBJ");
 
@@ -672,7 +672,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_signed_add1_attr_by_OBJ
      (si     : System.Address;
-      obj    : access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj    : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;
       c_type : int;
       bytes  : System.Address;
       len    : int) return int;  -- openssl/cms.h:273
@@ -696,7 +696,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_signed_get0_data_by_OBJ
      (si      : System.Address;
-      oid     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      oid     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int;
       c_type  : int) return System.Address;  -- openssl/cms.h:282
    pragma Import (C, CMS_signed_get0_data_by_OBJ, "CMS_signed_get0_data_by_OBJ");
@@ -712,7 +712,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_unsigned_get_attr_by_OBJ
      (si      : System.Address;
-      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/cms.h:288
    pragma Import (C, CMS_unsigned_get_attr_by_OBJ, "CMS_unsigned_get_attr_by_OBJ");
 
@@ -727,7 +727,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_unsigned_add1_attr_by_OBJ
      (si     : System.Address;
-      obj    : access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      obj    : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;
       c_type : int;
       bytes  : System.Address;
       len    : int) return int;  -- openssl/cms.h:293
@@ -751,7 +751,7 @@ package OpenSSL.Low_Level.cms_h is
 
    function CMS_unsigned_get0_data_by_OBJ
      (si      : System.Address;
-      oid     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+      oid     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       lastpos : int;
       c_type  : int) return System.Address;  -- openssl/cms.h:302
    pragma Import (C, CMS_unsigned_get0_data_by_OBJ, "CMS_unsigned_get0_data_by_OBJ");

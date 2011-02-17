@@ -154,7 +154,7 @@ package OpenSSL.Low_Level.dsa_h is
       method_mont_p : access OpenSSL.Low_Level.bn_h.bn_mont_ctx_st;  -- openssl/dsa.h:177
       references    : aliased int;  -- openssl/dsa.h:178
       ex_data       : aliased OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;  -- openssl/dsa.h:179
-      meth          : access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD;  -- openssl/dsa.h:180
+      meth          : access constant OpenSSL.Low_Level.dsa_h.dsa_method;  -- openssl/dsa.h:180
       the_engine    : System.Address;  -- openssl/dsa.h:182
    end record;
    pragma Convention (C_Pass_By_Copy, dsa_st);  -- openssl/dsa.h:158
@@ -190,16 +190,16 @@ package OpenSSL.Low_Level.dsa_h is
       the_dsa  : access OpenSSL.Low_Level.dsa_h.dsa_st) return int;  -- openssl/dsa.h:200
    pragma Import (C, DSA_do_verify, "DSA_do_verify");
 
-   function DSA_OpenSSL return access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD;  -- openssl/dsa.h:203
+   function DSA_OpenSSL return access constant OpenSSL.Low_Level.dsa_h.dsa_method;  -- openssl/dsa.h:203
    pragma Import (C, DSA_OpenSSL, "DSA_OpenSSL");
 
-   procedure DSA_set_default_method (arg1 : access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD);  -- openssl/dsa.h:205
+   procedure DSA_set_default_method (arg1 : access constant OpenSSL.Low_Level.dsa_h.dsa_method);  -- openssl/dsa.h:205
    pragma Import (C, DSA_set_default_method, "DSA_set_default_method");
 
-   function DSA_get_default_method return access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD;  -- openssl/dsa.h:206
+   function DSA_get_default_method return access constant OpenSSL.Low_Level.dsa_h.dsa_method;  -- openssl/dsa.h:206
    pragma Import (C, DSA_get_default_method, "DSA_get_default_method");
 
-   function DSA_set_method (the_dsa : access OpenSSL.Low_Level.dsa_h.dsa_st; arg2 : access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD) return int;  -- openssl/dsa.h:207
+   function DSA_set_method (the_dsa : access OpenSSL.Low_Level.dsa_h.dsa_st; arg2 : access constant OpenSSL.Low_Level.dsa_h.dsa_method) return int;  -- openssl/dsa.h:207
    pragma Import (C, DSA_set_method, "DSA_set_method");
 
    function DSA_new return access OpenSSL.Low_Level.dsa_h.dsa_st;  -- openssl/dsa.h:209

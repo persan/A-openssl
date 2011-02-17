@@ -406,7 +406,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_set_RSA (e : System.Address; rsa_meth : access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st) return int;  -- openssl/engine.h:463
    pragma Import (C, ENGINE_set_RSA, "ENGINE_set_RSA");
 
-   function ENGINE_set_DSA (e : System.Address; dsa_meth : access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD) return int;  -- openssl/engine.h:464
+   function ENGINE_set_DSA (e : System.Address; dsa_meth : access constant OpenSSL.Low_Level.dsa_h.dsa_method) return int;  -- openssl/engine.h:464
    pragma Import (C, ENGINE_set_DSA, "ENGINE_set_DSA");
 
    function ENGINE_set_ECDH (e : System.Address; ecdh_meth : System.Address) return int;  -- openssl/engine.h:465
@@ -415,7 +415,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_set_ECDSA (e : System.Address; ecdsa_meth : System.Address) return int;  -- openssl/engine.h:466
    pragma Import (C, ENGINE_set_ECDSA, "ENGINE_set_ECDSA");
 
-   function ENGINE_set_DH (e : System.Address; dh_meth : access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD) return int;  -- openssl/engine.h:467
+   function ENGINE_set_DH (e : System.Address; dh_meth : access constant OpenSSL.Low_Level.dh_h.dh_method) return int;  -- openssl/engine.h:467
    pragma Import (C, ENGINE_set_DH, "ENGINE_set_DH");
 
    function ENGINE_set_RAND (e : System.Address; rand_meth : access constant OpenSSL.Low_Level.rand_h.rand_meth_st) return int;  -- openssl/engine.h:468
@@ -547,7 +547,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_get_RSA (e : System.Address) return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/engine.h:502
    pragma Import (C, ENGINE_get_RSA, "ENGINE_get_RSA");
 
-   function ENGINE_get_DSA (e : System.Address) return access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD;  -- openssl/engine.h:503
+   function ENGINE_get_DSA (e : System.Address) return access constant OpenSSL.Low_Level.dsa_h.dsa_method;  -- openssl/engine.h:503
    pragma Import (C, ENGINE_get_DSA, "ENGINE_get_DSA");
 
    function ENGINE_get_ECDH (e : System.Address) return System.Address;  -- openssl/engine.h:504
@@ -556,7 +556,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_get_ECDSA (e : System.Address) return System.Address;  -- openssl/engine.h:505
    pragma Import (C, ENGINE_get_ECDSA, "ENGINE_get_ECDSA");
 
-   function ENGINE_get_DH (e : System.Address) return access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD;  -- openssl/engine.h:506
+   function ENGINE_get_DH (e : System.Address) return access constant OpenSSL.Low_Level.dh_h.dh_method;  -- openssl/engine.h:506
    pragma Import (C, ENGINE_get_DH, "ENGINE_get_DH");
 
    function ENGINE_get_RAND (e : System.Address) return access constant OpenSSL.Low_Level.rand_h.rand_meth_st;  -- openssl/engine.h:507

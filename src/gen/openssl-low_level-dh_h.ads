@@ -73,6 +73,7 @@ package OpenSSL.Low_Level.dh_h is
       DH_R_PARAMETER_ENCODING_ERROR : constant := 105;  --  openssl/dh.h:259
       DH_R_KEY_SIZE_TOO_SMALL     : constant := 110;  --  openssl/dh.h:260
    end defs;
+   type dh_st;
    type dh_method is record
       name            : Interfaces.C.Strings.chars_ptr;  -- openssl/dh.h:101
       generate_key    : access function (arg1 : System.Address) return int;  -- openssl/dh.h:103
@@ -117,7 +118,7 @@ package OpenSSL.Low_Level.dh_h is
       counter       : access OpenSSL.Low_Level.bn_h.bignum_st;  -- openssl/dh.h:136
       references    : aliased int;  -- openssl/dh.h:138
       ex_data       : aliased OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;  -- openssl/dh.h:139
-      meth          : access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD;  -- openssl/dh.h:140
+      meth          : access constant OpenSSL.Low_Level.dh_h.dh_method;  -- openssl/dh.h:140
       the_engine    : System.Address;  -- openssl/dh.h:141
    end record;
    pragma Convention (C_Pass_By_Copy, dh_st);  -- openssl/dh.h:117
@@ -125,16 +126,16 @@ package OpenSSL.Low_Level.dh_h is
    function DHparams_dup (arg1 : access OpenSSL.Low_Level.dh_h.dh_st) return access OpenSSL.Low_Level.dh_h.dh_st;  -- openssl/dh.h:169
    pragma Import (C, DHparams_dup, "DHparams_dup");
 
-   function DH_OpenSSL return access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD;  -- openssl/dh.h:171
+   function DH_OpenSSL return access constant OpenSSL.Low_Level.dh_h.dh_method;  -- openssl/dh.h:171
    pragma Import (C, DH_OpenSSL, "DH_OpenSSL");
 
-   procedure DH_set_default_method (meth : access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD);  -- openssl/dh.h:173
+   procedure DH_set_default_method (meth : access constant OpenSSL.Low_Level.dh_h.dh_method);  -- openssl/dh.h:173
    pragma Import (C, DH_set_default_method, "DH_set_default_method");
 
-   function DH_get_default_method return access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD;  -- openssl/dh.h:174
+   function DH_get_default_method return access constant OpenSSL.Low_Level.dh_h.dh_method;  -- openssl/dh.h:174
    pragma Import (C, DH_get_default_method, "DH_get_default_method");
 
-   function DH_set_method (the_dh : access OpenSSL.Low_Level.dh_h.dh_st; meth : access constant OpenSSL.Low_Level.dh_h.dh_st_METHOD) return int;  -- openssl/dh.h:175
+   function DH_set_method (the_dh : access OpenSSL.Low_Level.dh_h.dh_st; meth : access constant OpenSSL.Low_Level.dh_h.dh_method) return int;  -- openssl/dh.h:175
    pragma Import (C, DH_set_method, "DH_set_method");
 
    function DH_new_method (the_engine : System.Address) return access OpenSSL.Low_Level.dh_h.dh_st;  -- openssl/dh.h:176

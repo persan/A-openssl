@@ -3,8 +3,6 @@ with System;
 with OpenSSL.Low_Level.tls1_h;
 with Interfaces.C.Strings;
 with OpenSSL.Low_Level.stack_h;
---  with OpenSSL.Low_Level.ossl_typ_h;
---  with stddef_h;
 limited with OpenSSL.Low_Level.comp_h;
 limited with OpenSSL.Low_Level.x509_vfy_h;
 limited with OpenSSL.Low_Level.x509_h;
@@ -15,13 +13,14 @@ limited with OpenSSL.Low_Level.ssl3_h;
 limited with OpenSSL.Low_Level.dtls1_h;
 limited with OpenSSL.Low_Level.kssl_h;
 limited with OpenSSL.Low_Level.ocsp_h;
---  limited --  with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.evp_h;
 with Interfaces.C_Streams;
 with OpenSSL.Low_Level.crypto_h;
+limited with OpenSSL.Low_Level.buffer_h;
+limited with OpenSSL.Low_Level.rsa_h;
+limited with OpenSSL.Low_Level.dh_h;
 
 package OpenSSL.Low_Level.ssl_h is
-
    package defs is
 
       SSL_SESSION_ASN1_VERSION : constant := 16#0001#;  --  openssl/ssl.h:177
@@ -1085,7 +1084,7 @@ package OpenSSL.Low_Level.ssl_h is
       arg4 : access stack_st_SSL_CIPHER;
       arg5 : System.Address;
       arg6 : System.Address) return int;  -- openssl/ssl.h:383
-
+   type ssl_st;
    type ssl_method_st is record
       version               : aliased int;  -- openssl/ssl.h:388
       ssl_new               : access function (arg1 : System.Address) return int;  -- openssl/ssl.h:389
@@ -1139,7 +1138,7 @@ package OpenSSL.Low_Level.ssl_h is
          arg4                  : System.Address) return long;  -- openssl/ssl.h:407
       get_cipher_by_char    : access function (arg1 : access unsigned_char) return System.Address;  -- openssl/ssl.h:408
       put_cipher_by_char    : access function (arg1 : System.Address; arg2 : access unsigned_char) return int;  -- openssl/ssl.h:409
-      ssl_pending           : access function (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:410
+      ssl_pending           : access function (arg1 : access constant  ssl_st) return int;  -- openssl/ssl.h:410
       num_ciphers           : access function return int;  -- openssl/ssl.h:411
       get_cipher            : access function (arg1 : unsigned) return System.Address;  -- openssl/ssl.h:412
       get_ssl_method        : access function (arg1 : int) return System.Address;  -- openssl/ssl.h:413
@@ -1226,14 +1225,14 @@ package OpenSSL.Low_Level.ssl_h is
    pragma Import (C, SSL_set_msg_callback, "SSL_set_msg_callback");
 
    type GEN_SESSION_CB is access function
-     (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+     (arg1 : access constant  ssl_st;
       arg2 : access unsigned_char;
       arg3 : access unsigned) return int;  -- openssl/ssl.h:662
 
    type ssl_comp_st is record
       id     : aliased int;  -- openssl/ssl.h:667
       name   : Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:668
-      method : access OpenSSL.Low_Level.comp_h.COMP_METHOD;  -- openssl/ssl.h:670
+      method : access OpenSSL.Low_Level.comp_h.comp_method_st;  -- openssl/ssl.h:670
    end record;
    pragma Convention (C_Pass_By_Copy, ssl_comp_st);  -- openssl/ssl.h:665
 
@@ -1288,7 +1287,7 @@ package OpenSSL.Low_Level.ssl_h is
          arg4                                 : access int) return access SSL_SESSION;  -- openssl/ssl.h:718
       stats                                : aliased anon_37;  -- openssl/ssl.h:738
       references                           : aliased int;  -- openssl/ssl.h:740
-      app_verify_callback                  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; arg2 : System.Address) return int;  -- openssl/ssl.h:743
+      app_verify_callback                  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; arg2 : System.Address) return int;  -- openssl/ssl.h:743
       app_verify_arg                       : System.Address;  -- openssl/ssl.h:744
       default_passwd_callback              : access function
         (arg1 : Interfaces.C.Strings.chars_ptr;
@@ -1315,7 +1314,7 @@ package OpenSSL.Low_Level.ssl_h is
       extra_certs                          : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ssl.h:771
       comp_methods                         : access stack_st_SSL_COMP;  -- openssl/ssl.h:772
       info_callback                        : access procedure
-        (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access constant  ssl_st;
          arg2                                 : int;
          arg3                                 : int);  -- openssl/ssl.h:777
       client_CA                            : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:780
@@ -1336,12 +1335,12 @@ package OpenSSL.Low_Level.ssl_h is
       verify_mode                          : aliased int;  -- openssl/ssl.h:796
       sid_ctx_length                       : aliased unsigned;  -- openssl/ssl.h:797
       sid_ctx                              : aliased ssl_ctx_st_sid_ctx_array;  -- openssl/ssl.h:798
-      default_verify_callback              : access function (arg1 : int; arg2                     : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/ssl.h:799
+      default_verify_callback              : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/ssl.h:799
       generate_session_id                  : access function
-        (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access constant  ssl_st;
          arg2                                 : access unsigned_char;
          arg3                                 : access unsigned) return int;  -- openssl/ssl.h:802
-      param                                : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM;  -- openssl/ssl.h:804
+      param                                : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM_st;  -- openssl/ssl.h:804
       quiet_shutdown                       : aliased int;  -- openssl/ssl.h:811
       max_send_fragment                    : aliased unsigned;  -- openssl/ssl.h:817
       client_cert_engine                   : System.Address;  -- openssl/ssl.h:822
@@ -1358,7 +1357,7 @@ package OpenSSL.Low_Level.ssl_h is
          arg2                                 : access unsigned_char;
          arg3                                 : access unsigned_char;
          arg4                                 : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
-         arg5                                 : access OpenSSL.Low_Level.hmac_h.HMAC_CTX;
+         arg5                                 : access OpenSSL.Low_Level.hmac_h.hmac_ctx_st;
          arg6                                 : int) return int;  -- openssl/ssl.h:837
       tlsext_status_cb                     : access function (arg1 : System.Address; arg2          : System.Address) return int;  -- openssl/ssl.h:841
       tlsext_status_arg                    : System.Address;  -- openssl/ssl.h:842
@@ -1391,75 +1390,75 @@ package OpenSSL.Low_Level.ssl_h is
 
    --  skipped empty struct ssl3_buf_freelist_st
 
-   function SSL_CTX_sessions (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access lhash_st_SSL_SESSION;  -- openssl/ssl.h:877
+   function SSL_CTX_sessions (ctx : access  ssl_ctx_st) return access lhash_st_SSL_SESSION;  -- openssl/ssl.h:877
    pragma Import (C, SSL_CTX_sessions, "SSL_CTX_sessions");
 
-   procedure SSL_CTX_sess_set_new_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; new_session_cb : access function (arg1 : System.Address; arg2 : access SSL_SESSION) return int);  -- openssl/ssl.h:903
+   procedure SSL_CTX_sess_set_new_cb (ctx : access  ssl_ctx_st; new_session_cb : access function (arg1 : System.Address; arg2 : access SSL_SESSION) return int);  -- openssl/ssl.h:903
    pragma Import (C, SSL_CTX_sess_set_new_cb, "SSL_CTX_sess_set_new_cb");
 
-   function SSL_CTX_sess_get_new_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access function (arg1 : System.Address; arg2 : access SSL_SESSION) return int;  -- openssl/ssl.h:904
+   function SSL_CTX_sess_get_new_cb (ctx : access  ssl_ctx_st) return access function (arg1 : System.Address; arg2 : access SSL_SESSION) return int;  -- openssl/ssl.h:904
    pragma Import (C, SSL_CTX_sess_get_new_cb, "SSL_CTX_sess_get_new_cb");
 
-   procedure SSL_CTX_sess_set_remove_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; remove_session_cb : access procedure (arg1 : access ssl_ctx_st; arg2 : access SSL_SESSION));  -- openssl/ssl.h:905
+   procedure SSL_CTX_sess_set_remove_cb (ctx : access  ssl_ctx_st; remove_session_cb : access procedure (arg1 : access ssl_ctx_st; arg2 : access SSL_SESSION));  -- openssl/ssl.h:905
    pragma Import (C, SSL_CTX_sess_set_remove_cb, "SSL_CTX_sess_set_remove_cb");
 
-   function SSL_CTX_sess_get_remove_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access procedure (arg1 : access ssl_ctx_st; arg2 : access SSL_SESSION);  -- openssl/ssl.h:906
+   function SSL_CTX_sess_get_remove_cb (ctx : access  ssl_ctx_st) return access procedure (arg1 : access ssl_ctx_st; arg2 : access SSL_SESSION);  -- openssl/ssl.h:906
    pragma Import (C, SSL_CTX_sess_get_remove_cb, "SSL_CTX_sess_get_remove_cb");
 
-   procedure SSL_CTX_sess_set_get_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; get_session_cb : access function
+   procedure SSL_CTX_sess_set_get_cb (ctx : access  ssl_ctx_st; get_session_cb : access function
                                         (arg1 : System.Address;
                                          arg2 : access unsigned_char;
                                          arg3 : int;
                                          arg4 : access int) return access SSL_SESSION);  -- openssl/ssl.h:907
    pragma Import (C, SSL_CTX_sess_set_get_cb, "SSL_CTX_sess_set_get_cb");
 
-   function SSL_CTX_sess_get_get_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access function
+   function SSL_CTX_sess_get_get_cb (ctx : access  ssl_ctx_st) return access function
      (arg1 : System.Address;
       arg2 : access unsigned_char;
       arg3 : int;
       arg4 : access int) return access SSL_SESSION;  -- openssl/ssl.h:908
    pragma Import (C, SSL_CTX_sess_get_get_cb, "SSL_CTX_sess_get_get_cb");
 
-   procedure SSL_CTX_set_info_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; cb : access procedure
-                                          (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_CTX_set_info_callback (ctx : access  ssl_ctx_st; cb : access procedure
+                                          (arg1 : access constant  ssl_st;
                                            arg2 : int;
                                            arg3 : int));  -- openssl/ssl.h:909
    pragma Import (C, SSL_CTX_set_info_callback, "SSL_CTX_set_info_callback");
 
-   function SSL_CTX_get_info_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access procedure
-     (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   function SSL_CTX_get_info_callback (ctx : access  ssl_ctx_st) return access procedure
+     (arg1 : access constant  ssl_st;
       arg2 : int;
       arg3 : int);  -- openssl/ssl.h:910
    pragma Import (C, SSL_CTX_get_info_callback, "SSL_CTX_get_info_callback");
 
-   procedure SSL_CTX_set_client_cert_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; client_cert_cb : access function
+   procedure SSL_CTX_set_client_cert_cb (ctx : access  ssl_ctx_st; client_cert_cb : access function
                                            (arg1 : System.Address;
                                             arg2 : System.Address;
                                             arg3 : System.Address) return int);  -- openssl/ssl.h:911
    pragma Import (C, SSL_CTX_set_client_cert_cb, "SSL_CTX_set_client_cert_cb");
 
-   function SSL_CTX_get_client_cert_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access function
+   function SSL_CTX_get_client_cert_cb (ctx : access  ssl_ctx_st) return access function
      (arg1 : System.Address;
       arg2 : System.Address;
       arg3 : System.Address) return int;  -- openssl/ssl.h:912
    pragma Import (C, SSL_CTX_get_client_cert_cb, "SSL_CTX_get_client_cert_cb");
 
-   function SSL_CTX_set_client_cert_engine (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; e : System.Address) return int;  -- openssl/ssl.h:914
+   function SSL_CTX_set_client_cert_engine (ctx : access  ssl_ctx_st; e : System.Address) return int;  -- openssl/ssl.h:914
    pragma Import (C, SSL_CTX_set_client_cert_engine, "SSL_CTX_set_client_cert_engine");
 
-   procedure SSL_CTX_set_cookie_generate_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; app_gen_cookie_cb : access function
+   procedure SSL_CTX_set_cookie_generate_cb (ctx : access  ssl_ctx_st; app_gen_cookie_cb : access function
                                                (arg1 : System.Address;
                                                 arg2 : access unsigned_char;
                                                 arg3 : access unsigned) return int);  -- openssl/ssl.h:916
    pragma Import (C, SSL_CTX_set_cookie_generate_cb, "SSL_CTX_set_cookie_generate_cb");
 
-   procedure SSL_CTX_set_cookie_verify_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; app_verify_cookie_cb : access function
+   procedure SSL_CTX_set_cookie_verify_cb (ctx : access  ssl_ctx_st; app_verify_cookie_cb : access function
                                              (arg1 : System.Address;
                                               arg2 : access unsigned_char;
                                               arg3 : unsigned) return int);  -- openssl/ssl.h:917
    pragma Import (C, SSL_CTX_set_cookie_verify_cb, "SSL_CTX_set_cookie_verify_cb");
 
-   procedure SSL_CTX_set_psk_client_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; psk_client_callback : access function
+   procedure SSL_CTX_set_psk_client_callback (ctx : access  ssl_ctx_st; psk_client_callback : access function
                                                 (arg1 : System.Address;
                                                  arg2 : Interfaces.C.Strings.chars_ptr;
                                                  arg3 : Interfaces.C.Strings.chars_ptr;
@@ -1477,7 +1476,7 @@ package OpenSSL.Low_Level.ssl_h is
                                              arg6 : unsigned) return unsigned);  -- openssl/ssl.h:928
    pragma Import (C, SSL_set_psk_client_callback, "SSL_set_psk_client_callback");
 
-   procedure SSL_CTX_set_psk_server_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; psk_server_callback : access function
+   procedure SSL_CTX_set_psk_server_callback (ctx : access  ssl_ctx_st; psk_server_callback : access function
                                                 (arg1 : System.Address;
                                                  arg2 : Interfaces.C.Strings.chars_ptr;
                                                  arg3 : access unsigned_char;
@@ -1491,16 +1490,16 @@ package OpenSSL.Low_Level.ssl_h is
                                              arg4 : unsigned) return unsigned);  -- openssl/ssl.h:935
    pragma Import (C, SSL_set_psk_server_callback, "SSL_set_psk_server_callback");
 
-   function SSL_CTX_use_psk_identity_hint (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; identity_hint : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:938
+   function SSL_CTX_use_psk_identity_hint (ctx : access  ssl_ctx_st; identity_hint : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:938
    pragma Import (C, SSL_CTX_use_psk_identity_hint, "SSL_CTX_use_psk_identity_hint");
 
    function SSL_use_psk_identity_hint (s : System.Address; identity_hint : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:939
    pragma Import (C, SSL_use_psk_identity_hint, "SSL_use_psk_identity_hint");
 
-   function SSL_get_psk_identity_hint (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:940
+   function SSL_get_psk_identity_hint (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:940
    pragma Import (C, SSL_get_psk_identity_hint, "SSL_get_psk_identity_hint");
 
-   function SSL_get_psk_identity (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:941
+   function SSL_get_psk_identity (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:941
    pragma Import (C, SSL_get_psk_identity, "SSL_get_psk_identity");
 
    type ssl_st_sid_ctx_array is array (0 .. 31) of aliased unsigned_char;
@@ -1513,7 +1512,7 @@ package OpenSSL.Low_Level.ssl_h is
       bbio                          : access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:975
       rwstate                       : aliased int;  -- openssl/ssl.h:986
       in_handshake                  : aliased int;  -- openssl/ssl.h:989
-      handshake_func                : access function (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:990
+      handshake_func                : access function (arg1 : access  ssl_st) return int;  -- openssl/ssl.h:990
       server                        : aliased int;  -- openssl/ssl.h:1000
       new_session                   : aliased int;  -- openssl/ssl.h:1002
       quiet_shutdown                : aliased int;  -- openssl/ssl.h:1008
@@ -1536,50 +1535,50 @@ package OpenSSL.Low_Level.ssl_h is
          arg3                          : int;
          arg4                          : System.Address;
          arg5                          : size_t;
-         arg6                          : access OpenSSL.Low_Level.ssl_h.ssl_st;
+         arg6                          : access  ssl_st;
          arg7                          : System.Address);  -- openssl/ssl.h:1031
       msg_callback_arg              : System.Address;  -- openssl/ssl.h:1032
       hit                           : aliased int;  -- openssl/ssl.h:1034
-      param                         : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM;  -- openssl/ssl.h:1036
+      param                         : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM_st;  -- openssl/ssl.h:1036
       cipher_list                   : access stack_st_SSL_CIPHER;  -- openssl/ssl.h:1044
       cipher_list_by_id             : access stack_st_SSL_CIPHER;  -- openssl/ssl.h:1045
       mac_flags                     : aliased int;  -- openssl/ssl.h:1049
       enc_read_ctx                  : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;  -- openssl/ssl.h:1050
       read_hash                     : access OpenSSL.Low_Level.evp_h.env_md_ctx_st;  -- openssl/ssl.h:1051
-      expand                        : access OpenSSL.Low_Level.comp_h.COMP_CTX;  -- openssl/ssl.h:1053
+      expand                        : access OpenSSL.Low_Level.comp_h.comp_ctx_st;  -- openssl/ssl.h:1053
       enc_write_ctx                 : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;  -- openssl/ssl.h:1058
       write_hash                    : access OpenSSL.Low_Level.evp_h.env_md_ctx_st;  -- openssl/ssl.h:1059
-      compress                      : access OpenSSL.Low_Level.comp_h.COMP_CTX;  -- openssl/ssl.h:1061
+      compress                      : access OpenSSL.Low_Level.comp_h.comp_ctx_st;  -- openssl/ssl.h:1061
       cert                          : System.Address;  -- openssl/ssl.h:1070
       sid_ctx_length                : aliased unsigned;  -- openssl/ssl.h:1074
       sid_ctx                       : aliased ssl_st_sid_ctx_array;  -- openssl/ssl.h:1075
       session                       : access SSL_SESSION;  -- openssl/ssl.h:1078
       generate_session_id           : access function
-        (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access constant  ssl_st;
          arg2                          : access unsigned_char;
          arg3                          : access unsigned) return int;  -- openssl/ssl.h:1081
       verify_mode                   : aliased int;  -- openssl/ssl.h:1084
-      verify_callback               : access function (arg1 : int; arg2              : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/ssl.h:1086
+      verify_callback               : access function (arg1 : int; arg2              : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/ssl.h:1086
       info_callback                 : access procedure
-        (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access constant  ssl_st;
          arg2                          : int;
          arg3                          : int);  -- openssl/ssl.h:1088
       error                         : aliased int;  -- openssl/ssl.h:1090
       error_code                    : aliased int;  -- openssl/ssl.h:1091
-      the_kssl_ctx                  : access OpenSSL.Low_Level.kssl_h.KSSL_CTX;  -- openssl/ssl.h:1094
+      the_kssl_ctx                  : access OpenSSL.Low_Level.kssl_h.kssl_ctx_st;  -- openssl/ssl.h:1094
       psk_client_callback           : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2                          : Interfaces.C.Strings.chars_ptr;
          arg3                          : Interfaces.C.Strings.chars_ptr;
          arg4                          : unsigned;
          arg5                          : access unsigned_char;
          arg6                          : unsigned) return unsigned;  -- openssl/ssl.h:1100
       psk_server_callback           : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2                          : Interfaces.C.Strings.chars_ptr;
          arg3                          : access unsigned_char;
          arg4                          : unsigned) return unsigned;  -- openssl/ssl.h:1102
-      ctx                           : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;  -- openssl/ssl.h:1105
+      ctx                           : access  ssl_ctx_st;  -- openssl/ssl.h:1105
       debug                         : aliased int;  -- openssl/ssl.h:1108
       verify_result                 : aliased long;  -- openssl/ssl.h:1111
       ex_data                       : aliased OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;  -- openssl/ssl.h:1112
@@ -1592,7 +1591,7 @@ package OpenSSL.Low_Level.ssl_h is
       client_version                : aliased int;  -- openssl/ssl.h:1122
       max_send_fragment             : aliased unsigned;  -- openssl/ssl.h:1124
       tlsext_debug_cb               : access procedure
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2                          : int;
          arg3                          : int;
          arg4                          : access unsigned_char;
@@ -1604,7 +1603,7 @@ package OpenSSL.Low_Level.ssl_h is
       tlsext_status_type            : aliased int;  -- openssl/ssl.h:1139
       tlsext_status_expected        : aliased int;  -- openssl/ssl.h:1141
       tlsext_ocsp_ids               : access OpenSSL.Low_Level.ocsp_h.stack_st_OCSP_RESPID;  -- openssl/ssl.h:1143
-      tlsext_ocsp_exts              : access OpenSSL.Low_Level.x509_h.X509_EXTENSIONS;  -- openssl/ssl.h:1144
+      tlsext_ocsp_exts              : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ssl.h:1144
       tlsext_ocsp_resp              : access unsigned_char;  -- openssl/ssl.h:1146
       tlsext_ocsp_resplen           : aliased int;  -- openssl/ssl.h:1147
       tlsext_ticket_expected        : aliased int;  -- openssl/ssl.h:1150
@@ -1612,31 +1611,31 @@ package OpenSSL.Low_Level.ssl_h is
       tlsext_opaque_prf_input_len   : aliased size_t;  -- openssl/ssl.h:1154
       tlsext_session_ticket         : access TLS_SESSION_TICKET_EXT;  -- openssl/ssl.h:1157
       tls_session_ticket_ext_cb     : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2                          : access unsigned_char;
          arg3                          : int;
          arg4                          : System.Address) return int;  -- openssl/ssl.h:1160
       tls_session_ticket_ext_cb_arg : System.Address;  -- openssl/ssl.h:1161
       tls_session_secret_cb         : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2                          : System.Address;
          arg3                          : access int;
          arg4                          : access stack_st_SSL_CIPHER;
          arg5                          : System.Address;
          arg6                          : System.Address) return int;  -- openssl/ssl.h:1164
       tls_session_secret_cb_arg     : System.Address;  -- openssl/ssl.h:1165
-      initial_ctx                   : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;  -- openssl/ssl.h:1167
+      initial_ctx                   : access  ssl_ctx_st;  -- openssl/ssl.h:1167
    end record;
    pragma Convention (C_Pass_By_Copy, ssl_st);  -- openssl/ssl.h:958
 
    function SSL_get_finished
-     (s     : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s     : access constant  ssl_st;
       buf   : System.Address;
       count : size_t) return size_t;  -- openssl/ssl.h:1243
    pragma Import (C, SSL_get_finished, "SSL_get_finished");
 
    function SSL_get_peer_finished
-     (s     : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s     : access constant  ssl_st;
       buf   : System.Address;
       count : size_t) return size_t;  -- openssl/ssl.h:1244
    pragma Import (C, SSL_get_peer_finished, "SSL_get_peer_finished");
@@ -1669,16 +1668,16 @@ package OpenSSL.Low_Level.ssl_h is
       u  : System.Address) return access SSL_SESSION;  -- openssl/ssl.h:1281
    pragma Import (C, PEM_read_bio_SSL_SESSION, "PEM_read_bio_SSL_SESSION");
 
-   function BIO_f_ssl return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/ssl.h:1447
+   function BIO_f_ssl return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/ssl.h:1447
    pragma Import (C, BIO_f_ssl, "BIO_f_ssl");
 
-   function BIO_new_ssl (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; client : int) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1448
+   function BIO_new_ssl (ctx : access  ssl_ctx_st; client : int) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1448
    pragma Import (C, BIO_new_ssl, "BIO_new_ssl");
 
-   function BIO_new_ssl_connect (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1449
+   function BIO_new_ssl_connect (ctx : access  ssl_ctx_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1449
    pragma Import (C, BIO_new_ssl_connect, "BIO_new_ssl_connect");
 
-   function BIO_new_buffer_ssl_connect (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1450
+   function BIO_new_buffer_ssl_connect (ctx : access  ssl_ctx_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1450
    pragma Import (C, BIO_new_buffer_ssl_connect, "BIO_new_buffer_ssl_connect");
 
    function BIO_ssl_copy_session_id (to : access OpenSSL.Low_Level.bio_h.bio_st; from : access OpenSSL.Low_Level.bio_h.bio_st) return int;  -- openssl/ssl.h:1451
@@ -1687,37 +1686,37 @@ package OpenSSL.Low_Level.ssl_h is
    procedure BIO_ssl_shutdown (ssl_bio : access OpenSSL.Low_Level.bio_h.bio_st);  -- openssl/ssl.h:1452
    pragma Import (C, BIO_ssl_shutdown, "BIO_ssl_shutdown");
 
-   function SSL_CTX_set_cipher_list (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; str : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1456
+   function SSL_CTX_set_cipher_list (arg1 : access  ssl_ctx_st; str : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1456
    pragma Import (C, SSL_CTX_set_cipher_list, "SSL_CTX_set_cipher_list");
 
-   function SSL_CTX_new (meth : System.Address) return access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;  -- openssl/ssl.h:1457
+   function SSL_CTX_new (meth : System.Address) return access  ssl_ctx_st;  -- openssl/ssl.h:1457
    pragma Import (C, SSL_CTX_new, "SSL_CTX_new");
 
-   procedure SSL_CTX_free (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st);  -- openssl/ssl.h:1458
+   procedure SSL_CTX_free (arg1 : access  ssl_ctx_st);  -- openssl/ssl.h:1458
    pragma Import (C, SSL_CTX_free, "SSL_CTX_free");
 
-   function SSL_CTX_set_timeout (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; t : long) return long;  -- openssl/ssl.h:1459
+   function SSL_CTX_set_timeout (ctx : access  ssl_ctx_st; t : long) return long;  -- openssl/ssl.h:1459
    pragma Import (C, SSL_CTX_set_timeout, "SSL_CTX_set_timeout");
 
-   function SSL_CTX_get_timeout (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return long;  -- openssl/ssl.h:1460
+   function SSL_CTX_get_timeout (ctx : access constant  ssl_ctx_st) return long;  -- openssl/ssl.h:1460
    pragma Import (C, SSL_CTX_get_timeout, "SSL_CTX_get_timeout");
 
-   function SSL_CTX_get_cert_store (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/ssl.h:1461
+   function SSL_CTX_get_cert_store (arg1 : access constant  ssl_ctx_st) return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/ssl.h:1461
    pragma Import (C, SSL_CTX_get_cert_store, "SSL_CTX_get_cert_store");
 
-   procedure SSL_CTX_set_cert_store (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st);  -- openssl/ssl.h:1462
+   procedure SSL_CTX_set_cert_store (arg1 : access  ssl_ctx_st; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st);  -- openssl/ssl.h:1462
    pragma Import (C, SSL_CTX_set_cert_store, "SSL_CTX_set_cert_store");
 
-   function SSL_want (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1463
+   function SSL_want (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1463
    pragma Import (C, SSL_want, "SSL_want");
 
-   function SSL_clear (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1464
+   function SSL_clear (s : access  ssl_st) return int;  -- openssl/ssl.h:1464
    pragma Import (C, SSL_clear, "SSL_clear");
 
-   procedure SSL_CTX_flush_sessions (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; tm : long);  -- openssl/ssl.h:1466
+   procedure SSL_CTX_flush_sessions (ctx : access  ssl_ctx_st; tm : long);  -- openssl/ssl.h:1466
    pragma Import (C, SSL_CTX_flush_sessions, "SSL_CTX_flush_sessions");
 
-   function SSL_get_current_cipher (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return System.Address;  -- openssl/ssl.h:1468
+   function SSL_get_current_cipher (s : access constant  ssl_st) return System.Address;  -- openssl/ssl.h:1468
    pragma Import (C, SSL_get_current_cipher, "SSL_get_current_cipher");
 
    function SSL_CIPHER_get_bits (c : System.Address; alg_bits : access int) return int;  -- openssl/ssl.h:1469
@@ -1729,140 +1728,140 @@ package OpenSSL.Low_Level.ssl_h is
    function SSL_CIPHER_get_name (c : System.Address) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1471
    pragma Import (C, SSL_CIPHER_get_name, "SSL_CIPHER_get_name");
 
-   function SSL_get_fd (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1473
+   function SSL_get_fd (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1473
    pragma Import (C, SSL_get_fd, "SSL_get_fd");
 
-   function SSL_get_rfd (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1474
+   function SSL_get_rfd (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1474
    pragma Import (C, SSL_get_rfd, "SSL_get_rfd");
 
-   function SSL_get_wfd (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1475
+   function SSL_get_wfd (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1475
    pragma Import (C, SSL_get_wfd, "SSL_get_wfd");
 
-   function SSL_get_cipher_list (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st; n : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1476
+   function SSL_get_cipher_list (s : access constant  ssl_st; n : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1476
    pragma Import (C, SSL_get_cipher_list, "SSL_get_cipher_list");
 
    function SSL_get_shared_ciphers
-     (s   : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s   : access constant  ssl_st;
       buf : Interfaces.C.Strings.chars_ptr;
       len : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1477
    pragma Import (C, SSL_get_shared_ciphers, "SSL_get_shared_ciphers");
 
-   function SSL_get_read_ahead (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1478
+   function SSL_get_read_ahead (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1478
    pragma Import (C, SSL_get_read_ahead, "SSL_get_read_ahead");
 
-   function SSL_pending (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1479
+   function SSL_pending (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1479
    pragma Import (C, SSL_pending, "SSL_pending");
 
-   function SSL_set_fd (s : access OpenSSL.Low_Level.ssl_h.ssl_st; fd : int) return int;  -- openssl/ssl.h:1481
+   function SSL_set_fd (s : access  ssl_st; fd : int) return int;  -- openssl/ssl.h:1481
    pragma Import (C, SSL_set_fd, "SSL_set_fd");
 
-   function SSL_set_rfd (s : access OpenSSL.Low_Level.ssl_h.ssl_st; fd : int) return int;  -- openssl/ssl.h:1482
+   function SSL_set_rfd (s : access  ssl_st; fd : int) return int;  -- openssl/ssl.h:1482
    pragma Import (C, SSL_set_rfd, "SSL_set_rfd");
 
-   function SSL_set_wfd (s : access OpenSSL.Low_Level.ssl_h.ssl_st; fd : int) return int;  -- openssl/ssl.h:1483
+   function SSL_set_wfd (s : access  ssl_st; fd : int) return int;  -- openssl/ssl.h:1483
    pragma Import (C, SSL_set_wfd, "SSL_set_wfd");
 
    procedure SSL_set_bio
-     (s    : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s    : access  ssl_st;
       rbio : access OpenSSL.Low_Level.bio_h.bio_st;
       wbio : access OpenSSL.Low_Level.bio_h.bio_st);  -- openssl/ssl.h:1486
    pragma Import (C, SSL_set_bio, "SSL_set_bio");
 
-   function SSL_get_rbio (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1487
+   function SSL_get_rbio (s : access constant  ssl_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1487
    pragma Import (C, SSL_get_rbio, "SSL_get_rbio");
 
-   function SSL_get_wbio (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1488
+   function SSL_get_wbio (s : access constant  ssl_st) return access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ssl.h:1488
    pragma Import (C, SSL_get_wbio, "SSL_get_wbio");
 
-   function SSL_set_cipher_list (s : access OpenSSL.Low_Level.ssl_h.ssl_st; str : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1490
+   function SSL_set_cipher_list (s : access  ssl_st; str : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1490
    pragma Import (C, SSL_set_cipher_list, "SSL_set_cipher_list");
 
-   procedure SSL_set_read_ahead (s : access OpenSSL.Low_Level.ssl_h.ssl_st; yes : int);  -- openssl/ssl.h:1491
+   procedure SSL_set_read_ahead (s : access  ssl_st; yes : int);  -- openssl/ssl.h:1491
    pragma Import (C, SSL_set_read_ahead, "SSL_set_read_ahead");
 
-   function SSL_get_verify_mode (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1492
+   function SSL_get_verify_mode (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1492
    pragma Import (C, SSL_get_verify_mode, "SSL_get_verify_mode");
 
-   function SSL_get_verify_depth (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1493
+   function SSL_get_verify_depth (s : access constant  ssl_st) return int;  -- openssl/ssl.h:1493
    pragma Import (C, SSL_get_verify_depth, "SSL_get_verify_depth");
 
-   function SSL_get_verify_callback (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/ssl.h:1494
+   function SSL_get_verify_callback (s : access constant  ssl_st) return access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/ssl.h:1494
    pragma Import (C, SSL_get_verify_callback, "SSL_get_verify_callback");
 
    procedure SSL_set_verify
-     (s        : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s        : access  ssl_st;
       mode     : int;
-      callback : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int);  -- openssl/ssl.h:1495
+      callback : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int);  -- openssl/ssl.h:1495
    pragma Import (C, SSL_set_verify, "SSL_set_verify");
 
-   procedure SSL_set_verify_depth (s : access OpenSSL.Low_Level.ssl_h.ssl_st; depth : int);  -- openssl/ssl.h:1497
+   procedure SSL_set_verify_depth (s : access  ssl_st; depth : int);  -- openssl/ssl.h:1497
    pragma Import (C, SSL_set_verify_depth, "SSL_set_verify_depth");
 
-   function SSL_use_RSAPrivateKey (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/ssl.h:1499
+   function SSL_use_RSAPrivateKey (the_ssl : access  ssl_st; the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/ssl.h:1499
    pragma Import (C, SSL_use_RSAPrivateKey, "SSL_use_RSAPrivateKey");
 
    function SSL_use_RSAPrivateKey_ASN1
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       d       : access unsigned_char;
       len     : long) return int;  -- openssl/ssl.h:1501
    pragma Import (C, SSL_use_RSAPrivateKey_ASN1, "SSL_use_RSAPrivateKey_ASN1");
 
-   function SSL_use_PrivateKey (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; pkey : access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/ssl.h:1502
+   function SSL_use_PrivateKey (the_ssl : access  ssl_st; pkey : access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/ssl.h:1502
    pragma Import (C, SSL_use_PrivateKey, "SSL_use_PrivateKey");
 
    function SSL_use_PrivateKey_ASN1
      (pk      : int;
-      the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+      the_ssl : access  ssl_st;
       d       : access unsigned_char;
       len     : long) return int;  -- openssl/ssl.h:1503
    pragma Import (C, SSL_use_PrivateKey_ASN1, "SSL_use_PrivateKey_ASN1");
 
-   function SSL_use_certificate (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1504
+   function SSL_use_certificate (the_ssl : access  ssl_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1504
    pragma Import (C, SSL_use_certificate, "SSL_use_certificate");
 
    function SSL_use_certificate_ASN1
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       d       : access unsigned_char;
       len     : int) return int;  -- openssl/ssl.h:1505
    pragma Import (C, SSL_use_certificate_ASN1, "SSL_use_certificate_ASN1");
 
    function SSL_use_RSAPrivateKey_file
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       file    : Interfaces.C.Strings.chars_ptr;
       c_type  : int) return int;  -- openssl/ssl.h:1508
    pragma Import (C, SSL_use_RSAPrivateKey_file, "SSL_use_RSAPrivateKey_file");
 
    function SSL_use_PrivateKey_file
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       file    : Interfaces.C.Strings.chars_ptr;
       c_type  : int) return int;  -- openssl/ssl.h:1509
    pragma Import (C, SSL_use_PrivateKey_file, "SSL_use_PrivateKey_file");
 
    function SSL_use_certificate_file
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       file    : Interfaces.C.Strings.chars_ptr;
       c_type  : int) return int;  -- openssl/ssl.h:1510
    pragma Import (C, SSL_use_certificate_file, "SSL_use_certificate_file");
 
    function SSL_CTX_use_RSAPrivateKey_file
-     (ctx    : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx    : access  ssl_ctx_st;
       file   : Interfaces.C.Strings.chars_ptr;
       c_type : int) return int;  -- openssl/ssl.h:1511
    pragma Import (C, SSL_CTX_use_RSAPrivateKey_file, "SSL_CTX_use_RSAPrivateKey_file");
 
    function SSL_CTX_use_PrivateKey_file
-     (ctx    : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx    : access  ssl_ctx_st;
       file   : Interfaces.C.Strings.chars_ptr;
       c_type : int) return int;  -- openssl/ssl.h:1512
    pragma Import (C, SSL_CTX_use_PrivateKey_file, "SSL_CTX_use_PrivateKey_file");
 
    function SSL_CTX_use_certificate_file
-     (ctx    : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx    : access  ssl_ctx_st;
       file   : Interfaces.C.Strings.chars_ptr;
       c_type : int) return int;  -- openssl/ssl.h:1513
    pragma Import (C, SSL_CTX_use_certificate_file, "SSL_CTX_use_certificate_file");
 
-   function SSL_CTX_use_certificate_chain_file (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; file : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1514
+   function SSL_CTX_use_certificate_chain_file (ctx : access  ssl_ctx_st; file : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1514
    pragma Import (C, SSL_CTX_use_certificate_chain_file, "SSL_CTX_use_certificate_chain_file");
 
    function SSL_load_client_CA_file (file : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1515
@@ -1877,16 +1876,16 @@ package OpenSSL.Low_Level.ssl_h is
    procedure SSL_load_error_strings;  -- openssl/ssl.h:1527
    pragma Import (C, SSL_load_error_strings, "SSL_load_error_strings");
 
-   function SSL_state_string (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1528
+   function SSL_state_string (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1528
    pragma Import (C, SSL_state_string, "SSL_state_string");
 
-   function SSL_rstate_string (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1529
+   function SSL_rstate_string (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1529
    pragma Import (C, SSL_rstate_string, "SSL_rstate_string");
 
-   function SSL_state_string_long (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1530
+   function SSL_state_string_long (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1530
    pragma Import (C, SSL_state_string_long, "SSL_state_string_long");
 
-   function SSL_rstate_string_long (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1531
+   function SSL_rstate_string_long (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1531
    pragma Import (C, SSL_rstate_string_long, "SSL_rstate_string_long");
 
    function SSL_SESSION_get_time (s : System.Address) return long;  -- openssl/ssl.h:1532
@@ -1901,7 +1900,7 @@ package OpenSSL.Low_Level.ssl_h is
    function SSL_SESSION_set_timeout (s : access SSL_SESSION; t : long) return long;  -- openssl/ssl.h:1535
    pragma Import (C, SSL_SESSION_set_timeout, "SSL_SESSION_set_timeout");
 
-   procedure SSL_copy_session_id (to : access OpenSSL.Low_Level.ssl_h.ssl_st; from : access constant OpenSSL.Low_Level.ssl_h.ssl_st);  -- openssl/ssl.h:1536
+   procedure SSL_copy_session_id (to : access  ssl_st; from : access constant  ssl_st);  -- openssl/ssl.h:1536
    pragma Import (C, SSL_copy_session_id, "SSL_copy_session_id");
 
    function SSL_SESSION_new return access SSL_SESSION;  -- openssl/ssl.h:1538
@@ -1922,29 +1921,29 @@ package OpenSSL.Low_Level.ssl_h is
    function i2d_SSL_SESSION (c_in : access SSL_SESSION; pp : System.Address) return int;  -- openssl/ssl.h:1548
    pragma Import (C, i2d_SSL_SESSION, "i2d_SSL_SESSION");
 
-   function SSL_set_session (to : access OpenSSL.Low_Level.ssl_h.ssl_st; session : access SSL_SESSION) return int;  -- openssl/ssl.h:1549
+   function SSL_set_session (to : access  ssl_st; session : access SSL_SESSION) return int;  -- openssl/ssl.h:1549
    pragma Import (C, SSL_set_session, "SSL_set_session");
 
-   function SSL_CTX_add_session (s : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; c : access SSL_SESSION) return int;  -- openssl/ssl.h:1550
+   function SSL_CTX_add_session (s : access  ssl_ctx_st; c : access SSL_SESSION) return int;  -- openssl/ssl.h:1550
    pragma Import (C, SSL_CTX_add_session, "SSL_CTX_add_session");
 
-   function SSL_CTX_remove_session (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; c : access SSL_SESSION) return int;  -- openssl/ssl.h:1551
+   function SSL_CTX_remove_session (arg1 : access  ssl_ctx_st; c : access SSL_SESSION) return int;  -- openssl/ssl.h:1551
    pragma Import (C, SSL_CTX_remove_session, "SSL_CTX_remove_session");
 
-   function SSL_CTX_set_generate_session_id (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; arg2 : access function
-                                               (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   function SSL_CTX_set_generate_session_id (arg1 : access  ssl_ctx_st; arg2 : access function
+                                               (arg1 : access constant  ssl_st;
                                                 arg2 : access unsigned_char;
                                                 arg3 : access unsigned) return int) return int;  -- openssl/ssl.h:1552
    pragma Import (C, SSL_CTX_set_generate_session_id, "SSL_CTX_set_generate_session_id");
 
-   function SSL_set_generate_session_id (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st; arg2 : access function
-                                           (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   function SSL_set_generate_session_id (arg1 : access  ssl_st; arg2 : access function
+                                           (arg1 : access constant  ssl_st;
                                             arg2 : access unsigned_char;
                                             arg3 : access unsigned) return int) return int;  -- openssl/ssl.h:1553
    pragma Import (C, SSL_set_generate_session_id, "SSL_set_generate_session_id");
 
    function SSL_has_matching_session_id
-     (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access constant  ssl_st;
       id      : access unsigned_char;
       id_len  : unsigned) return int;  -- openssl/ssl.h:1554
    pragma Import (C, SSL_has_matching_session_id, "SSL_has_matching_session_id");
@@ -1955,173 +1954,173 @@ package OpenSSL.Low_Level.ssl_h is
       length : long) return access SSL_SESSION;  -- openssl/ssl.h:1556
    pragma Import (C, d2i_SSL_SESSION, "d2i_SSL_SESSION");
 
-   function SSL_get_peer_certificate (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ssl.h:1560
+   function SSL_get_peer_certificate (s : access constant  ssl_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ssl.h:1560
    pragma Import (C, SSL_get_peer_certificate, "SSL_get_peer_certificate");
 
-   function SSL_get_peer_cert_chain (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ssl.h:1563
+   function SSL_get_peer_cert_chain (s : access constant  ssl_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ssl.h:1563
    pragma Import (C, SSL_get_peer_cert_chain, "SSL_get_peer_cert_chain");
 
-   function SSL_CTX_get_verify_mode (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return int;  -- openssl/ssl.h:1565
+   function SSL_CTX_get_verify_mode (ctx : access constant  ssl_ctx_st) return int;  -- openssl/ssl.h:1565
    pragma Import (C, SSL_CTX_get_verify_mode, "SSL_CTX_get_verify_mode");
 
-   function SSL_CTX_get_verify_depth (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return int;  -- openssl/ssl.h:1566
+   function SSL_CTX_get_verify_depth (ctx : access constant  ssl_ctx_st) return int;  -- openssl/ssl.h:1566
    pragma Import (C, SSL_CTX_get_verify_depth, "SSL_CTX_get_verify_depth");
 
-   function SSL_CTX_get_verify_callback (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/ssl.h:1567
+   function SSL_CTX_get_verify_callback (ctx : access constant  ssl_ctx_st) return access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/ssl.h:1567
    pragma Import (C, SSL_CTX_get_verify_callback, "SSL_CTX_get_verify_callback");
 
    procedure SSL_CTX_set_verify
-     (ctx      : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx      : access  ssl_ctx_st;
       mode     : int;
-      callback : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int);  -- openssl/ssl.h:1568
+      callback : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int);  -- openssl/ssl.h:1568
    pragma Import (C, SSL_CTX_set_verify, "SSL_CTX_set_verify");
 
-   procedure SSL_CTX_set_verify_depth (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; depth : int);  -- openssl/ssl.h:1570
+   procedure SSL_CTX_set_verify_depth (ctx : access  ssl_ctx_st; depth : int);  -- openssl/ssl.h:1570
    pragma Import (C, SSL_CTX_set_verify_depth, "SSL_CTX_set_verify_depth");
 
    procedure SSL_CTX_set_cert_verify_callback
-     (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
-      cb  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; arg2 : System.Address) return int;
+     (ctx : access  ssl_ctx_st;
+      cb  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; arg2 : System.Address) return int;
       arg : System.Address);  -- openssl/ssl.h:1571
    pragma Import (C, SSL_CTX_set_cert_verify_callback, "SSL_CTX_set_cert_verify_callback");
 
-   function SSL_CTX_use_RSAPrivateKey (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/ssl.h:1573
+   function SSL_CTX_use_RSAPrivateKey (ctx : access  ssl_ctx_st; the_rsa : access OpenSSL.Low_Level.rsa_h.rsa_st) return int;  -- openssl/ssl.h:1573
    pragma Import (C, SSL_CTX_use_RSAPrivateKey, "SSL_CTX_use_RSAPrivateKey");
 
    function SSL_CTX_use_RSAPrivateKey_ASN1
-     (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx : access  ssl_ctx_st;
       d   : access unsigned_char;
       len : long) return int;  -- openssl/ssl.h:1575
    pragma Import (C, SSL_CTX_use_RSAPrivateKey_ASN1, "SSL_CTX_use_RSAPrivateKey_ASN1");
 
-   function SSL_CTX_use_PrivateKey (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; pkey : access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/ssl.h:1576
+   function SSL_CTX_use_PrivateKey (ctx : access  ssl_ctx_st; pkey : access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/ssl.h:1576
    pragma Import (C, SSL_CTX_use_PrivateKey, "SSL_CTX_use_PrivateKey");
 
    function SSL_CTX_use_PrivateKey_ASN1
      (pk  : int;
-      ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+      ctx : access  ssl_ctx_st;
       d   : access unsigned_char;
       len : long) return int;  -- openssl/ssl.h:1577
    pragma Import (C, SSL_CTX_use_PrivateKey_ASN1, "SSL_CTX_use_PrivateKey_ASN1");
 
-   function SSL_CTX_use_certificate (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1579
+   function SSL_CTX_use_certificate (ctx : access  ssl_ctx_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1579
    pragma Import (C, SSL_CTX_use_certificate, "SSL_CTX_use_certificate");
 
    function SSL_CTX_use_certificate_ASN1
-     (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx : access  ssl_ctx_st;
       len : int;
       d   : access unsigned_char) return int;  -- openssl/ssl.h:1580
    pragma Import (C, SSL_CTX_use_certificate_ASN1, "SSL_CTX_use_certificate_ASN1");
 
-   procedure SSL_CTX_set_default_passwd_cb (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; cb : access function
+   procedure SSL_CTX_set_default_passwd_cb (ctx : access  ssl_ctx_st; cb : access function
                                               (arg1 : Interfaces.C.Strings.chars_ptr;
                                                arg2 : int;
                                                arg3 : int;
                                                arg4 : System.Address) return int);  -- openssl/ssl.h:1582
    pragma Import (C, SSL_CTX_set_default_passwd_cb, "SSL_CTX_set_default_passwd_cb");
 
-   procedure SSL_CTX_set_default_passwd_cb_userdata (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; u : System.Address);  -- openssl/ssl.h:1583
+   procedure SSL_CTX_set_default_passwd_cb_userdata (ctx : access  ssl_ctx_st; u : System.Address);  -- openssl/ssl.h:1583
    pragma Import (C, SSL_CTX_set_default_passwd_cb_userdata, "SSL_CTX_set_default_passwd_cb_userdata");
 
-   function SSL_CTX_check_private_key (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return int;  -- openssl/ssl.h:1585
+   function SSL_CTX_check_private_key (ctx : access constant  ssl_ctx_st) return int;  -- openssl/ssl.h:1585
    pragma Import (C, SSL_CTX_check_private_key, "SSL_CTX_check_private_key");
 
-   function SSL_check_private_key (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1586
+   function SSL_check_private_key (ctx : access constant  ssl_st) return int;  -- openssl/ssl.h:1586
    pragma Import (C, SSL_check_private_key, "SSL_check_private_key");
 
    function SSL_CTX_set_session_id_context
-     (ctx         : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx         : access  ssl_ctx_st;
       sid_ctx     : access unsigned_char;
       sid_ctx_len : unsigned) return int;  -- openssl/ssl.h:1588
    pragma Import (C, SSL_CTX_set_session_id_context, "SSL_CTX_set_session_id_context");
 
-   function SSL_new (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.ssl_h.ssl_st;  -- openssl/ssl.h:1591
+   function SSL_new (ctx : access  ssl_ctx_st) return access  ssl_st;  -- openssl/ssl.h:1591
    pragma Import (C, SSL_new, "SSL_new");
 
    function SSL_set_session_id_context
-     (the_ssl     : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl     : access  ssl_st;
       sid_ctx     : access unsigned_char;
       sid_ctx_len : unsigned) return int;  -- openssl/ssl.h:1592
    pragma Import (C, SSL_set_session_id_context, "SSL_set_session_id_context");
 
-   function SSL_CTX_set_purpose (s : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; purpose : int) return int;  -- openssl/ssl.h:1595
+   function SSL_CTX_set_purpose (s : access  ssl_ctx_st; purpose : int) return int;  -- openssl/ssl.h:1595
    pragma Import (C, SSL_CTX_set_purpose, "SSL_CTX_set_purpose");
 
-   function SSL_set_purpose (s : access OpenSSL.Low_Level.ssl_h.ssl_st; purpose : int) return int;  -- openssl/ssl.h:1596
+   function SSL_set_purpose (s : access  ssl_st; purpose : int) return int;  -- openssl/ssl.h:1596
    pragma Import (C, SSL_set_purpose, "SSL_set_purpose");
 
-   function SSL_CTX_set_trust (s : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; trust : int) return int;  -- openssl/ssl.h:1597
+   function SSL_CTX_set_trust (s : access  ssl_ctx_st; trust : int) return int;  -- openssl/ssl.h:1597
    pragma Import (C, SSL_CTX_set_trust, "SSL_CTX_set_trust");
 
-   function SSL_set_trust (s : access OpenSSL.Low_Level.ssl_h.ssl_st; trust : int) return int;  -- openssl/ssl.h:1598
+   function SSL_set_trust (s : access  ssl_st; trust : int) return int;  -- openssl/ssl.h:1598
    pragma Import (C, SSL_set_trust, "SSL_set_trust");
 
-   function SSL_CTX_set1_param (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; vpm : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM) return int;  -- openssl/ssl.h:1600
+   function SSL_CTX_set1_param (ctx : access  ssl_ctx_st; vpm : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM_st) return int;  -- openssl/ssl.h:1600
    pragma Import (C, SSL_CTX_set1_param, "SSL_CTX_set1_param");
 
-   function SSL_set1_param (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; vpm : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM) return int;  -- openssl/ssl.h:1601
+   function SSL_set1_param (the_ssl : access  ssl_st; vpm : access OpenSSL.Low_Level.x509_vfy_h.X509_VERIFY_PARAM_st) return int;  -- openssl/ssl.h:1601
    pragma Import (C, SSL_set1_param, "SSL_set1_param");
 
-   procedure SSL_free (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st);  -- openssl/ssl.h:1603
+   procedure SSL_free (the_ssl : access  ssl_st);  -- openssl/ssl.h:1603
    pragma Import (C, SSL_free, "SSL_free");
 
-   function SSL_accept (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1604
+   function SSL_accept (the_ssl : access  ssl_st) return int;  -- openssl/ssl.h:1604
    pragma Import (C, SSL_accept, "SSL_accept");
 
-   function SSL_connect (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1605
+   function SSL_connect (the_ssl : access  ssl_st) return int;  -- openssl/ssl.h:1605
    pragma Import (C, SSL_connect, "SSL_connect");
 
    function SSL_read
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       buf     : System.Address;
       num     : int) return int;  -- openssl/ssl.h:1606
    pragma Import (C, SSL_read, "SSL_read");
 
    function SSL_peek
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       buf     : System.Address;
       num     : int) return int;  -- openssl/ssl.h:1607
    pragma Import (C, SSL_peek, "SSL_peek");
 
    function SSL_write
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       buf     : System.Address;
       num     : int) return int;  -- openssl/ssl.h:1608
    pragma Import (C, SSL_write, "SSL_write");
 
    function SSL_ctrl
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       cmd     : int;
       larg    : long;
       parg    : System.Address) return long;  -- openssl/ssl.h:1609
    pragma Import (C, SSL_ctrl, "SSL_ctrl");
 
    function SSL_callback_ctrl
-     (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (arg1 : access  ssl_st;
       arg2 : int;
       arg3 : access procedure) return long;  -- openssl/ssl.h:1610
    pragma Import (C, SSL_callback_ctrl, "SSL_callback_ctrl");
 
    function SSL_CTX_ctrl
-     (ctx  : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx  : access  ssl_ctx_st;
       cmd  : int;
       larg : long;
       parg : System.Address) return long;  -- openssl/ssl.h:1611
    pragma Import (C, SSL_CTX_ctrl, "SSL_CTX_ctrl");
 
    function SSL_CTX_callback_ctrl
-     (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (arg1 : access  ssl_ctx_st;
       arg2 : int;
       arg3 : access procedure) return long;  -- openssl/ssl.h:1612
    pragma Import (C, SSL_CTX_callback_ctrl, "SSL_CTX_callback_ctrl");
 
-   function SSL_get_error (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st; ret_code : int) return int;  -- openssl/ssl.h:1614
+   function SSL_get_error (s : access constant  ssl_st; ret_code : int) return int;  -- openssl/ssl.h:1614
    pragma Import (C, SSL_get_error, "SSL_get_error");
 
-   function SSL_get_version (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1615
+   function SSL_get_version (s : access constant  ssl_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1615
    pragma Import (C, SSL_get_version, "SSL_get_version");
 
-   function SSL_CTX_set_ssl_version (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; meth : System.Address) return int;  -- openssl/ssl.h:1618
+   function SSL_CTX_set_ssl_version (ctx : access  ssl_ctx_st; meth : System.Address) return int;  -- openssl/ssl.h:1618
    pragma Import (C, SSL_CTX_set_ssl_version, "SSL_CTX_set_ssl_version");
 
    function SSLv2_method return System.Address;  -- openssl/ssl.h:1621
@@ -2169,25 +2168,25 @@ package OpenSSL.Low_Level.ssl_h is
    function DTLSv1_client_method return System.Address;  -- openssl/ssl.h:1640
    pragma Import (C, DTLSv1_client_method, "DTLSv1_client_method");
 
-   function SSL_get_ciphers (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access stack_st_SSL_CIPHER;  -- openssl/ssl.h:1642
+   function SSL_get_ciphers (s : access constant  ssl_st) return access stack_st_SSL_CIPHER;  -- openssl/ssl.h:1642
    pragma Import (C, SSL_get_ciphers, "SSL_get_ciphers");
 
-   function SSL_do_handshake (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1644
+   function SSL_do_handshake (s : access  ssl_st) return int;  -- openssl/ssl.h:1644
    pragma Import (C, SSL_do_handshake, "SSL_do_handshake");
 
-   function SSL_renegotiate (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1645
+   function SSL_renegotiate (s : access  ssl_st) return int;  -- openssl/ssl.h:1645
    pragma Import (C, SSL_renegotiate, "SSL_renegotiate");
 
-   function SSL_renegotiate_pending (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1646
+   function SSL_renegotiate_pending (s : access  ssl_st) return int;  -- openssl/ssl.h:1646
    pragma Import (C, SSL_renegotiate_pending, "SSL_renegotiate_pending");
 
-   function SSL_shutdown (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1647
+   function SSL_shutdown (s : access  ssl_st) return int;  -- openssl/ssl.h:1647
    pragma Import (C, SSL_shutdown, "SSL_shutdown");
 
-   function SSL_get_ssl_method (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return System.Address;  -- openssl/ssl.h:1649
+   function SSL_get_ssl_method (s : access  ssl_st) return System.Address;  -- openssl/ssl.h:1649
    pragma Import (C, SSL_get_ssl_method, "SSL_get_ssl_method");
 
-   function SSL_set_ssl_method (s : access OpenSSL.Low_Level.ssl_h.ssl_st; method : System.Address) return int;  -- openssl/ssl.h:1650
+   function SSL_set_ssl_method (s : access  ssl_st; method : System.Address) return int;  -- openssl/ssl.h:1650
    pragma Import (C, SSL_set_ssl_method, "SSL_set_ssl_method");
 
    function SSL_alert_type_string_long (value : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1651
@@ -2202,31 +2201,31 @@ package OpenSSL.Low_Level.ssl_h is
    function SSL_alert_desc_string (value : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1654
    pragma Import (C, SSL_alert_desc_string, "SSL_alert_desc_string");
 
-   procedure SSL_set_client_CA_list (s : access OpenSSL.Low_Level.ssl_h.ssl_st; name_list : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME);  -- openssl/ssl.h:1656
+   procedure SSL_set_client_CA_list (s : access  ssl_st; name_list : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME);  -- openssl/ssl.h:1656
    pragma Import (C, SSL_set_client_CA_list, "SSL_set_client_CA_list");
 
-   procedure SSL_CTX_set_client_CA_list (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; name_list : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME);  -- openssl/ssl.h:1657
+   procedure SSL_CTX_set_client_CA_list (ctx : access  ssl_ctx_st; name_list : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME);  -- openssl/ssl.h:1657
    pragma Import (C, SSL_CTX_set_client_CA_list, "SSL_CTX_set_client_CA_list");
 
-   function SSL_get_client_CA_list (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1658
+   function SSL_get_client_CA_list (s : access constant  ssl_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1658
    pragma Import (C, SSL_get_client_CA_list, "SSL_get_client_CA_list");
 
-   function SSL_CTX_get_client_CA_list (s : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1659
+   function SSL_CTX_get_client_CA_list (s : access constant  ssl_ctx_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1659
    pragma Import (C, SSL_CTX_get_client_CA_list, "SSL_CTX_get_client_CA_list");
 
-   function SSL_add_client_CA (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1660
+   function SSL_add_client_CA (the_ssl : access  ssl_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1660
    pragma Import (C, SSL_add_client_CA, "SSL_add_client_CA");
 
-   function SSL_CTX_add_client_CA (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1661
+   function SSL_CTX_add_client_CA (ctx : access  ssl_ctx_st; x : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ssl.h:1661
    pragma Import (C, SSL_CTX_add_client_CA, "SSL_CTX_add_client_CA");
 
-   procedure SSL_set_connect_state (s : access OpenSSL.Low_Level.ssl_h.ssl_st);  -- openssl/ssl.h:1663
+   procedure SSL_set_connect_state (s : access  ssl_st);  -- openssl/ssl.h:1663
    pragma Import (C, SSL_set_connect_state, "SSL_set_connect_state");
 
-   procedure SSL_set_accept_state (s : access OpenSSL.Low_Level.ssl_h.ssl_st);  -- openssl/ssl.h:1664
+   procedure SSL_set_accept_state (s : access  ssl_st);  -- openssl/ssl.h:1664
    pragma Import (C, SSL_set_accept_state, "SSL_set_accept_state");
 
-   function SSL_get_default_timeout (s : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return long;  -- openssl/ssl.h:1666
+   function SSL_get_default_timeout (s : access constant  ssl_st) return long;  -- openssl/ssl.h:1666
    pragma Import (C, SSL_get_default_timeout, "SSL_get_default_timeout");
 
    function SSL_library_init return int;  -- openssl/ssl.h:1668
@@ -2241,85 +2240,85 @@ package OpenSSL.Low_Level.ssl_h is
    function SSL_dup_CA_list (sk : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME) return access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;  -- openssl/ssl.h:1671
    pragma Import (C, SSL_dup_CA_list, "SSL_dup_CA_list");
 
-   function SSL_dup (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.ssl_h.ssl_st;  -- openssl/ssl.h:1673
+   function SSL_dup (the_ssl : access  ssl_st) return access  ssl_st;  -- openssl/ssl.h:1673
    pragma Import (C, SSL_dup, "SSL_dup");
 
-   function SSL_get_certificate (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ssl.h:1675
+   function SSL_get_certificate (the_ssl : access constant  ssl_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ssl.h:1675
    pragma Import (C, SSL_get_certificate, "SSL_get_certificate");
 
-   function SSL_get_privatekey (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/ssl.h:1676
+   function SSL_get_privatekey (the_ssl : access  ssl_st) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/ssl.h:1676
    pragma Import (C, SSL_get_privatekey, "SSL_get_privatekey");
 
-   procedure SSL_CTX_set_quiet_shutdown (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; mode : int);  -- openssl/ssl.h:1678
+   procedure SSL_CTX_set_quiet_shutdown (ctx : access  ssl_ctx_st; mode : int);  -- openssl/ssl.h:1678
    pragma Import (C, SSL_CTX_set_quiet_shutdown, "SSL_CTX_set_quiet_shutdown");
 
-   function SSL_CTX_get_quiet_shutdown (ctx : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return int;  -- openssl/ssl.h:1679
+   function SSL_CTX_get_quiet_shutdown (ctx : access constant  ssl_ctx_st) return int;  -- openssl/ssl.h:1679
    pragma Import (C, SSL_CTX_get_quiet_shutdown, "SSL_CTX_get_quiet_shutdown");
 
-   procedure SSL_set_quiet_shutdown (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; mode : int);  -- openssl/ssl.h:1680
+   procedure SSL_set_quiet_shutdown (the_ssl : access  ssl_st; mode : int);  -- openssl/ssl.h:1680
    pragma Import (C, SSL_set_quiet_shutdown, "SSL_set_quiet_shutdown");
 
-   function SSL_get_quiet_shutdown (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1681
+   function SSL_get_quiet_shutdown (the_ssl : access constant  ssl_st) return int;  -- openssl/ssl.h:1681
    pragma Import (C, SSL_get_quiet_shutdown, "SSL_get_quiet_shutdown");
 
-   procedure SSL_set_shutdown (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; mode : int);  -- openssl/ssl.h:1682
+   procedure SSL_set_shutdown (the_ssl : access  ssl_st; mode : int);  -- openssl/ssl.h:1682
    pragma Import (C, SSL_set_shutdown, "SSL_set_shutdown");
 
-   function SSL_get_shutdown (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1683
+   function SSL_get_shutdown (the_ssl : access constant  ssl_st) return int;  -- openssl/ssl.h:1683
    pragma Import (C, SSL_get_shutdown, "SSL_get_shutdown");
 
-   function SSL_version (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1684
+   function SSL_version (the_ssl : access constant  ssl_st) return int;  -- openssl/ssl.h:1684
    pragma Import (C, SSL_version, "SSL_version");
 
-   function SSL_CTX_set_default_verify_paths (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return int;  -- openssl/ssl.h:1685
+   function SSL_CTX_set_default_verify_paths (ctx : access  ssl_ctx_st) return int;  -- openssl/ssl.h:1685
    pragma Import (C, SSL_CTX_set_default_verify_paths, "SSL_CTX_set_default_verify_paths");
 
    function SSL_CTX_load_verify_locations
-     (ctx    : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ctx    : access  ssl_ctx_st;
       CAfile : Interfaces.C.Strings.chars_ptr;
       CApath : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ssl.h:1686
    pragma Import (C, SSL_CTX_load_verify_locations, "SSL_CTX_load_verify_locations");
 
-   function SSL_get_session (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access SSL_SESSION;  -- openssl/ssl.h:1689
+   function SSL_get_session (the_ssl : access constant  ssl_st) return access SSL_SESSION;  -- openssl/ssl.h:1689
    pragma Import (C, SSL_get_session, "SSL_get_session");
 
-   function SSL_get1_session (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st) return access SSL_SESSION;  -- openssl/ssl.h:1690
+   function SSL_get1_session (the_ssl : access  ssl_st) return access SSL_SESSION;  -- openssl/ssl.h:1690
    pragma Import (C, SSL_get1_session, "SSL_get1_session");
 
-   function SSL_get_SSL_CTX (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;  -- openssl/ssl.h:1691
+   function SSL_get_SSL_CTX (the_ssl : access constant  ssl_st) return access  ssl_ctx_st;  -- openssl/ssl.h:1691
    pragma Import (C, SSL_get_SSL_CTX, "SSL_get_SSL_CTX");
 
-   function SSL_set_SSL_CTX (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st) return access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;  -- openssl/ssl.h:1692
+   function SSL_set_SSL_CTX (the_ssl : access  ssl_st; ctx : access  ssl_ctx_st) return access  ssl_ctx_st;  -- openssl/ssl.h:1692
    pragma Import (C, SSL_set_SSL_CTX, "SSL_set_SSL_CTX");
 
-   procedure SSL_set_info_callback (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; cb : access procedure
-                                      (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_set_info_callback (the_ssl : access  ssl_st; cb : access procedure
+                                      (arg1 : access constant  ssl_st;
                                        arg2 : int;
                                        arg3 : int));  -- openssl/ssl.h:1693
    pragma Import (C, SSL_set_info_callback, "SSL_set_info_callback");
 
-   function SSL_get_info_callback (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return access procedure
-     (arg1 : access constant OpenSSL.Low_Level.ssl_h.ssl_st;
+   function SSL_get_info_callback (the_ssl : access constant  ssl_st) return access procedure
+     (arg1 : access constant  ssl_st;
       arg2 : int;
       arg3 : int);  -- openssl/ssl.h:1695
    pragma Import (C, SSL_get_info_callback, "SSL_get_info_callback");
 
-   function SSL_state (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return int;  -- openssl/ssl.h:1696
+   function SSL_state (the_ssl : access constant  ssl_st) return int;  -- openssl/ssl.h:1696
    pragma Import (C, SSL_state, "SSL_state");
 
-   procedure SSL_set_verify_result (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; v : long);  -- openssl/ssl.h:1698
+   procedure SSL_set_verify_result (the_ssl : access  ssl_st; v : long);  -- openssl/ssl.h:1698
    pragma Import (C, SSL_set_verify_result, "SSL_set_verify_result");
 
-   function SSL_get_verify_result (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st) return long;  -- openssl/ssl.h:1699
+   function SSL_get_verify_result (the_ssl : access constant  ssl_st) return long;  -- openssl/ssl.h:1699
    pragma Import (C, SSL_get_verify_result, "SSL_get_verify_result");
 
    function SSL_set_ex_data
-     (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (the_ssl : access  ssl_st;
       idx     : int;
       data    : System.Address) return int;  -- openssl/ssl.h:1701
    pragma Import (C, SSL_set_ex_data, "SSL_set_ex_data");
 
-   function SSL_get_ex_data (the_ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_st; idx : int) return System.Address;  -- openssl/ssl.h:1702
+   function SSL_get_ex_data (the_ssl : access constant  ssl_st; idx : int) return System.Address;  -- openssl/ssl.h:1702
    pragma Import (C, SSL_get_ex_data, "SSL_get_ex_data");
 
    function SSL_get_ex_new_index
@@ -2384,12 +2383,12 @@ package OpenSSL.Low_Level.ssl_h is
    pragma Import (C, SSL_SESSION_get_ex_new_index, "SSL_SESSION_get_ex_new_index");
 
    function SSL_CTX_set_ex_data
-     (ssl  : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st;
+     (ssl  : access  ssl_ctx_st;
       idx  : int;
       data : System.Address) return int;  -- openssl/ssl.h:1711
    pragma Import (C, SSL_CTX_set_ex_data, "SSL_CTX_set_ex_data");
 
-   function SSL_CTX_get_ex_data (ssl : access constant OpenSSL.Low_Level.ssl_h.ssl_ctx_st; idx : int) return System.Address;  -- openssl/ssl.h:1712
+   function SSL_CTX_get_ex_data (ssl : access constant  ssl_ctx_st; idx : int) return System.Address;  -- openssl/ssl.h:1712
    pragma Import (C, SSL_CTX_get_ex_data, "SSL_CTX_get_ex_data");
 
    function SSL_CTX_get_ex_new_index
@@ -2421,55 +2420,55 @@ package OpenSSL.Low_Level.ssl_h is
    function SSL_get_ex_data_X509_STORE_CTX_idx return int;  -- openssl/ssl.h:1716
    pragma Import (C, SSL_get_ex_data_X509_STORE_CTX_idx, "SSL_get_ex_data_X509_STORE_CTX_idx");
 
-   procedure SSL_CTX_set_tmp_rsa_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; cb : access function
-                                             (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_CTX_set_tmp_rsa_callback (ctx : access  ssl_ctx_st; cb : access function
+                                             (arg1 : access  ssl_st;
                                               arg2 : int;
                                               arg3 : int) return access OpenSSL.Low_Level.rsa_h.rsa_st);  -- openssl/ssl.h:1749
    pragma Import (C, SSL_CTX_set_tmp_rsa_callback, "SSL_CTX_set_tmp_rsa_callback");
 
-   procedure SSL_set_tmp_rsa_callback (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; cb : access function
-                                         (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_set_tmp_rsa_callback (the_ssl : access  ssl_st; cb : access function
+                                         (arg1 : access  ssl_st;
                                           arg2 : int;
                                           arg3 : int) return access OpenSSL.Low_Level.rsa_h.rsa_st);  -- openssl/ssl.h:1753
    pragma Import (C, SSL_set_tmp_rsa_callback, "SSL_set_tmp_rsa_callback");
 
-   procedure SSL_CTX_set_tmp_dh_callback (ctx : access OpenSSL.Low_Level.ssl_h.ssl_ctx_st; dh : access function
-                                            (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_CTX_set_tmp_dh_callback (ctx : access  ssl_ctx_st; dh : access function
+                                            (arg1 : access  ssl_st;
                                              arg2 : int;
                                              arg3 : int) return access OpenSSL.Low_Level.dh_h.dh_st);  -- openssl/ssl.h:1758
    pragma Import (C, SSL_CTX_set_tmp_dh_callback, "SSL_CTX_set_tmp_dh_callback");
 
-   procedure SSL_set_tmp_dh_callback (the_ssl : access OpenSSL.Low_Level.ssl_h.ssl_st; dh : access function
-                                        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+   procedure SSL_set_tmp_dh_callback (the_ssl : access  ssl_st; dh : access function
+                                        (arg1 : access  ssl_st;
                                          arg2 : int;
                                          arg3 : int) return access OpenSSL.Low_Level.dh_h.dh_st);  -- openssl/ssl.h:1761
    pragma Import (C, SSL_set_tmp_dh_callback, "SSL_set_tmp_dh_callback");
 
-   function SSL_get_current_compression (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return access constant OpenSSL.Low_Level.comp_h.COMP_METHOD;  -- openssl/ssl.h:1767
+   function SSL_get_current_compression (s : access  ssl_st) return access constant OpenSSL.Low_Level.comp_h.comp_method_st;  -- openssl/ssl.h:1767
    pragma Import (C, SSL_get_current_compression, "SSL_get_current_compression");
 
-   function SSL_get_current_expansion (s : access OpenSSL.Low_Level.ssl_h.ssl_st) return access constant OpenSSL.Low_Level.comp_h.COMP_METHOD;  -- openssl/ssl.h:1768
+   function SSL_get_current_expansion (s : access  ssl_st) return access constant OpenSSL.Low_Level.comp_h.comp_method_st;  -- openssl/ssl.h:1768
    pragma Import (C, SSL_get_current_expansion, "SSL_get_current_expansion");
 
-   function SSL_COMP_get_name (comp : access constant OpenSSL.Low_Level.comp_h.COMP_METHOD) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1769
+   function SSL_COMP_get_name (comp : access constant OpenSSL.Low_Level.comp_h.comp_method_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/ssl.h:1769
    pragma Import (C, SSL_COMP_get_name, "SSL_COMP_get_name");
 
    function SSL_COMP_get_compression_methods return access stack_st_SSL_COMP;  -- openssl/ssl.h:1770
    pragma Import (C, SSL_COMP_get_compression_methods, "SSL_COMP_get_compression_methods");
 
-   function SSL_COMP_add_compression_method (id : int; cm : access OpenSSL.Low_Level.comp_h.COMP_METHOD) return int;  -- openssl/ssl.h:1771
+   function SSL_COMP_add_compression_method (id : int; cm : access OpenSSL.Low_Level.comp_h.comp_method_st) return int;  -- openssl/ssl.h:1771
    pragma Import (C, SSL_COMP_add_compression_method, "SSL_COMP_add_compression_method");
 
    function SSL_set_session_ticket_ext
-     (s        : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s        : access  ssl_st;
       ext_data : System.Address;
       ext_len  : int) return int;  -- openssl/ssl.h:1781
    pragma Import (C, SSL_set_session_ticket_ext, "SSL_set_session_ticket_ext");
 
    function SSL_set_session_ticket_ext_cb
-     (s   : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s   : access  ssl_st;
       cb  : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2 : access unsigned_char;
          arg3 : int;
          arg4 : System.Address) return int;
@@ -2477,9 +2476,9 @@ package OpenSSL.Low_Level.ssl_h is
    pragma Import (C, SSL_set_session_ticket_ext_cb, "SSL_set_session_ticket_ext_cb");
 
    function SSL_set_session_secret_cb
-     (s                     : access OpenSSL.Low_Level.ssl_h.ssl_st;
+     (s                     : access  ssl_st;
       tls_session_secret_cb : access function
-        (arg1 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+        (arg1 : access  ssl_st;
          arg2 : System.Address;
          arg3 : access int;
          arg4 : access stack_st_SSL_CIPHER;

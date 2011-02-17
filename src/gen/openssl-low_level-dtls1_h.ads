@@ -41,7 +41,7 @@ package OpenSSL.Low_Level.dtls1_h is
    type dtls1_retransmit_state is record
       enc_write_ctx : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;  -- openssl/dtls1.h:120
       write_hash : access OpenSSL.Low_Level.evp_h.env_md_ctx_st;  -- openssl/dtls1.h:121
-      compress : access OpenSSL.Low_Level.comp_h.COMP_CTX;  -- openssl/dtls1.h:123
+      compress : access OpenSSL.Low_Level.comp_h.comp_ctx_st;  -- openssl/dtls1.h:123
       session : access OpenSSL.Low_Level.ssl_h.SSL_SESSION;  -- openssl/dtls1.h:127
       epoch : aliased unsigned_short;  -- openssl/dtls1.h:128
    end record;

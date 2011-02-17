@@ -290,30 +290,30 @@ package OpenSSL.Low_Level.x509_vfy_h is
       crls              : access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL;  -- openssl/x509_vfy.h:238
       param             : access X509_VERIFY_PARAM;  -- openssl/x509_vfy.h:240
       other_ctx         : System.Address;  -- openssl/x509_vfy.h:241
-      verify            : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:244
-      verify_cb         : access function (arg1 : int; arg2  : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:245
+      verify            : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:244
+      verify_cb         : access function (arg1 : int; arg2  : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:245
       get_issuer        : access function
         (arg1 : System.Address;
-         arg2              : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+         arg2              : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
          arg3              : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509_vfy.h:246
       check_issued      : access function
-        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
          arg2              : access OpenSSL.Low_Level.x509_h.x509_st;
          arg3              : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509_vfy.h:247
-      check_revocation  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:248
+      check_revocation  : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:248
       get_crl           : access function
-        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
          arg2              : System.Address;
          arg3              : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509_vfy.h:249
-      check_crl         : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_crl_st) return int;  -- openssl/x509_vfy.h:250
+      check_crl         : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_crl_st) return int;  -- openssl/x509_vfy.h:250
       cert_crl          : access function
-        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+        (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
          arg2              : access OpenSSL.Low_Level.x509_h.X509_crl_st;
          arg3              : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509_vfy.h:251
-      check_policy      : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:252
-      lookup_certs      : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:253
-      lookup_crls       : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL;  -- openssl/x509_vfy.h:254
-      cleanup           : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:255
+      check_policy      : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:252
+      lookup_certs      : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:253
+      lookup_crls       : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; arg2 : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL;  -- openssl/x509_vfy.h:254
+      cleanup           : access function (arg1 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:255
       valid             : aliased int;  -- openssl/x509_vfy.h:258
       last_untrusted    : aliased int;  -- openssl/x509_vfy.h:259
       chain             : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:260
@@ -326,12 +326,12 @@ package OpenSSL.Low_Level.x509_vfy_h is
       current_crl       : access OpenSSL.Low_Level.x509_h.X509_crl_st;  -- openssl/x509_vfy.h:270
       current_crl_score : aliased int;  -- openssl/x509_vfy.h:272
       current_reasons   : aliased unsigned;  -- openssl/x509_vfy.h:273
-      parent            : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;  -- openssl/x509_vfy.h:275
+      parent            : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/x509_vfy.h:275
       ex_data           : aliased OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;  -- openssl/x509_vfy.h:277
    end record;
    pragma Convention (C_Pass_By_Copy, x509_store_ctx_st);  -- openssl/x509_vfy.h:230
 
-   procedure X509_STORE_CTX_set_depth (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; depth : int);  -- openssl/x509_vfy.h:280
+   procedure X509_STORE_CTX_set_depth (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; depth : int);  -- openssl/x509_vfy.h:280
    pragma Import (C, X509_STORE_CTX_set_depth, "X509_STORE_CTX_set_depth");
 
    function X509_OBJECT_idx_by_subject
@@ -361,10 +361,10 @@ package OpenSSL.Low_Level.x509_vfy_h is
    procedure X509_STORE_free (v : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st);  -- openssl/x509_vfy.h:413
    pragma Import (C, X509_STORE_free, "X509_STORE_free");
 
-   function X509_STORE_get1_certs (st : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; nm : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:415
+   function X509_STORE_get1_certs (st : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; nm : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:415
    pragma Import (C, X509_STORE_get1_certs, "X509_STORE_get1_certs");
 
-   function X509_STORE_get1_crls (st : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; nm : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL;  -- openssl/x509_vfy.h:416
+   function X509_STORE_get1_crls (st : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; nm : access OpenSSL.Low_Level.x509_h.X509_name_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL;  -- openssl/x509_vfy.h:416
    pragma Import (C, X509_STORE_get1_crls, "X509_STORE_get1_crls");
 
    function X509_STORE_set_flags (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; flags : unsigned_long) return int;  -- openssl/x509_vfy.h:417
@@ -379,32 +379,32 @@ package OpenSSL.Low_Level.x509_vfy_h is
    function X509_STORE_set1_param (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; pm : access X509_VERIFY_PARAM) return int;  -- openssl/x509_vfy.h:420
    pragma Import (C, X509_STORE_set1_param, "X509_STORE_set1_param");
 
-   procedure X509_STORE_set_verify_cb (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; verify_cb : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int);  -- openssl/x509_vfy.h:422
+   procedure X509_STORE_set_verify_cb (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; verify_cb : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int);  -- openssl/x509_vfy.h:422
    pragma Import (C, X509_STORE_set_verify_cb, "X509_STORE_set_verify_cb");
 
-   function X509_STORE_CTX_new return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;  -- openssl/x509_vfy.h:425
+   function X509_STORE_CTX_new return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/x509_vfy.h:425
    pragma Import (C, X509_STORE_CTX_new, "X509_STORE_CTX_new");
 
    function X509_STORE_CTX_get1_issuer
      (issuer : System.Address;
-      ctx    : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+      ctx    : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       x      : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509_vfy.h:427
    pragma Import (C, X509_STORE_CTX_get1_issuer, "X509_STORE_CTX_get1_issuer");
 
-   procedure X509_STORE_CTX_free (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st);  -- openssl/x509_vfy.h:429
+   procedure X509_STORE_CTX_free (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st);  -- openssl/x509_vfy.h:429
    pragma Import (C, X509_STORE_CTX_free, "X509_STORE_CTX_free");
 
    function X509_STORE_CTX_init
-     (ctx      : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+     (ctx      : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       store    : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       the_x509 : access OpenSSL.Low_Level.x509_h.x509_st;
       chain    : access OpenSSL.Low_Level.x509_h.stack_st_X509) return int;  -- openssl/x509_vfy.h:430
    pragma Import (C, X509_STORE_CTX_init, "X509_STORE_CTX_init");
 
-   procedure X509_STORE_CTX_trusted_stack (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509);  -- openssl/x509_vfy.h:432
+   procedure X509_STORE_CTX_trusted_stack (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509);  -- openssl/x509_vfy.h:432
    pragma Import (C, X509_STORE_CTX_trusted_stack, "X509_STORE_CTX_trusted_stack");
 
-   procedure X509_STORE_CTX_cleanup (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st);  -- openssl/x509_vfy.h:433
+   procedure X509_STORE_CTX_cleanup (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st);  -- openssl/x509_vfy.h:433
    pragma Import (C, X509_STORE_CTX_cleanup, "X509_STORE_CTX_cleanup");
 
    function X509_STORE_add_lookup (v : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; m : access X509_LOOKUP_METHOD) return access X509_LOOKUP;  -- openssl/x509_vfy.h:435
@@ -423,7 +423,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
    pragma Import (C, X509_STORE_add_crl, "X509_STORE_add_crl");
 
    function X509_STORE_get_by_subject
-     (vs     : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+     (vs     : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       c_type : int;
       name   : access OpenSSL.Low_Level.x509_h.X509_name_st;
       ret    : access X509_OBJECT) return int;  -- openssl/x509_vfy.h:443
@@ -534,88 +534,88 @@ package OpenSSL.Low_Level.x509_vfy_h is
    pragma Import (C, X509_STORE_CTX_get_ex_new_index, "X509_STORE_CTX_get_ex_new_index");
 
    function X509_STORE_CTX_set_ex_data
-     (ctx  : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+     (ctx  : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       idx  : int;
       data : System.Address) return int;  -- openssl/x509_vfy.h:477
    pragma Import (C, X509_STORE_CTX_set_ex_data, "X509_STORE_CTX_set_ex_data");
 
-   function X509_STORE_CTX_get_ex_data (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; idx : int) return System.Address;  -- openssl/x509_vfy.h:478
+   function X509_STORE_CTX_get_ex_data (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; idx : int) return System.Address;  -- openssl/x509_vfy.h:478
    pragma Import (C, X509_STORE_CTX_get_ex_data, "X509_STORE_CTX_get_ex_data");
 
-   function X509_STORE_CTX_get_error (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:479
+   function X509_STORE_CTX_get_error (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:479
    pragma Import (C, X509_STORE_CTX_get_error, "X509_STORE_CTX_get_error");
 
-   procedure X509_STORE_CTX_set_error (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; s : int);  -- openssl/x509_vfy.h:480
+   procedure X509_STORE_CTX_set_error (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; s : int);  -- openssl/x509_vfy.h:480
    pragma Import (C, X509_STORE_CTX_set_error, "X509_STORE_CTX_set_error");
 
-   function X509_STORE_CTX_get_error_depth (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:481
+   function X509_STORE_CTX_get_error_depth (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:481
    pragma Import (C, X509_STORE_CTX_get_error_depth, "X509_STORE_CTX_get_error_depth");
 
-   function X509_STORE_CTX_get_current_cert (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509_vfy.h:482
+   function X509_STORE_CTX_get_current_cert (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509_vfy.h:482
    pragma Import (C, X509_STORE_CTX_get_current_cert, "X509_STORE_CTX_get_current_cert");
 
-   function X509_STORE_CTX_get0_current_issuer (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509_vfy.h:483
+   function X509_STORE_CTX_get0_current_issuer (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/x509_vfy.h:483
    pragma Import (C, X509_STORE_CTX_get0_current_issuer, "X509_STORE_CTX_get0_current_issuer");
 
-   function X509_STORE_CTX_get0_current_crl (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_h.X509_crl_st;  -- openssl/x509_vfy.h:484
+   function X509_STORE_CTX_get0_current_crl (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_h.X509_crl_st;  -- openssl/x509_vfy.h:484
    pragma Import (C, X509_STORE_CTX_get0_current_crl, "X509_STORE_CTX_get0_current_crl");
 
-   function X509_STORE_CTX_get0_parent_ctx (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;  -- openssl/x509_vfy.h:485
+   function X509_STORE_CTX_get0_parent_ctx (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/x509_vfy.h:485
    pragma Import (C, X509_STORE_CTX_get0_parent_ctx, "X509_STORE_CTX_get0_parent_ctx");
 
-   function X509_STORE_CTX_get_chain (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:486
+   function X509_STORE_CTX_get_chain (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:486
    pragma Import (C, X509_STORE_CTX_get_chain, "X509_STORE_CTX_get_chain");
 
-   function X509_STORE_CTX_get1_chain (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:487
+   function X509_STORE_CTX_get1_chain (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/x509_vfy.h:487
    pragma Import (C, X509_STORE_CTX_get1_chain, "X509_STORE_CTX_get1_chain");
 
-   procedure X509_STORE_CTX_set_cert (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; x : access OpenSSL.Low_Level.x509_h.x509_st);  -- openssl/x509_vfy.h:488
+   procedure X509_STORE_CTX_set_cert (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; x : access OpenSSL.Low_Level.x509_h.x509_st);  -- openssl/x509_vfy.h:488
    pragma Import (C, X509_STORE_CTX_set_cert, "X509_STORE_CTX_set_cert");
 
-   procedure X509_STORE_CTX_set_chain (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509);  -- openssl/x509_vfy.h:489
+   procedure X509_STORE_CTX_set_chain (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509);  -- openssl/x509_vfy.h:489
    pragma Import (C, X509_STORE_CTX_set_chain, "X509_STORE_CTX_set_chain");
 
-   procedure X509_STORE_CTX_set0_crls (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL);  -- openssl/x509_vfy.h:490
+   procedure X509_STORE_CTX_set0_crls (c : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509_CRL);  -- openssl/x509_vfy.h:490
    pragma Import (C, X509_STORE_CTX_set0_crls, "X509_STORE_CTX_set0_crls");
 
-   function X509_STORE_CTX_set_purpose (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; purpose : int) return int;  -- openssl/x509_vfy.h:491
+   function X509_STORE_CTX_set_purpose (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; purpose : int) return int;  -- openssl/x509_vfy.h:491
    pragma Import (C, X509_STORE_CTX_set_purpose, "X509_STORE_CTX_set_purpose");
 
-   function X509_STORE_CTX_set_trust (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; trust : int) return int;  -- openssl/x509_vfy.h:492
+   function X509_STORE_CTX_set_trust (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; trust : int) return int;  -- openssl/x509_vfy.h:492
    pragma Import (C, X509_STORE_CTX_set_trust, "X509_STORE_CTX_set_trust");
 
    function X509_STORE_CTX_purpose_inherit
-     (ctx         : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+     (ctx         : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       def_purpose : int;
       purpose     : int;
       trust       : int) return int;  -- openssl/x509_vfy.h:493
    pragma Import (C, X509_STORE_CTX_purpose_inherit, "X509_STORE_CTX_purpose_inherit");
 
-   procedure X509_STORE_CTX_set_flags (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; flags : unsigned_long);  -- openssl/x509_vfy.h:495
+   procedure X509_STORE_CTX_set_flags (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; flags : unsigned_long);  -- openssl/x509_vfy.h:495
    pragma Import (C, X509_STORE_CTX_set_flags, "X509_STORE_CTX_set_flags");
 
    procedure X509_STORE_CTX_set_time
-     (ctx   : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+     (ctx   : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       flags : unsigned_long;
       t     : time_h.time_t);  -- openssl/x509_vfy.h:496
    pragma Import (C, X509_STORE_CTX_set_time, "X509_STORE_CTX_set_time");
 
-   procedure X509_STORE_CTX_set_verify_cb (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; verify_cb : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int);  -- openssl/x509_vfy.h:498
+   procedure X509_STORE_CTX_set_verify_cb (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; verify_cb : access function (arg1 : int; arg2 : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int);  -- openssl/x509_vfy.h:498
    pragma Import (C, X509_STORE_CTX_set_verify_cb, "X509_STORE_CTX_set_verify_cb");
 
-   function X509_STORE_CTX_get0_policy_tree (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return System.Address;  -- openssl/x509_vfy.h:501
+   function X509_STORE_CTX_get0_policy_tree (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return System.Address;  -- openssl/x509_vfy.h:501
    pragma Import (C, X509_STORE_CTX_get0_policy_tree, "X509_STORE_CTX_get0_policy_tree");
 
-   function X509_STORE_CTX_get_explicit_policy (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return int;  -- openssl/x509_vfy.h:502
+   function X509_STORE_CTX_get_explicit_policy (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return int;  -- openssl/x509_vfy.h:502
    pragma Import (C, X509_STORE_CTX_get_explicit_policy, "X509_STORE_CTX_get_explicit_policy");
 
-   function X509_STORE_CTX_get0_param (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st) return access X509_VERIFY_PARAM;  -- openssl/x509_vfy.h:504
+   function X509_STORE_CTX_get0_param (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st) return access X509_VERIFY_PARAM;  -- openssl/x509_vfy.h:504
    pragma Import (C, X509_STORE_CTX_get0_param, "X509_STORE_CTX_get0_param");
 
-   procedure X509_STORE_CTX_set0_param (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; param : access X509_VERIFY_PARAM);  -- openssl/x509_vfy.h:505
+   procedure X509_STORE_CTX_set0_param (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; param : access X509_VERIFY_PARAM);  -- openssl/x509_vfy.h:505
    pragma Import (C, X509_STORE_CTX_set0_param, "X509_STORE_CTX_set0_param");
 
-   function X509_STORE_CTX_set_default (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st; name : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/x509_vfy.h:506
+   function X509_STORE_CTX_set_default (ctx : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st; name : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/x509_vfy.h:506
    pragma Import (C, X509_STORE_CTX_set_default, "X509_STORE_CTX_set_default");
 
    function X509_VERIFY_PARAM_new return access X509_VERIFY_PARAM;  -- openssl/x509_vfy.h:510
@@ -654,7 +654,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
    procedure X509_VERIFY_PARAM_set_time (param : access X509_VERIFY_PARAM; t : time_h.time_t);  -- openssl/x509_vfy.h:524
    pragma Import (C, X509_VERIFY_PARAM_set_time, "X509_VERIFY_PARAM_set_time");
 
-   function X509_VERIFY_PARAM_add0_policy (param : access X509_VERIFY_PARAM; policy : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT) return int;  -- openssl/x509_vfy.h:525
+   function X509_VERIFY_PARAM_add0_policy (param : access X509_VERIFY_PARAM; policy : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/x509_vfy.h:525
    pragma Import (C, X509_VERIFY_PARAM_add0_policy, "X509_VERIFY_PARAM_add0_policy");
 
    function X509_VERIFY_PARAM_set1_policies (param : access X509_VERIFY_PARAM; policies : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT) return int;  -- openssl/x509_vfy.h:527
@@ -701,7 +701,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
    function X509_policy_level_get0_node (level : System.Address; i : int) return System.Address;  -- openssl/x509_vfy.h:554
    pragma Import (C, X509_policy_level_get0_node, "X509_policy_level_get0_node");
 
-   function X509_policy_node_get0_policy (node : System.Address) return access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/x509_vfy.h:556
+   function X509_policy_node_get0_policy (node : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509_vfy.h:556
    pragma Import (C, X509_policy_node_get0_policy, "X509_policy_node_get0_policy");
 
    function X509_policy_node_get0_qualifiers (node : System.Address) return access OpenSSL.Low_Level.x509v3_h.stack_st_POLICYQUALINFO;  -- openssl/x509_vfy.h:559

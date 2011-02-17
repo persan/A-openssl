@@ -9,22 +9,22 @@ package OpenSSL.Low_Level.sha_h is
    --  unsupported macro: FIPS_SHA_SIZE_T size_t
    --  unsupported macro: SHA_LONG unsigned int
 
-   SHA_LBLOCK : constant := 16;  --  openssl/sha.h:93
+      SHA_LBLOCK : constant := 16;  --  openssl/sha.h:93
    --  unsupported macro: SHA_CBLOCK (SHA_LBLOCK*4)
    --  unsupported macro: SHA_LAST_BLOCK (SHA_CBLOCK-8)
 
-   SHA_DIGEST_LENGTH : constant := 20;  --  openssl/sha.h:98
+      SHA_DIGEST_LENGTH : constant := 20;  --  openssl/sha.h:98
    --  unsupported macro: SHA256_CBLOCK (SHA_LBLOCK*4)
 
-   SHA224_DIGEST_LENGTH : constant := 28;  --  openssl/sha.h:129
-   SHA256_DIGEST_LENGTH : constant := 32;  --  openssl/sha.h:130
+      SHA224_DIGEST_LENGTH : constant := 28;  --  openssl/sha.h:129
+      SHA256_DIGEST_LENGTH : constant := 32;  --  openssl/sha.h:130
 
-   SHA384_DIGEST_LENGTH : constant := 48;  --  openssl/sha.h:152
-   SHA512_DIGEST_LENGTH : constant := 64;  --  openssl/sha.h:153
+      SHA384_DIGEST_LENGTH : constant := 48;  --  openssl/sha.h:152
+      SHA512_DIGEST_LENGTH : constant := 64;  --  openssl/sha.h:153
    --  unsupported macro: SHA512_CBLOCK (SHA_LBLOCK*8)
    --  unsupported macro: SHA_LONG64 unsigned long long
    --  unsupported macro: U64(C) C ##ULL
-end;
+   end defs;
    type SHAstate_st_data_array is array (0 .. 15) of aliased unsigned;
    type SHAstate_st is record
       h0 : aliased unsigned;  -- openssl/sha.h:102

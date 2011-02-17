@@ -7,6 +7,8 @@ with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.safestack_h;
 with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.x509_h;
+limited with OpenSSL.Low_Level.bn_h;
+limited with OpenSSL.Low_Level.conf_h;
 package OpenSSL.Low_Level.asn1_h is
 
    package defs is
@@ -712,11 +714,11 @@ package OpenSSL.Low_Level.asn1_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_ASN1_STRING_TABLE);  -- openssl/asn1.h:279
 
-   subtype ASN1_TEMPLATE is OpenSSL.Low_Level.asn1t_h.ASN1_TEMPLATE_st;
+   --#  subtype ASN1_TEMPLATE is OpenSSL.Low_Level.asn1t_h.ASN1_TEMPLATE_st;
 
-   subtype ASN1_ITEM is OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+   --#  subtype ASN1_ITEM is OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
 
-   subtype ASN1_TLC is OpenSSL.Low_Level.asn1t_h.ASN1_TLC_st;
+   --#  subtype ASN1_TLC is OpenSSL.Low_Level.asn1t_h.ASN1_TLC_st;
 
    --  skipped empty struct ASN1_VALUE_st
 
@@ -726,7 +728,7 @@ package OpenSSL.Low_Level.asn1_h is
 
    --  skipped function type d2i_of_void
 
-   subtype ASN1_ITEM_EXP is ASN1_ITEM;  -- openssl/asn1.h:403
+   --# subtype ASN1_ITEM_EXP is ASN1_ITEM;  -- openssl/asn1.h:403
 
    type stack_st_ASN1_INTEGER is record
       stack : aliased OpenSSL.Low_Level.stack_h.u_STACK;  -- openssl/asn1.h:517
@@ -1950,7 +1952,7 @@ package OpenSSL.Low_Level.asn1_h is
    procedure ASN1_PCTX_set_str_flags (p : System.Address; flags : unsigned_long);  -- openssl/asn1.h:1132
    pragma Import (C, ASN1_PCTX_set_str_flags, "ASN1_PCTX_set_str_flags");
 
-   function BIO_f_asn1 return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/asn1.h:1134
+   function BIO_f_asn1 return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/asn1.h:1134
    pragma Import (C, BIO_f_asn1, "BIO_f_asn1");
 
    function BIO_new_NDEF

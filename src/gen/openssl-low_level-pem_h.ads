@@ -7,6 +7,8 @@ limited with OpenSSL.Low_Level.x509_h;
 limited with OpenSSL.Low_Level.pkcs7_h;
 with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.dsa_h;
+limited with OpenSSL.Low_Level.rsa_h;
+limited with OpenSSL.Low_Level.dh_h;
 package OpenSSL.Low_Level.pem_h is
 
    package defs is
@@ -340,7 +342,7 @@ package OpenSSL.Low_Level.pem_h is
 
    function PEM_X509_INFO_write_bio
      (bp   : access OpenSSL.Low_Level.bio_h.bio_st;
-      xi   : access OpenSSL.Low_Level.x509_h.X509_INFO;
+      xi   : access OpenSSL.Low_Level.x509_h.X509_info_st;
       enc  : access OpenSSL.Low_Level.evp_h.evp_cipher_st;
       kstr : access unsigned_char;
       klen : int;
@@ -528,10 +530,10 @@ package OpenSSL.Low_Level.pem_h is
       u  : System.Address) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/pem.h:461
    pragma Import (C, PEM_read_bio_X509_AUX, "PEM_read_bio_X509_AUX");
 
-   function PEM_write_X509_CERT_PAIR (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_CERT_PAIR) return int;  -- openssl/pem.h:463
+   function PEM_write_X509_CERT_PAIR (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.x509_cert_pair_st) return int;  -- openssl/pem.h:463
    pragma Import (C, PEM_write_X509_CERT_PAIR, "PEM_write_X509_CERT_PAIR");
 
-   function PEM_write_bio_X509_CERT_PAIR (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_CERT_PAIR) return int;  -- openssl/pem.h:463
+   function PEM_write_bio_X509_CERT_PAIR (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.x509_cert_pair_st) return int;  -- openssl/pem.h:463
    pragma Import (C, PEM_write_bio_X509_CERT_PAIR, "PEM_write_bio_X509_CERT_PAIR");
 
    function PEM_read_X509_CERT_PAIR
@@ -542,7 +544,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_CERT_PAIR;  -- openssl/pem.h:463
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.x509_cert_pair_st;  -- openssl/pem.h:463
    pragma Import (C, PEM_read_X509_CERT_PAIR, "PEM_read_X509_CERT_PAIR");
 
    function PEM_read_bio_X509_CERT_PAIR
@@ -553,13 +555,13 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_CERT_PAIR;  -- openssl/pem.h:463
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.x509_cert_pair_st;  -- openssl/pem.h:463
    pragma Import (C, PEM_read_bio_X509_CERT_PAIR, "PEM_read_bio_X509_CERT_PAIR");
 
-   function PEM_write_X509_REQ (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/pem.h:465
+   function PEM_write_X509_REQ (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/pem.h:465
    pragma Import (C, PEM_write_X509_REQ, "PEM_write_X509_REQ");
 
-   function PEM_write_bio_X509_REQ (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/pem.h:465
+   function PEM_write_bio_X509_REQ (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/pem.h:465
    pragma Import (C, PEM_write_bio_X509_REQ, "PEM_write_bio_X509_REQ");
 
    function PEM_read_X509_REQ
@@ -570,7 +572,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_REQ;  -- openssl/pem.h:465
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_req_st;  -- openssl/pem.h:465
    pragma Import (C, PEM_read_X509_REQ, "PEM_read_X509_REQ");
 
    function PEM_read_bio_X509_REQ
@@ -581,13 +583,13 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_REQ;  -- openssl/pem.h:465
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_req_st;  -- openssl/pem.h:465
    pragma Import (C, PEM_read_bio_X509_REQ, "PEM_read_bio_X509_REQ");
 
-   function PEM_write_X509_REQ_NEW (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/pem.h:466
+   function PEM_write_X509_REQ_NEW (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/pem.h:466
    pragma Import (C, PEM_write_X509_REQ_NEW, "PEM_write_X509_REQ_NEW");
 
-   function PEM_write_bio_X509_REQ_NEW (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_REQ) return int;  -- openssl/pem.h:466
+   function PEM_write_bio_X509_REQ_NEW (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/pem.h:466
    pragma Import (C, PEM_write_bio_X509_REQ_NEW, "PEM_write_bio_X509_REQ_NEW");
 
    function PEM_write_X509_CRL (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_crl_st) return int;  -- openssl/pem.h:468
@@ -618,10 +620,10 @@ package OpenSSL.Low_Level.pem_h is
       u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_crl_st;  -- openssl/pem.h:468
    pragma Import (C, PEM_read_bio_X509_CRL, "PEM_read_bio_X509_CRL");
 
-   function PEM_write_PKCS7 (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.pkcs7_h.PKCS7) return int;  -- openssl/pem.h:470
+   function PEM_write_PKCS7 (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st) return int;  -- openssl/pem.h:470
    pragma Import (C, PEM_write_PKCS7, "PEM_write_PKCS7");
 
-   function PEM_write_bio_PKCS7 (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.pkcs7_h.PKCS7) return int;  -- openssl/pem.h:470
+   function PEM_write_bio_PKCS7 (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.pkcs7_h.pkcs7_st) return int;  -- openssl/pem.h:470
    pragma Import (C, PEM_write_bio_PKCS7, "PEM_write_bio_PKCS7");
 
    function PEM_read_PKCS7
@@ -632,7 +634,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/pem.h:470
+      u  : System.Address) return access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;  -- openssl/pem.h:470
    pragma Import (C, PEM_read_PKCS7, "PEM_read_PKCS7");
 
    function PEM_read_bio_PKCS7
@@ -643,13 +645,13 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/pem.h:470
+      u  : System.Address) return access OpenSSL.Low_Level.pkcs7_h.pkcs7_st;  -- openssl/pem.h:470
    pragma Import (C, PEM_read_bio_PKCS7, "PEM_read_bio_PKCS7");
 
-   function PEM_write_NETSCAPE_CERT_SEQUENCE (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.NETSCAPE_CERT_SEQUENCE) return int;  -- openssl/pem.h:472
+   function PEM_write_NETSCAPE_CERT_SEQUENCE (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.Netscape_certificate_sequence) return int;  -- openssl/pem.h:472
    pragma Import (C, PEM_write_NETSCAPE_CERT_SEQUENCE, "PEM_write_NETSCAPE_CERT_SEQUENCE");
 
-   function PEM_write_bio_NETSCAPE_CERT_SEQUENCE (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.NETSCAPE_CERT_SEQUENCE) return int;  -- openssl/pem.h:472
+   function PEM_write_bio_NETSCAPE_CERT_SEQUENCE (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.Netscape_certificate_sequence) return int;  -- openssl/pem.h:472
    pragma Import (C, PEM_write_bio_NETSCAPE_CERT_SEQUENCE, "PEM_write_bio_NETSCAPE_CERT_SEQUENCE");
 
    function PEM_read_NETSCAPE_CERT_SEQUENCE
@@ -660,7 +662,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.NETSCAPE_CERT_SEQUENCE;  -- openssl/pem.h:472
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.Netscape_certificate_sequence;  -- openssl/pem.h:472
    pragma Import (C, PEM_read_NETSCAPE_CERT_SEQUENCE, "PEM_read_NETSCAPE_CERT_SEQUENCE");
 
    function PEM_read_bio_NETSCAPE_CERT_SEQUENCE
@@ -671,13 +673,13 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.NETSCAPE_CERT_SEQUENCE;  -- openssl/pem.h:472
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.Netscape_certificate_sequence;  -- openssl/pem.h:472
    pragma Import (C, PEM_read_bio_NETSCAPE_CERT_SEQUENCE, "PEM_read_bio_NETSCAPE_CERT_SEQUENCE");
 
-   function PEM_write_PKCS8 (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_SIG) return int;  -- openssl/pem.h:474
+   function PEM_write_PKCS8 (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.X509_sig_st) return int;  -- openssl/pem.h:474
    pragma Import (C, PEM_write_PKCS8, "PEM_write_PKCS8");
 
-   function PEM_write_bio_PKCS8 (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_SIG) return int;  -- openssl/pem.h:474
+   function PEM_write_bio_PKCS8 (bp : access OpenSSL.Low_Level.bio_h.bio_st; x : access OpenSSL.Low_Level.x509_h.X509_sig_st) return int;  -- openssl/pem.h:474
    pragma Import (C, PEM_write_bio_PKCS8, "PEM_write_bio_PKCS8");
 
    function PEM_read_PKCS8
@@ -688,7 +690,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pem.h:474
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_sig_st;  -- openssl/pem.h:474
    pragma Import (C, PEM_read_PKCS8, "PEM_read_PKCS8");
 
    function PEM_read_bio_PKCS8
@@ -699,7 +701,7 @@ package OpenSSL.Low_Level.pem_h is
          arg2 : int;
          arg3 : int;
          arg4 : System.Address) return int;
-      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pem.h:474
+      u  : System.Address) return access OpenSSL.Low_Level.x509_h.X509_sig_st;  -- openssl/pem.h:474
    pragma Import (C, PEM_read_bio_PKCS8, "PEM_read_bio_PKCS8");
 
    function PEM_write_PKCS8_PRIV_KEY_INFO (fp : access Interfaces.C_Streams.FILEs; x : access OpenSSL.Low_Level.x509_h.pkcs8_priv_key_info_st) return int;  -- openssl/pem.h:476

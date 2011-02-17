@@ -7,26 +7,26 @@ package OpenSSL.Low_Level.kssl_h is
 
    package defs is
 
-   KRB5SVC : aliased constant String := "host" & ASCII.NUL;  --  openssl/kssl.h:100
+      KRB5SVC : aliased constant String := "host" & ASCII.NUL;  --  openssl/kssl.h:100
 
-   KRB5KEYTAB : aliased constant String := "/etc/krb5.keytab" & ASCII.NUL;  --  openssl/kssl.h:104
+      KRB5KEYTAB : aliased constant String := "/etc/krb5.keytab" & ASCII.NUL;  --  openssl/kssl.h:104
 
-   KRB5SENDAUTH : constant := 1;  --  openssl/kssl.h:108
+      KRB5SENDAUTH : constant := 1;  --  openssl/kssl.h:108
 
-   KRB5CHECKAUTH : constant := 1;  --  openssl/kssl.h:112
+      KRB5CHECKAUTH : constant := 1;  --  openssl/kssl.h:112
    --  unsupported macro: KSSL_CLOCKSKEW 300;
 
-   KSSL_ERR_MAX : constant := 255;  --  openssl/kssl.h:119
+      KSSL_ERR_MAX : constant := 255;  --  openssl/kssl.h:119
 
-   KSSL_CLIENT : constant := 1;  --  openssl/kssl.h:143
-   KSSL_SERVER : constant := 2;  --  openssl/kssl.h:144
-   KSSL_SERVICE : constant := 3;  --  openssl/kssl.h:145
-   KSSL_KEYTAB : constant := 4;  --  openssl/kssl.h:146
+      KSSL_CLIENT : constant := 1;  --  openssl/kssl.h:143
+      KSSL_SERVER : constant := 2;  --  openssl/kssl.h:144
+      KSSL_SERVICE : constant := 3;  --  openssl/kssl.h:145
+      KSSL_KEYTAB : constant := 4;  --  openssl/kssl.h:146
 
-   KSSL_CTX_OK : constant := 0;  --  openssl/kssl.h:148
-   KSSL_CTX_ERR : constant := 1;  --  openssl/kssl.h:149
-   KSSL_NOMEM : constant := 2;  --  openssl/kssl.h:150
-end;
+      KSSL_CTX_OK : constant := 0;  --  openssl/kssl.h:148
+      KSSL_CTX_ERR : constant := 1;  --  openssl/kssl.h:149
+      KSSL_NOMEM : constant := 2;  --  openssl/kssl.h:150
+   end defs;
    subtype kssl_err_st_text_array is Interfaces.C.char_array (0 .. 255);
    type kssl_err_st is record
       reason : aliased int;  -- openssl/kssl.h:121

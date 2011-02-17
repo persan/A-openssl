@@ -5,7 +5,8 @@ limited with OpenSSL.Low_Level.ssl_h;
 limited with OpenSSL.Low_Level.x509_h;
 limited with OpenSSL.Low_Level.bio_h;
 with System;
-
+limited with OpenSSL.Low_Level.dh_h;
+limited with OpenSSL.Low_Level.evp_h;
 package OpenSSL.Low_Level.ssl3_h is
 
    package defs is
@@ -320,7 +321,7 @@ package OpenSSL.Low_Level.ssl3_h is
       peer_finish_md_len  : aliased int;  -- openssl/ssl3.h:466
       message_size        : aliased unsigned_long;  -- openssl/ssl3.h:468
       message_type        : aliased int;  -- openssl/ssl3.h:469
-      new_cipher          : access constant OpenSSL.Low_Level.ssl_h.SSL_CIPHER;  -- openssl/ssl3.h:472
+      new_cipher          : access constant OpenSSL.Low_Level.ssl_h.ssl_cipher_st;  -- openssl/ssl3.h:472
       the_dh              : access OpenSSL.Low_Level.dh_h.dh_st;  -- openssl/ssl3.h:474
       next_state          : aliased int;  -- openssl/ssl3.h:479
       reuse_message       : aliased int;  -- openssl/ssl3.h:481
@@ -335,7 +336,7 @@ package OpenSSL.Low_Level.ssl3_h is
       new_hash            : access constant OpenSSL.Low_Level.evp_h.env_md_st;  -- openssl/ssl3.h:495
       new_mac_pkey_type   : aliased int;  -- openssl/ssl3.h:496
       new_mac_secret_size : aliased int;  -- openssl/ssl3.h:497
-      new_compression     : access constant OpenSSL.Low_Level.ssl_h.SSL_COMP;  -- openssl/ssl3.h:499
+      new_compression     : access constant OpenSSL.Low_Level.ssl_h.ssl_comp_st;  -- openssl/ssl3.h:499
       cert_request        : aliased int;  -- openssl/ssl3.h:503
    end record;
    pragma Convention (C_Pass_By_Copy, anon_39);

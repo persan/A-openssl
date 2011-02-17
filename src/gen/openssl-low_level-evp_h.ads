@@ -515,8 +515,8 @@ package OpenSSL.Low_Level.evp_h is
          arg4                : size_t) return int;  -- openssl/evp.h:306
       cleanup             : access function (arg1 : System.Address) return int;  -- openssl/evp.h:307
       ctx_size            : aliased int;  -- openssl/evp.h:308
-      set_asn1_parameters : access function (arg1 : System.Address; arg2 : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:309
-      get_asn1_parameters : access function (arg1 : System.Address; arg2 : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:310
+      set_asn1_parameters : access function (arg1 : System.Address; arg2 : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:309
+      get_asn1_parameters : access function (arg1 : System.Address; arg2 : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:310
       ctrl                : access function
         (arg1 : System.Address;
          arg2                : int;
@@ -997,16 +997,16 @@ package OpenSSL.Low_Level.evp_h is
    function EVP_CIPHER_CTX_rand_key (ctx : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; key : access unsigned_char) return int;  -- openssl/evp.h:608
    pragma Import (C, EVP_CIPHER_CTX_rand_key, "EVP_CIPHER_CTX_rand_key");
 
-   function BIO_f_md return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/evp.h:611
+   function BIO_f_md return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/evp.h:611
    pragma Import (C, BIO_f_md, "BIO_f_md");
 
-   function BIO_f_base64 return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/evp.h:612
+   function BIO_f_base64 return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/evp.h:612
    pragma Import (C, BIO_f_base64, "BIO_f_base64");
 
-   function BIO_f_cipher return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/evp.h:613
+   function BIO_f_cipher return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/evp.h:613
    pragma Import (C, BIO_f_cipher, "BIO_f_cipher");
 
-   function BIO_f_reliable return access OpenSSL.Low_Level.bio_h.bio_st_METHOD;  -- openssl/evp.h:614
+   function BIO_f_reliable return access OpenSSL.Low_Level.bio_h.bio_method_st;  -- openssl/evp.h:614
    pragma Import (C, BIO_f_reliable, "BIO_f_reliable");
 
    procedure BIO_set_cipher
@@ -1484,23 +1484,23 @@ package OpenSSL.Low_Level.evp_h is
    function EVP_CIPHER_type (ctx : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st) return int;  -- openssl/evp.h:877
    pragma Import (C, EVP_CIPHER_type, "EVP_CIPHER_type");
 
-   function EVP_CIPHER_param_to_asn1 (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:880
+   function EVP_CIPHER_param_to_asn1 (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:880
    pragma Import (C, EVP_CIPHER_param_to_asn1, "EVP_CIPHER_param_to_asn1");
 
-   function EVP_CIPHER_asn1_to_param (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:881
+   function EVP_CIPHER_asn1_to_param (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:881
    pragma Import (C, EVP_CIPHER_asn1_to_param, "EVP_CIPHER_asn1_to_param");
 
-   function EVP_CIPHER_set_asn1_iv (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:884
+   function EVP_CIPHER_set_asn1_iv (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:884
    pragma Import (C, EVP_CIPHER_set_asn1_iv, "EVP_CIPHER_set_asn1_iv");
 
-   function EVP_CIPHER_get_asn1_iv (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/evp.h:885
+   function EVP_CIPHER_get_asn1_iv (c : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st; c_type : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/evp.h:885
    pragma Import (C, EVP_CIPHER_get_asn1_iv, "EVP_CIPHER_get_asn1_iv");
 
    function PKCS5_PBE_keyivgen
      (ctx     : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
       pass    : Interfaces.C.Strings.chars_ptr;
       passlen : int;
-      param   : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+      param   : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
       cipher  : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
       md      : access constant OpenSSL.Low_Level.evp_h.env_md_st;
       en_de   : int) return int;  -- openssl/evp.h:888
@@ -1531,7 +1531,7 @@ package OpenSSL.Low_Level.evp_h is
      (ctx     : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
       pass    : Interfaces.C.Strings.chars_ptr;
       passlen : int;
-      param   : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+      param   : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
       cipher  : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
       md      : access constant OpenSSL.Low_Level.evp_h.env_md_st;
       en_de   : int) return int;  -- openssl/evp.h:898
@@ -1541,10 +1541,10 @@ package OpenSSL.Low_Level.evp_h is
    pragma Import (C, PKCS5_PBE_add, "PKCS5_PBE_add");
 
    function EVP_PBE_CipherInit
-     (pbe_obj : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+     (pbe_obj : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
       pass    : Interfaces.C.Strings.chars_ptr;
       passlen : int;
-      param   : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+      param   : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
       ctx     : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
       en_de   : int) return int;  -- openssl/evp.h:904
    pragma Import (C, EVP_PBE_CipherInit, "EVP_PBE_CipherInit");
@@ -1558,7 +1558,7 @@ package OpenSSL.Low_Level.evp_h is
         (arg1 : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
          arg2 : Interfaces.C.Strings.chars_ptr;
          arg3 : int;
-         arg4 : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+         arg4 : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
          arg5 : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
          arg6 : access constant OpenSSL.Low_Level.evp_h.env_md_st;
          arg7 : int) return int) return int;  -- openssl/evp.h:914
@@ -1572,7 +1572,7 @@ package OpenSSL.Low_Level.evp_h is
         (arg1 : access OpenSSL.Low_Level.evp_h.evp_cipher_ctx_st;
          arg2 : Interfaces.C.Strings.chars_ptr;
          arg3 : int;
-         arg4 : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;
+         arg4 : access OpenSSL.Low_Level.asn1_h.asn1_type_st;
          arg5 : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;
          arg6 : access constant OpenSSL.Low_Level.evp_h.env_md_st;
          arg7 : int) return int) return int;  -- openssl/evp.h:916

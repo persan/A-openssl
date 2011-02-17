@@ -6,9 +6,9 @@ package OpenSSL.Low_Level.md2_h is
 
    package defs is
 
-   MD2_DIGEST_LENGTH : constant := 16;  --  openssl/md2.h:68
-   MD2_BLOCK : constant := 16;  --  openssl/md2.h:69
-end;
+      MD2_DIGEST_LENGTH : constant := 16;  --  openssl/md2.h:68
+      MD2_BLOCK         : constant := 16;  --  openssl/md2.h:69
+   end defs;
    type MD2state_st_data_array is array (0 .. 15) of aliased unsigned_char;
    type MD2state_st_cksm_array is array (0 .. 15) of aliased unsigned;
    type MD2state_st_state_array is array (0 .. 15) of aliased unsigned;

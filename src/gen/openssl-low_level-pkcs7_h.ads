@@ -220,7 +220,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    subtype PKCS7_SIGNED is pkcs7_signed_st;
 
    type pkcs7_enc_content_st is record
-      content_type : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/pkcs7.h:136
+      content_type : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/pkcs7.h:136
       algorithm    : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/pkcs7.h:137
       enc_data     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/pkcs7.h:138
       cipher       : access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;  -- openssl/pkcs7.h:139
@@ -274,7 +274,7 @@ package OpenSSL.Low_Level.pkcs7_h is
       length   : aliased long;  -- openssl/pkcs7.h:180
       state    : aliased int;  -- openssl/pkcs7.h:185
       detached : aliased int;  -- openssl/pkcs7.h:187
-      c_type   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/pkcs7.h:189
+      c_type   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/pkcs7.h:189
       d        : anon_32;  -- openssl/pkcs7.h:216
    end record;
    pragma Convention (C_Pass_By_Copy, pkcs7_st);  -- openssl/pkcs7.h:175
@@ -531,7 +531,7 @@ package OpenSSL.Low_Level.pkcs7_h is
    function PKCS7_set0_type_other
      (p7     : access PKCS7;
       c_type : int;
-      other  : access OpenSSL.Low_Level.asn1_h.ASN1_TYPE) return int;  -- openssl/pkcs7.h:312
+      other  : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/pkcs7.h:312
    pragma Import (C, PKCS7_set0_type_other, "PKCS7_set0_type_other");
 
    function PKCS7_set_content (p7 : access PKCS7; p7_data : access PKCS7) return int;  -- openssl/pkcs7.h:313
@@ -561,7 +561,7 @@ package OpenSSL.Low_Level.pkcs7_h is
 
    function PKCS7_dataVerify
      (cert_store : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
-      ctx        : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st_CTX.x509_store_st;
+      ctx        : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       the_bio    : access OpenSSL.Low_Level.bio_h.bio_st;
       p7         : access PKCS7;
       si         : access PKCS7_SIGNER_INFO) return int;  -- openssl/pkcs7.h:321
@@ -648,10 +648,10 @@ package OpenSSL.Low_Level.pkcs7_h is
       value   : System.Address) return int;  -- openssl/pkcs7.h:350
    pragma Import (C, PKCS7_add_attribute, "PKCS7_add_attribute");
 
-   function PKCS7_get_attribute (si : access PKCS7_SIGNER_INFO; nid : int) return access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/pkcs7.h:352
+   function PKCS7_get_attribute (si : access PKCS7_SIGNER_INFO; nid : int) return access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/pkcs7.h:352
    pragma Import (C, PKCS7_get_attribute, "PKCS7_get_attribute");
 
-   function PKCS7_get_signed_attribute (si : access PKCS7_SIGNER_INFO; nid : int) return access OpenSSL.Low_Level.asn1_h.ASN1_TYPE;  -- openssl/pkcs7.h:353
+   function PKCS7_get_signed_attribute (si : access PKCS7_SIGNER_INFO; nid : int) return access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/pkcs7.h:353
    pragma Import (C, PKCS7_get_signed_attribute, "PKCS7_get_signed_attribute");
 
    function PKCS7_set_signed_attributes (p7si : access PKCS7_SIGNER_INFO; sk : access OpenSSL.Low_Level.x509_h.stack_st_X509_ATTRIBUTE) return int;  -- openssl/pkcs7.h:354
@@ -724,7 +724,7 @@ package OpenSSL.Low_Level.pkcs7_h is
       arg : int) return int;  -- openssl/pkcs7.h:377
    pragma Import (C, PKCS7_simple_smimecap, "PKCS7_simple_smimecap");
 
-   function PKCS7_add_attrib_content_type (si : access PKCS7_SIGNER_INFO; coid : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT) return int;  -- openssl/pkcs7.h:379
+   function PKCS7_add_attrib_content_type (si : access PKCS7_SIGNER_INFO; coid : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/pkcs7.h:379
    pragma Import (C, PKCS7_add_attrib_content_type, "PKCS7_add_attrib_content_type");
 
    function PKCS7_add0_attrib_signing_time (si : access PKCS7_SIGNER_INFO; t : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/pkcs7.h:380

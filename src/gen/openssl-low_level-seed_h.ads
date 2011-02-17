@@ -4,10 +4,11 @@ with System;
 
 package OpenSSL.Low_Level.seed_h is
 
+   package defs is
 
    SEED_BLOCK_SIZE : constant := 16;  --  openssl/seed.h:102
    SEED_KEY_LENGTH : constant := 16;  --  openssl/seed.h:103
-
+end;
    type seed_key_st_data_array is array (0 .. 31) of aliased unsigned;
    type seed_key_st is record
       data : aliased seed_key_st_data_array;  -- openssl/seed.h:115

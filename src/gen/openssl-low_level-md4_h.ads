@@ -5,12 +5,13 @@ with System;
 package OpenSSL.Low_Level.md4_h is
 
    --  unsupported macro: MD4_LONG unsigned int
+   package defs is
 
    MD4_CBLOCK : constant := 64;  --  openssl/md4.h:96
    --  unsupported macro: MD4_LBLOCK (MD4_CBLOCK/4)
 
    MD4_DIGEST_LENGTH : constant := 16;  --  openssl/md4.h:98
-
+end;
    type MD4state_st_data_array is array (0 .. 15) of aliased unsigned;
    type MD4state_st is record
       A : aliased unsigned;  -- openssl/md4.h:102

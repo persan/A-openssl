@@ -1,8 +1,7 @@
 with Interfaces.C; use Interfaces.C;
---  with stddef_h;
-with System;
---  limited --  with OpenSSL.Low_Level.ossl_typ_h;
 
+with System;
+with OpenSSL.Low_Level.rand_h;
 package OpenSSL.Low_Level.fips_rand_h is
 
    function FIPS_rand_set_key (key : access unsigned_char; keylen : size_t) return int;  -- openssl/fips_rand.h:61

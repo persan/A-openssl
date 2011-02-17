@@ -28,8 +28,7 @@ Project OpenSSL.Tests is
    end Compiler;
 
    package Binder is
-      for Default_Switches ("ada") use
-        OpenSSL.Binder'Default_Switches ("ada");
+      for Default_Switches ("ada") use ("-E");
    end Binder;
 
 end OpenSSL.Tests;

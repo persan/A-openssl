@@ -1,17 +1,16 @@
 with Interfaces.C; use Interfaces.C;
---  with OpenSSL.Low_Level.ossl_typ_h;
 with System;
---  with stddef_h;
-
+with OpenSSL.Low_Level.evp_h;
 package OpenSSL.Low_Level.hmac_h is
 
+   package defs is
 
-   HMAC_MAX_MD_CBLOCK : constant := 128;  --  openssl/hmac.h:69
+      HMAC_MAX_MD_CBLOCK : constant := 128;  --  openssl/hmac.h:69
    --  arg-macro: function HMAC_size (e)
    --    return EVP_MD_size((e).md);
    --  arg-macro: procedure HMAC_cleanup (ctx)
    --    HMAC_CTX_cleanup(ctx)
-
+   end defs;
    type hmac_ctx_st_key_array is array (0 .. 127) of aliased unsigned_char;
    type hmac_ctx_st is record
       md : access constant OpenSSL.Low_Level.evp_h.env_md_st;  -- openssl/hmac.h:77

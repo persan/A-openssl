@@ -5,12 +5,13 @@ with System;
 package OpenSSL.Low_Level.ripemd_h is
 
    --  unsupported macro: RIPEMD160_LONG unsigned int
+   package defs is
 
    RIPEMD160_CBLOCK : constant := 64;  --  openssl/ripemd.h:82
    --  unsupported macro: RIPEMD160_LBLOCK (RIPEMD160_CBLOCK/4)
 
    RIPEMD160_DIGEST_LENGTH : constant := 20;  --  openssl/ripemd.h:84
-
+end;
    type RIPEMD160state_st_data_array is array (0 .. 15) of aliased unsigned;
    type RIPEMD160state_st is record
       A : aliased unsigned;  -- openssl/ripemd.h:88

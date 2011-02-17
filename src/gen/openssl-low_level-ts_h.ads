@@ -1,150 +1,149 @@
 with Interfaces.C; use Interfaces.C;
---  with OpenSSL.Low_Level.ossl_typ_h;
-limited with OpenSSL.Low_Level.asn1_h;
-limited with OpenSSL.Low_Level.x509_h;
-limited with OpenSSL.Low_Level.x509v3_h;
+with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.x509_h;
+with OpenSSL.Low_Level.x509v3_h;
 with OpenSSL.Low_Level.stack_h;
-limited with OpenSSL.Low_Level.pkcs7_h;
+with OpenSSL.Low_Level.pkcs7_h;
 with System;
---  limited --  with Interfaces.C_Streams;
-limited with OpenSSL.Low_Level.bio_h;
+with OpenSSL.Low_Level.bio_h;
 with Interfaces.C.Strings;
-
+with OpenSSL.Low_Level.conf_h;
 package OpenSSL.Low_Level.ts_h is
 
+   package defs is
 
-   TS_STATUS_GRANTED : constant := 0;  --  openssl/ts.h:201
-   TS_STATUS_GRANTED_WITH_MODS : constant := 1;  --  openssl/ts.h:202
-   TS_STATUS_REJECTION : constant := 2;  --  openssl/ts.h:203
-   TS_STATUS_WAITING : constant := 3;  --  openssl/ts.h:204
-   TS_STATUS_REVOCATION_WARNING : constant := 4;  --  openssl/ts.h:205
-   TS_STATUS_REVOCATION_NOTIFICATION : constant := 5;  --  openssl/ts.h:206
+      TS_STATUS_GRANTED                 : constant := 0;  --  openssl/ts.h:201
+      TS_STATUS_GRANTED_WITH_MODS       : constant := 1;  --  openssl/ts.h:202
+      TS_STATUS_REJECTION               : constant := 2;  --  openssl/ts.h:203
+      TS_STATUS_WAITING                 : constant := 3;  --  openssl/ts.h:204
+      TS_STATUS_REVOCATION_WARNING      : constant := 4;  --  openssl/ts.h:205
+      TS_STATUS_REVOCATION_NOTIFICATION : constant := 5;  --  openssl/ts.h:206
 
-   TS_INFO_BAD_ALG : constant := 0;  --  openssl/ts.h:210
-   TS_INFO_BAD_REQUEST : constant := 2;  --  openssl/ts.h:211
-   TS_INFO_BAD_DATA_FORMAT : constant := 5;  --  openssl/ts.h:212
-   TS_INFO_TIME_NOT_AVAILABLE : constant := 14;  --  openssl/ts.h:213
-   TS_INFO_UNACCEPTED_POLICY : constant := 15;  --  openssl/ts.h:214
-   TS_INFO_UNACCEPTED_EXTENSION : constant := 16;  --  openssl/ts.h:215
-   TS_INFO_ADD_INFO_NOT_AVAILABLE : constant := 17;  --  openssl/ts.h:216
-   TS_INFO_SYSTEM_FAILURE : constant := 25;  --  openssl/ts.h:217
+      TS_INFO_BAD_ALG                   : constant := 0;  --  openssl/ts.h:210
+      TS_INFO_BAD_REQUEST               : constant := 2;  --  openssl/ts.h:211
+      TS_INFO_BAD_DATA_FORMAT           : constant := 5;  --  openssl/ts.h:212
+      TS_INFO_TIME_NOT_AVAILABLE        : constant := 14;  --  openssl/ts.h:213
+      TS_INFO_UNACCEPTED_POLICY         : constant := 15;  --  openssl/ts.h:214
+      TS_INFO_UNACCEPTED_EXTENSION      : constant := 16;  --  openssl/ts.h:215
+      TS_INFO_ADD_INFO_NOT_AVAILABLE    : constant := 17;  --  openssl/ts.h:216
+      TS_INFO_SYSTEM_FAILURE            : constant := 25;  --  openssl/ts.h:217
 
-   TS_TSA_NAME : constant := 16#01#;  --  openssl/ts.h:473
+      TS_TSA_NAME                       : constant := 16#01#;  --  openssl/ts.h:473
 
-   TS_ORDERING : constant := 16#02#;  --  openssl/ts.h:476
+      TS_ORDERING                       : constant := 16#02#;  --  openssl/ts.h:476
 
-   TS_ESS_CERT_ID_CHAIN : constant := 16#04#;  --  openssl/ts.h:483
+      TS_ESS_CERT_ID_CHAIN              : constant := 16#04#;  --  openssl/ts.h:483
 
-   TS_MAX_CLOCK_PRECISION_DIGITS : constant := 6;  --  openssl/ts.h:570
+      TS_MAX_CLOCK_PRECISION_DIGITS     : constant := 6;  --  openssl/ts.h:570
 
-   TS_VFY_SIGNATURE : constant := (2 ** 0);  --  openssl/ts.h:620
+      TS_VFY_SIGNATURE                  : constant := (2 ** 0);  --  openssl/ts.h:620
 
-   TS_VFY_VERSION : constant := (2 ** 1);  --  openssl/ts.h:622
+      TS_VFY_VERSION                    : constant := (2 ** 1);  --  openssl/ts.h:622
 
-   TS_VFY_POLICY : constant := (2 ** 2);  --  openssl/ts.h:624
+      TS_VFY_POLICY                     : constant := (2 ** 2);  --  openssl/ts.h:624
 
-   TS_VFY_IMPRINT : constant := (2 ** 3);  --  openssl/ts.h:627
+      TS_VFY_IMPRINT                    : constant := (2 ** 3);  --  openssl/ts.h:627
 
-   TS_VFY_DATA : constant := (2 ** 4);  --  openssl/ts.h:631
+      TS_VFY_DATA                       : constant := (2 ** 4);  --  openssl/ts.h:631
 
-   TS_VFY_NONCE : constant := (2 ** 5);  --  openssl/ts.h:633
+      TS_VFY_NONCE                      : constant := (2 ** 5);  --  openssl/ts.h:633
 
-   TS_VFY_SIGNER : constant := (2 ** 6);  --  openssl/ts.h:635
+      TS_VFY_SIGNER                     : constant := (2 ** 6);  --  openssl/ts.h:635
 
-   TS_VFY_TSA_NAME : constant := (2 ** 7);  --  openssl/ts.h:637
-   --  unsupported macro: TS_VFY_ALL_IMPRINT (TS_VFY_SIGNATURE | TS_VFY_VERSION | TS_VFY_POLICY | TS_VFY_IMPRINT | TS_VFY_NONCE | TS_VFY_SIGNER | TS_VFY_TSA_NAME)
-   --  unsupported macro: TS_VFY_ALL_DATA (TS_VFY_SIGNATURE | TS_VFY_VERSION | TS_VFY_POLICY | TS_VFY_DATA | TS_VFY_NONCE | TS_VFY_SIGNER | TS_VFY_TSA_NAME)
+      TS_VFY_TSA_NAME                   : constant := (2 ** 7);  --  openssl/ts.h:637
+      --  unsupported macro: TS_VFY_ALL_IMPRINT (TS_VFY_SIGNATURE | TS_VFY_VERSION | TS_VFY_POLICY | TS_VFY_IMPRINT | TS_VFY_NONCE | TS_VFY_SIGNER | TS_VFY_TSA_NAME)
+      --  unsupported macro: TS_VFY_ALL_DATA (TS_VFY_SIGNATURE | TS_VFY_VERSION | TS_VFY_POLICY | TS_VFY_DATA | TS_VFY_NONCE | TS_VFY_SIGNER | TS_VFY_TSA_NAME)
 
-   TS_F_D2I_TS_RESP : constant := 147;  --  openssl/ts.h:769
-   TS_F_DEF_SERIAL_CB : constant := 110;  --  openssl/ts.h:770
-   TS_F_DEF_TIME_CB : constant := 111;  --  openssl/ts.h:771
-   TS_F_ESS_ADD_SIGNING_CERT : constant := 112;  --  openssl/ts.h:772
-   TS_F_ESS_CERT_ID_NEW_INIT : constant := 113;  --  openssl/ts.h:773
-   TS_F_ESS_SIGNING_CERT_NEW_INIT : constant := 114;  --  openssl/ts.h:774
-   TS_F_INT_TS_RESP_VERIFY_TOKEN : constant := 149;  --  openssl/ts.h:775
-   TS_F_PKCS7_TO_TS_TST_INFO : constant := 148;  --  openssl/ts.h:776
-   TS_F_TS_ACCURACY_SET_MICROS : constant := 115;  --  openssl/ts.h:777
-   TS_F_TS_ACCURACY_SET_MILLIS : constant := 116;  --  openssl/ts.h:778
-   TS_F_TS_ACCURACY_SET_SECONDS : constant := 117;  --  openssl/ts.h:779
-   TS_F_TS_CHECK_IMPRINTS : constant := 100;  --  openssl/ts.h:780
-   TS_F_TS_CHECK_NONCES : constant := 101;  --  openssl/ts.h:781
-   TS_F_TS_CHECK_POLICY : constant := 102;  --  openssl/ts.h:782
-   TS_F_TS_CHECK_SIGNING_CERTS : constant := 103;  --  openssl/ts.h:783
-   TS_F_TS_CHECK_STATUS_INFO : constant := 104;  --  openssl/ts.h:784
-   TS_F_TS_COMPUTE_IMPRINT : constant := 145;  --  openssl/ts.h:785
-   TS_F_TS_CONF_SET_DEFAULT_ENGINE : constant := 146;  --  openssl/ts.h:786
-   TS_F_TS_GET_STATUS_TEXT : constant := 105;  --  openssl/ts.h:787
-   TS_F_TS_MSG_IMPRINT_SET_ALGO : constant := 118;  --  openssl/ts.h:788
-   TS_F_TS_REQ_SET_MSG_IMPRINT : constant := 119;  --  openssl/ts.h:789
-   TS_F_TS_REQ_SET_NONCE : constant := 120;  --  openssl/ts.h:790
-   TS_F_TS_REQ_SET_POLICY_ID : constant := 121;  --  openssl/ts.h:791
-   TS_F_TS_RESP_CREATE_RESPONSE : constant := 122;  --  openssl/ts.h:792
-   TS_F_TS_RESP_CREATE_TST_INFO : constant := 123;  --  openssl/ts.h:793
-   TS_F_TS_RESP_CTX_ADD_FAILURE_INFO : constant := 124;  --  openssl/ts.h:794
-   TS_F_TS_RESP_CTX_ADD_MD : constant := 125;  --  openssl/ts.h:795
-   TS_F_TS_RESP_CTX_ADD_POLICY : constant := 126;  --  openssl/ts.h:796
-   TS_F_TS_RESP_CTX_NEW : constant := 127;  --  openssl/ts.h:797
-   TS_F_TS_RESP_CTX_SET_ACCURACY : constant := 128;  --  openssl/ts.h:798
-   TS_F_TS_RESP_CTX_SET_CERTS : constant := 129;  --  openssl/ts.h:799
-   TS_F_TS_RESP_CTX_SET_DEF_POLICY : constant := 130;  --  openssl/ts.h:800
-   TS_F_TS_RESP_CTX_SET_SIGNER_CERT : constant := 131;  --  openssl/ts.h:801
-   TS_F_TS_RESP_CTX_SET_STATUS_INFO : constant := 132;  --  openssl/ts.h:802
-   TS_F_TS_RESP_GET_POLICY : constant := 133;  --  openssl/ts.h:803
-   TS_F_TS_RESP_SET_GENTIME_WITH_PRECISION : constant := 134;  --  openssl/ts.h:804
-   TS_F_TS_RESP_SET_STATUS_INFO : constant := 135;  --  openssl/ts.h:805
-   TS_F_TS_RESP_SET_TST_INFO : constant := 150;  --  openssl/ts.h:806
-   TS_F_TS_RESP_SIGN : constant := 136;  --  openssl/ts.h:807
-   TS_F_TS_RESP_VERIFY_SIGNATURE : constant := 106;  --  openssl/ts.h:808
-   TS_F_TS_RESP_VERIFY_TOKEN : constant := 107;  --  openssl/ts.h:809
-   TS_F_TS_TST_INFO_SET_ACCURACY : constant := 137;  --  openssl/ts.h:810
-   TS_F_TS_TST_INFO_SET_MSG_IMPRINT : constant := 138;  --  openssl/ts.h:811
-   TS_F_TS_TST_INFO_SET_NONCE : constant := 139;  --  openssl/ts.h:812
-   TS_F_TS_TST_INFO_SET_POLICY_ID : constant := 140;  --  openssl/ts.h:813
-   TS_F_TS_TST_INFO_SET_SERIAL : constant := 141;  --  openssl/ts.h:814
-   TS_F_TS_TST_INFO_SET_TIME : constant := 142;  --  openssl/ts.h:815
-   TS_F_TS_TST_INFO_SET_TSA : constant := 143;  --  openssl/ts.h:816
-   TS_F_TS_VERIFY : constant := 108;  --  openssl/ts.h:817
-   TS_F_TS_VERIFY_CERT : constant := 109;  --  openssl/ts.h:818
-   TS_F_TS_VERIFY_CTX_NEW : constant := 144;  --  openssl/ts.h:819
+      TS_F_D2I_TS_RESP                  : constant := 147;  --  openssl/ts.h:769
+      TS_F_DEF_SERIAL_CB                : constant := 110;  --  openssl/ts.h:770
+      TS_F_DEF_TIME_CB                  : constant := 111;  --  openssl/ts.h:771
+      TS_F_ESS_ADD_SIGNING_CERT         : constant := 112;  --  openssl/ts.h:772
+      TS_F_ESS_CERT_ID_NEW_INIT         : constant := 113;  --  openssl/ts.h:773
+      TS_F_ESS_SIGNING_CERT_NEW_INIT    : constant := 114;  --  openssl/ts.h:774
+      TS_F_INT_TS_RESP_VERIFY_TOKEN     : constant := 149;  --  openssl/ts.h:775
+      TS_F_PKCS7_TO_TS_TST_INFO         : constant := 148;  --  openssl/ts.h:776
+      TS_F_TS_ACCURACY_SET_MICROS       : constant := 115;  --  openssl/ts.h:777
+      TS_F_TS_ACCURACY_SET_MILLIS       : constant := 116;  --  openssl/ts.h:778
+      TS_F_TS_ACCURACY_SET_SECONDS      : constant := 117;  --  openssl/ts.h:779
+      TS_F_TS_CHECK_IMPRINTS            : constant := 100;  --  openssl/ts.h:780
+      TS_F_TS_CHECK_NONCES              : constant := 101;  --  openssl/ts.h:781
+      TS_F_TS_CHECK_POLICY              : constant := 102;  --  openssl/ts.h:782
+      TS_F_TS_CHECK_SIGNING_CERTS       : constant := 103;  --  openssl/ts.h:783
+      TS_F_TS_CHECK_STATUS_INFO         : constant := 104;  --  openssl/ts.h:784
+      TS_F_TS_COMPUTE_IMPRINT           : constant := 145;  --  openssl/ts.h:785
+      TS_F_TS_CONF_SET_DEFAULT_ENGINE   : constant := 146;  --  openssl/ts.h:786
+      TS_F_TS_GET_STATUS_TEXT           : constant := 105;  --  openssl/ts.h:787
+      TS_F_TS_MSG_IMPRINT_SET_ALGO      : constant := 118;  --  openssl/ts.h:788
+      TS_F_TS_REQ_SET_MSG_IMPRINT       : constant := 119;  --  openssl/ts.h:789
+      TS_F_TS_REQ_SET_NONCE             : constant := 120;  --  openssl/ts.h:790
+      TS_F_TS_REQ_SET_POLICY_ID         : constant := 121;  --  openssl/ts.h:791
+      TS_F_TS_RESP_CREATE_RESPONSE      : constant := 122;  --  openssl/ts.h:792
+      TS_F_TS_RESP_CREATE_TST_INFO      : constant := 123;  --  openssl/ts.h:793
+      TS_F_TS_RESP_CTX_ADD_FAILURE_INFO : constant := 124;  --  openssl/ts.h:794
+      TS_F_TS_RESP_CTX_ADD_MD           : constant := 125;  --  openssl/ts.h:795
+      TS_F_TS_RESP_CTX_ADD_POLICY       : constant := 126;  --  openssl/ts.h:796
+      TS_F_TS_RESP_CTX_NEW              : constant := 127;  --  openssl/ts.h:797
+      TS_F_TS_RESP_CTX_SET_ACCURACY     : constant := 128;  --  openssl/ts.h:798
+      TS_F_TS_RESP_CTX_SET_CERTS        : constant := 129;  --  openssl/ts.h:799
+      TS_F_TS_RESP_CTX_SET_DEF_POLICY   : constant := 130;  --  openssl/ts.h:800
+      TS_F_TS_RESP_CTX_SET_SIGNER_CERT  : constant := 131;  --  openssl/ts.h:801
+      TS_F_TS_RESP_CTX_SET_STATUS_INFO  : constant := 132;  --  openssl/ts.h:802
+      TS_F_TS_RESP_GET_POLICY           : constant := 133;  --  openssl/ts.h:803
+      TS_F_TS_RESP_SET_GENTIME_WITH_PRECISION : constant := 134;  --  openssl/ts.h:804
+      TS_F_TS_RESP_SET_STATUS_INFO      : constant := 135;  --  openssl/ts.h:805
+      TS_F_TS_RESP_SET_TST_INFO         : constant := 150;  --  openssl/ts.h:806
+      TS_F_TS_RESP_SIGN                 : constant := 136;  --  openssl/ts.h:807
+      TS_F_TS_RESP_VERIFY_SIGNATURE     : constant := 106;  --  openssl/ts.h:808
+      TS_F_TS_RESP_VERIFY_TOKEN         : constant := 107;  --  openssl/ts.h:809
+      TS_F_TS_TST_INFO_SET_ACCURACY     : constant := 137;  --  openssl/ts.h:810
+      TS_F_TS_TST_INFO_SET_MSG_IMPRINT  : constant := 138;  --  openssl/ts.h:811
+      TS_F_TS_TST_INFO_SET_NONCE        : constant := 139;  --  openssl/ts.h:812
+      TS_F_TS_TST_INFO_SET_POLICY_ID    : constant := 140;  --  openssl/ts.h:813
+      TS_F_TS_TST_INFO_SET_SERIAL       : constant := 141;  --  openssl/ts.h:814
+      TS_F_TS_TST_INFO_SET_TIME         : constant := 142;  --  openssl/ts.h:815
+      TS_F_TS_TST_INFO_SET_TSA          : constant := 143;  --  openssl/ts.h:816
+      TS_F_TS_VERIFY                    : constant := 108;  --  openssl/ts.h:817
+      TS_F_TS_VERIFY_CERT               : constant := 109;  --  openssl/ts.h:818
+      TS_F_TS_VERIFY_CTX_NEW            : constant := 144;  --  openssl/ts.h:819
 
-   TS_R_BAD_PKCS7_TYPE : constant := 132;  --  openssl/ts.h:822
-   TS_R_BAD_TYPE : constant := 133;  --  openssl/ts.h:823
-   TS_R_CERTIFICATE_VERIFY_ERROR : constant := 100;  --  openssl/ts.h:824
-   TS_R_COULD_NOT_SET_ENGINE : constant := 127;  --  openssl/ts.h:825
-   TS_R_COULD_NOT_SET_TIME : constant := 115;  --  openssl/ts.h:826
-   TS_R_D2I_TS_RESP_INT_FAILED : constant := 128;  --  openssl/ts.h:827
-   TS_R_DETACHED_CONTENT : constant := 134;  --  openssl/ts.h:828
-   TS_R_ESS_ADD_SIGNING_CERT_ERROR : constant := 116;  --  openssl/ts.h:829
-   TS_R_ESS_SIGNING_CERTIFICATE_ERROR : constant := 101;  --  openssl/ts.h:830
-   TS_R_INVALID_NULL_POINTER : constant := 102;  --  openssl/ts.h:831
-   TS_R_INVALID_SIGNER_CERTIFICATE_PURPOSE : constant := 117;  --  openssl/ts.h:832
-   TS_R_MESSAGE_IMPRINT_MISMATCH : constant := 103;  --  openssl/ts.h:833
-   TS_R_NONCE_MISMATCH : constant := 104;  --  openssl/ts.h:834
-   TS_R_NONCE_NOT_RETURNED : constant := 105;  --  openssl/ts.h:835
-   TS_R_NO_CONTENT : constant := 106;  --  openssl/ts.h:836
-   TS_R_NO_TIME_STAMP_TOKEN : constant := 107;  --  openssl/ts.h:837
-   TS_R_PKCS7_ADD_SIGNATURE_ERROR : constant := 118;  --  openssl/ts.h:838
-   TS_R_PKCS7_ADD_SIGNED_ATTR_ERROR : constant := 119;  --  openssl/ts.h:839
-   TS_R_PKCS7_TO_TS_TST_INFO_FAILED : constant := 129;  --  openssl/ts.h:840
-   TS_R_POLICY_MISMATCH : constant := 108;  --  openssl/ts.h:841
-   TS_R_PRIVATE_KEY_DOES_NOT_MATCH_CERTIFICATE : constant := 120;  --  openssl/ts.h:842
-   TS_R_RESPONSE_SETUP_ERROR : constant := 121;  --  openssl/ts.h:843
-   TS_R_SIGNATURE_FAILURE : constant := 109;  --  openssl/ts.h:844
-   TS_R_THERE_MUST_BE_ONE_SIGNER : constant := 110;  --  openssl/ts.h:845
-   TS_R_TIME_SYSCALL_ERROR : constant := 122;  --  openssl/ts.h:846
-   TS_R_TOKEN_NOT_PRESENT : constant := 130;  --  openssl/ts.h:847
-   TS_R_TOKEN_PRESENT : constant := 131;  --  openssl/ts.h:848
-   TS_R_TSA_NAME_MISMATCH : constant := 111;  --  openssl/ts.h:849
-   TS_R_TSA_UNTRUSTED : constant := 112;  --  openssl/ts.h:850
-   TS_R_TST_INFO_SETUP_ERROR : constant := 123;  --  openssl/ts.h:851
-   TS_R_TS_DATASIGN : constant := 124;  --  openssl/ts.h:852
-   TS_R_UNACCEPTABLE_POLICY : constant := 125;  --  openssl/ts.h:853
-   TS_R_UNSUPPORTED_MD_ALGORITHM : constant := 126;  --  openssl/ts.h:854
-   TS_R_UNSUPPORTED_VERSION : constant := 113;  --  openssl/ts.h:855
-   TS_R_WRONG_CONTENT_TYPE : constant := 114;  --  openssl/ts.h:856
-
+      TS_R_BAD_PKCS7_TYPE               : constant := 132;  --  openssl/ts.h:822
+      TS_R_BAD_TYPE                     : constant := 133;  --  openssl/ts.h:823
+      TS_R_CERTIFICATE_VERIFY_ERROR     : constant := 100;  --  openssl/ts.h:824
+      TS_R_COULD_NOT_SET_ENGINE         : constant := 127;  --  openssl/ts.h:825
+      TS_R_COULD_NOT_SET_TIME           : constant := 115;  --  openssl/ts.h:826
+      TS_R_D2I_TS_RESP_INT_FAILED       : constant := 128;  --  openssl/ts.h:827
+      TS_R_DETACHED_CONTENT             : constant := 134;  --  openssl/ts.h:828
+      TS_R_ESS_ADD_SIGNING_CERT_ERROR   : constant := 116;  --  openssl/ts.h:829
+      TS_R_ESS_SIGNING_CERTIFICATE_ERROR : constant := 101;  --  openssl/ts.h:830
+      TS_R_INVALID_NULL_POINTER         : constant := 102;  --  openssl/ts.h:831
+      TS_R_INVALID_SIGNER_CERTIFICATE_PURPOSE : constant := 117;  --  openssl/ts.h:832
+      TS_R_MESSAGE_IMPRINT_MISMATCH     : constant := 103;  --  openssl/ts.h:833
+      TS_R_NONCE_MISMATCH               : constant := 104;  --  openssl/ts.h:834
+      TS_R_NONCE_NOT_RETURNED           : constant := 105;  --  openssl/ts.h:835
+      TS_R_NO_CONTENT                   : constant := 106;  --  openssl/ts.h:836
+      TS_R_NO_TIME_STAMP_TOKEN          : constant := 107;  --  openssl/ts.h:837
+      TS_R_PKCS7_ADD_SIGNATURE_ERROR    : constant := 118;  --  openssl/ts.h:838
+      TS_R_PKCS7_ADD_SIGNED_ATTR_ERROR  : constant := 119;  --  openssl/ts.h:839
+      TS_R_PKCS7_TO_TS_TST_INFO_FAILED  : constant := 129;  --  openssl/ts.h:840
+      TS_R_POLICY_MISMATCH              : constant := 108;  --  openssl/ts.h:841
+      TS_R_PRIVATE_KEY_DOES_NOT_MATCH_CERTIFICATE : constant := 120;  --  openssl/ts.h:842
+      TS_R_RESPONSE_SETUP_ERROR         : constant := 121;  --  openssl/ts.h:843
+      TS_R_SIGNATURE_FAILURE            : constant := 109;  --  openssl/ts.h:844
+      TS_R_THERE_MUST_BE_ONE_SIGNER     : constant := 110;  --  openssl/ts.h:845
+      TS_R_TIME_SYSCALL_ERROR           : constant := 122;  --  openssl/ts.h:846
+      TS_R_TOKEN_NOT_PRESENT            : constant := 130;  --  openssl/ts.h:847
+      TS_R_TOKEN_PRESENT                : constant := 131;  --  openssl/ts.h:848
+      TS_R_TSA_NAME_MISMATCH            : constant := 111;  --  openssl/ts.h:849
+      TS_R_TSA_UNTRUSTED                : constant := 112;  --  openssl/ts.h:850
+      TS_R_TST_INFO_SETUP_ERROR         : constant := 123;  --  openssl/ts.h:851
+      TS_R_TS_DATASIGN                  : constant := 124;  --  openssl/ts.h:852
+      TS_R_UNACCEPTABLE_POLICY          : constant := 125;  --  openssl/ts.h:853
+      TS_R_UNSUPPORTED_MD_ALGORITHM     : constant := 126;  --  openssl/ts.h:854
+      TS_R_UNSUPPORTED_VERSION          : constant := 113;  --  openssl/ts.h:855
+      TS_R_WRONG_CONTENT_TYPE           : constant := 114;  --  openssl/ts.h:856
+   end defs;
    type TS_msg_imprint_st is record
-      hash_algo : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:112
+      hash_algo  : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:112
       hashed_msg : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:113
    end record;
    pragma Convention (C_Pass_By_Copy, TS_msg_imprint_st);  -- openssl/ts.h:110
@@ -152,12 +151,12 @@ package OpenSSL.Low_Level.ts_h is
    subtype TS_MSG_IMPRINT is TS_msg_imprint_st;
 
    type TS_req_st is record
-      version : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:130
+      version     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:130
       msg_imprint : access TS_MSG_IMPRINT;  -- openssl/ts.h:131
-      policy_id : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:132
-      nonce : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:133
-      cert_req : aliased Interfaces.C.int;  -- openssl/ts.h:134
-      extensions : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:135
+      policy_id   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:132
+      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:133
+      cert_req    : aliased Interfaces.C.int;  -- openssl/ts.h:134
+      extensions  : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:135
    end record;
    pragma Convention (C_Pass_By_Copy, TS_req_st);  -- openssl/ts.h:128
 
@@ -165,24 +164,24 @@ package OpenSSL.Low_Level.ts_h is
 
    type TS_accuracy_st is record
       seconds : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:147
-      millis : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:148
-      micros : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:149
+      millis  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:148
+      micros  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:149
    end record;
    pragma Convention (C_Pass_By_Copy, TS_accuracy_st);  -- openssl/ts.h:145
 
    subtype TS_ACCURACY is TS_accuracy_st;
 
    type TS_tst_info_st is record
-      version : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:174
-      policy_id : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:175
+      version     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:174
+      policy_id   : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:175
       msg_imprint : access TS_MSG_IMPRINT;  -- openssl/ts.h:176
-      serial : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:177
-      time : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:178
-      accuracy : access TS_ACCURACY;  -- openssl/ts.h:179
-      ordering : aliased Interfaces.C.int;  -- openssl/ts.h:180
-      nonce : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:181
-      tsa : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:182
-      extensions : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:183
+      serial      : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:177
+      time        : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:178
+      accuracy    : access TS_ACCURACY;  -- openssl/ts.h:179
+      ordering    : aliased Interfaces.C.int;  -- openssl/ts.h:180
+      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:181
+      tsa         : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:182
+      extensions  : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:183
    end record;
    pragma Convention (C_Pass_By_Copy, TS_tst_info_st);  -- openssl/ts.h:172
 
@@ -190,8 +189,8 @@ package OpenSSL.Low_Level.ts_h is
 
    type stack_st_ASN1_UTF8STRING;
    type TS_status_info_st is record
-      status : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:221
-      text : access stack_st_ASN1_UTF8STRING;  -- openssl/ts.h:222
+      status       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:221
+      text         : access stack_st_ASN1_UTF8STRING;  -- openssl/ts.h:222
       failure_info : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:223
    end record;
    pragma Convention (C_Pass_By_Copy, TS_status_info_st);  -- openssl/ts.h:219
@@ -205,8 +204,8 @@ package OpenSSL.Low_Level.ts_h is
 
    type TS_resp_st is record
       status_info : access TS_STATUS_INFO;  -- openssl/ts.h:237
-      token : access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/ts.h:238
-      tst_info : access TS_TST_INFO;  -- openssl/ts.h:239
+      token       : access OpenSSL.Low_Level.pkcs7_h.PKCS7;  -- openssl/ts.h:238
+      tst_info    : access TS_TST_INFO;  -- openssl/ts.h:239
    end record;
    pragma Convention (C_Pass_By_Copy, TS_resp_st);  -- openssl/ts.h:235
 
@@ -219,7 +218,7 @@ package OpenSSL.Low_Level.ts_h is
    pragma Convention (C_Pass_By_Copy, ESS_issuer_serial);  -- openssl/ts.h:251
 
    type ESS_cert_id is record
-      hash : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:266
+      hash          : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:266
       issuer_serial : access ESS_ISSUER_SERIAL;  -- openssl/ts.h:267
    end record;
    pragma Convention (C_Pass_By_Copy, ESS_cert_id);  -- openssl/ts.h:264
@@ -230,7 +229,7 @@ package OpenSSL.Low_Level.ts_h is
    pragma Convention (C_Pass_By_Copy, stack_st_ESS_CERT_ID);  -- openssl/ts.h:270
 
    type ESS_signing_cert is record
-      cert_ids : access stack_st_ESS_CERT_ID;  -- openssl/ts.h:282
+      cert_ids    : access stack_st_ESS_CERT_ID;  -- openssl/ts.h:282
       policy_info : access OpenSSL.Low_Level.x509v3_h.stack_st_POLICYINFO;  -- openssl/ts.h:283
    end record;
    pragma Convention (C_Pass_By_Copy, ESS_signing_cert);  -- openssl/ts.h:280
@@ -245,8 +244,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_REQ, "i2d_TS_REQ");
 
    function d2i_TS_REQ
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_REQ;  -- openssl/ts.h:290
    pragma Import (C, d2i_TS_REQ, "d2i_TS_REQ");
 
@@ -259,10 +258,10 @@ package OpenSSL.Low_Level.ts_h is
    function i2d_TS_REQ_fp (fp : access Interfaces.C_Streams.FILEs; a : access TS_REQ) return int;  -- openssl/ts.h:295
    pragma Import (C, i2d_TS_REQ_fp, "i2d_TS_REQ_fp");
 
-   function d2i_TS_REQ_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : System.Address) return access TS_REQ;  -- openssl/ts.h:296
+   function d2i_TS_REQ_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : System.Address) return access TS_REQ;  -- openssl/ts.h:296
    pragma Import (C, d2i_TS_REQ_bio, "d2i_TS_REQ_bio");
 
-   function i2d_TS_REQ_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_REQ) return int;  -- openssl/ts.h:297
+   function i2d_TS_REQ_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_REQ) return int;  -- openssl/ts.h:297
    pragma Import (C, i2d_TS_REQ_bio, "i2d_TS_REQ_bio");
 
    function TS_MSG_IMPRINT_new return access TS_MSG_IMPRINT;  -- openssl/ts.h:299
@@ -275,8 +274,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_MSG_IMPRINT, "i2d_TS_MSG_IMPRINT");
 
    function d2i_TS_MSG_IMPRINT
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_MSG_IMPRINT;  -- openssl/ts.h:302
    pragma Import (C, d2i_TS_MSG_IMPRINT, "d2i_TS_MSG_IMPRINT");
 
@@ -289,10 +288,10 @@ package OpenSSL.Low_Level.ts_h is
    function i2d_TS_MSG_IMPRINT_fp (fp : access Interfaces.C_Streams.FILEs; a : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:308
    pragma Import (C, i2d_TS_MSG_IMPRINT_fp, "i2d_TS_MSG_IMPRINT_fp");
 
-   function d2i_TS_MSG_IMPRINT_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : System.Address) return access TS_MSG_IMPRINT;  -- openssl/ts.h:309
+   function d2i_TS_MSG_IMPRINT_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : System.Address) return access TS_MSG_IMPRINT;  -- openssl/ts.h:309
    pragma Import (C, d2i_TS_MSG_IMPRINT_bio, "d2i_TS_MSG_IMPRINT_bio");
 
-   function i2d_TS_MSG_IMPRINT_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:310
+   function i2d_TS_MSG_IMPRINT_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:310
    pragma Import (C, i2d_TS_MSG_IMPRINT_bio, "i2d_TS_MSG_IMPRINT_bio");
 
    function TS_RESP_new return access TS_RESP;  -- openssl/ts.h:312
@@ -305,8 +304,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_RESP, "i2d_TS_RESP");
 
    function d2i_TS_RESP
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_RESP;  -- openssl/ts.h:315
    pragma Import (C, d2i_TS_RESP, "d2i_TS_RESP");
 
@@ -322,10 +321,10 @@ package OpenSSL.Low_Level.ts_h is
    function i2d_TS_RESP_fp (fp : access Interfaces.C_Streams.FILEs; a : access TS_RESP) return int;  -- openssl/ts.h:320
    pragma Import (C, i2d_TS_RESP_fp, "i2d_TS_RESP_fp");
 
-   function d2i_TS_RESP_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : System.Address) return access TS_RESP;  -- openssl/ts.h:321
+   function d2i_TS_RESP_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : System.Address) return access TS_RESP;  -- openssl/ts.h:321
    pragma Import (C, d2i_TS_RESP_bio, "d2i_TS_RESP_bio");
 
-   function i2d_TS_RESP_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_RESP) return int;  -- openssl/ts.h:322
+   function i2d_TS_RESP_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_RESP) return int;  -- openssl/ts.h:322
    pragma Import (C, i2d_TS_RESP_bio, "i2d_TS_RESP_bio");
 
    function TS_STATUS_INFO_new return access TS_STATUS_INFO;  -- openssl/ts.h:324
@@ -338,8 +337,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_STATUS_INFO, "i2d_TS_STATUS_INFO");
 
    function d2i_TS_STATUS_INFO
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_STATUS_INFO;  -- openssl/ts.h:327
    pragma Import (C, d2i_TS_STATUS_INFO, "d2i_TS_STATUS_INFO");
 
@@ -356,8 +355,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_TST_INFO, "i2d_TS_TST_INFO");
 
    function d2i_TS_TST_INFO
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_TST_INFO;  -- openssl/ts.h:334
    pragma Import (C, d2i_TS_TST_INFO, "d2i_TS_TST_INFO");
 
@@ -370,10 +369,10 @@ package OpenSSL.Low_Level.ts_h is
    function i2d_TS_TST_INFO_fp (fp : access Interfaces.C_Streams.FILEs; a : access TS_TST_INFO) return int;  -- openssl/ts.h:339
    pragma Import (C, i2d_TS_TST_INFO_fp, "i2d_TS_TST_INFO_fp");
 
-   function d2i_TS_TST_INFO_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : System.Address) return access TS_TST_INFO;  -- openssl/ts.h:340
+   function d2i_TS_TST_INFO_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : System.Address) return access TS_TST_INFO;  -- openssl/ts.h:340
    pragma Import (C, d2i_TS_TST_INFO_bio, "d2i_TS_TST_INFO_bio");
 
-   function i2d_TS_TST_INFO_bio (fp : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_TST_INFO) return int;  -- openssl/ts.h:341
+   function i2d_TS_TST_INFO_bio (fp : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_TST_INFO) return int;  -- openssl/ts.h:341
    pragma Import (C, i2d_TS_TST_INFO_bio, "i2d_TS_TST_INFO_bio");
 
    function TS_ACCURACY_new return access TS_ACCURACY;  -- openssl/ts.h:343
@@ -386,8 +385,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_TS_ACCURACY, "i2d_TS_ACCURACY");
 
    function d2i_TS_ACCURACY
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access TS_ACCURACY;  -- openssl/ts.h:346
    pragma Import (C, d2i_TS_ACCURACY, "d2i_TS_ACCURACY");
 
@@ -404,8 +403,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_ESS_ISSUER_SERIAL, "i2d_ESS_ISSUER_SERIAL");
 
    function d2i_ESS_ISSUER_SERIAL
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access ESS_ISSUER_SERIAL;  -- openssl/ts.h:354
    pragma Import (C, d2i_ESS_ISSUER_SERIAL, "d2i_ESS_ISSUER_SERIAL");
 
@@ -422,8 +421,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_ESS_CERT_ID, "i2d_ESS_CERT_ID");
 
    function d2i_ESS_CERT_ID
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access ESS_CERT_ID;  -- openssl/ts.h:361
    pragma Import (C, d2i_ESS_CERT_ID, "d2i_ESS_CERT_ID");
 
@@ -440,8 +439,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, i2d_ESS_SIGNING_CERT, "i2d_ESS_SIGNING_CERT");
 
    function d2i_ESS_SIGNING_CERT
-     (a : System.Address;
-      pp : System.Address;
+     (a      : System.Address;
+      pp     : System.Address;
       length : long) return access ESS_SIGNING_CERT;  -- openssl/ts.h:369
    pragma Import (C, d2i_ESS_SIGNING_CERT, "d2i_ESS_SIGNING_CERT");
 
@@ -467,8 +466,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_MSG_IMPRINT_get_algo, "TS_MSG_IMPRINT_get_algo");
 
    function TS_MSG_IMPRINT_set_msg
-     (a : access TS_MSG_IMPRINT;
-      d : access unsigned_char;
+     (a   : access TS_MSG_IMPRINT;
+      d   : access unsigned_char;
       len : int) return int;  -- openssl/ts.h:384
    pragma Import (C, TS_MSG_IMPRINT_set_msg, "TS_MSG_IMPRINT_set_msg");
 
@@ -503,20 +502,20 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_REQ_get_ext_count, "TS_REQ_get_ext_count");
 
    function TS_REQ_get_ext_by_NID
-     (a : access TS_REQ;
-      nid : int;
+     (a       : access TS_REQ;
+      nid     : int;
       lastpos : int) return int;  -- openssl/ts.h:399
    pragma Import (C, TS_REQ_get_ext_by_NID, "TS_REQ_get_ext_by_NID");
 
    function TS_REQ_get_ext_by_OBJ
-     (a : access TS_REQ;
-      obj : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+     (a       : access TS_REQ;
+      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
       lastpos : int) return int;  -- openssl/ts.h:400
    pragma Import (C, TS_REQ_get_ext_by_OBJ, "TS_REQ_get_ext_by_OBJ");
 
    function TS_REQ_get_ext_by_critical
-     (a : access TS_REQ;
-      crit : int;
+     (a       : access TS_REQ;
+      crit    : int;
       lastpos : int) return int;  -- openssl/ts.h:401
    pragma Import (C, TS_REQ_get_ext_by_critical, "TS_REQ_get_ext_by_critical");
 
@@ -527,19 +526,19 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_REQ_delete_ext, "TS_REQ_delete_ext");
 
    function TS_REQ_add_ext
-     (a : access TS_REQ;
-      ex : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+     (a   : access TS_REQ;
+      ex  : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
       loc : int) return int;  -- openssl/ts.h:404
    pragma Import (C, TS_REQ_add_ext, "TS_REQ_add_ext");
 
    function TS_REQ_get_ext_d2i
-     (a : access TS_REQ;
-      nid : int;
+     (a    : access TS_REQ;
+      nid  : int;
       crit : access int;
-      idx : access int) return System.Address;  -- openssl/ts.h:405
+      idx  : access int) return System.Address;  -- openssl/ts.h:405
    pragma Import (C, TS_REQ_get_ext_d2i, "TS_REQ_get_ext_d2i");
 
-   function TS_REQ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_REQ) return int;  -- openssl/ts.h:409
+   function TS_REQ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_REQ) return int;  -- openssl/ts.h:409
    pragma Import (C, TS_REQ_print_bio, "TS_REQ_print_bio");
 
    function TS_RESP_set_status_info (a : access TS_RESP; info : access TS_STATUS_INFO) return int;  -- openssl/ts.h:413
@@ -549,8 +548,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_RESP_get_status_info, "TS_RESP_get_status_info");
 
    procedure TS_RESP_set_tst_info
-     (a : access TS_RESP;
-      p7 : access OpenSSL.Low_Level.pkcs7_h.PKCS7;
+     (a        : access TS_RESP;
+      p7       : access OpenSSL.Low_Level.pkcs7_h.PKCS7;
       tst_info : access TS_TST_INFO);  -- openssl/ts.h:417
    pragma Import (C, TS_RESP_set_tst_info, "TS_RESP_set_tst_info");
 
@@ -642,20 +641,20 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_TST_INFO_get_ext_count, "TS_TST_INFO_get_ext_count");
 
    function TS_TST_INFO_get_ext_by_NID
-     (a : access TS_TST_INFO;
-      nid : int;
+     (a       : access TS_TST_INFO;
+      nid     : int;
       lastpos : int) return int;  -- openssl/ts.h:460
    pragma Import (C, TS_TST_INFO_get_ext_by_NID, "TS_TST_INFO_get_ext_by_NID");
 
    function TS_TST_INFO_get_ext_by_OBJ
-     (a : access TS_TST_INFO;
-      obj : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
+     (a       : access TS_TST_INFO;
+      obj     : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;
       lastpos : int) return int;  -- openssl/ts.h:461
    pragma Import (C, TS_TST_INFO_get_ext_by_OBJ, "TS_TST_INFO_get_ext_by_OBJ");
 
    function TS_TST_INFO_get_ext_by_critical
-     (a : access TS_TST_INFO;
-      crit : int;
+     (a       : access TS_TST_INFO;
+      crit    : int;
       lastpos : int) return int;  -- openssl/ts.h:462
    pragma Import (C, TS_TST_INFO_get_ext_by_critical, "TS_TST_INFO_get_ext_by_critical");
 
@@ -666,60 +665,60 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_TST_INFO_delete_ext, "TS_TST_INFO_delete_ext");
 
    function TS_TST_INFO_add_ext
-     (a : access TS_TST_INFO;
-      ex : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+     (a   : access TS_TST_INFO;
+      ex  : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
       loc : int) return int;  -- openssl/ts.h:465
    pragma Import (C, TS_TST_INFO_add_ext, "TS_TST_INFO_add_ext");
 
    function TS_TST_INFO_get_ext_d2i
-     (a : access TS_TST_INFO;
-      nid : int;
+     (a    : access TS_TST_INFO;
+      nid  : int;
       crit : access int;
-      idx : access int) return System.Address;  -- openssl/ts.h:466
+      idx  : access int) return System.Address;  -- openssl/ts.h:466
    pragma Import (C, TS_TST_INFO_get_ext_d2i, "TS_TST_INFO_get_ext_d2i");
 
    type TS_serial_cb is access function (arg1 : System.Address; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:489
 
    type TS_time_cb is access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : access long;
-         arg4 : access long) return int;  -- openssl/ts.h:494
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : access long;
+      arg4 : access long) return int;  -- openssl/ts.h:494
 
    type TS_extension_cb is access function
-        (arg1 : System.Address;
-         arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
-         arg3 : System.Address) return int;  -- openssl/ts.h:501
+     (arg1 : System.Address;
+      arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+      arg3 : System.Address) return int;  -- openssl/ts.h:501
 
    type stack_st_EVP_MD;
    type TS_resp_ctx is record
-      signer_cert : access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ts.h:505
-      signer_key : access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/ts.h:506
-      certs : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:507
-      policies : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;  -- openssl/ts.h:508
-      default_policy : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:509
-      mds : access stack_st_EVP_MD;  -- openssl/ts.h:510
-      seconds : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:511
-      millis : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:512
-      micros : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:513
+      signer_cert            : access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ts.h:505
+      signer_key             : access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/ts.h:506
+      certs                  : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:507
+      policies               : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;  -- openssl/ts.h:508
+      default_policy         : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:509
+      mds                    : access stack_st_EVP_MD;  -- openssl/ts.h:510
+      seconds                : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:511
+      millis                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:512
+      micros                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:513
       clock_precision_digits : aliased unsigned;  -- openssl/ts.h:514
-      flags : aliased unsigned;  -- openssl/ts.h:516
-      serial_cb : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:519
-      serial_cb_data : System.Address;  -- openssl/ts.h:520
-      time_cb : access function
-           (arg1 : access TS_resp_ctx;
-            arg2 : System.Address;
-            arg3 : access long;
-            arg4 : access long) return int;  -- openssl/ts.h:522
-      time_cb_data : System.Address;  -- openssl/ts.h:523
-      extension_cb : access function
-           (arg1 : access TS_resp_ctx;
-            arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
-            arg3 : System.Address) return int;  -- openssl/ts.h:525
-      extension_cb_data : System.Address;  -- openssl/ts.h:526
-      request : access TS_REQ;  -- openssl/ts.h:529
-      response : access TS_RESP;  -- openssl/ts.h:530
-      tst_info : access TS_TST_INFO;  -- openssl/ts.h:531
+      flags                  : aliased unsigned;  -- openssl/ts.h:516
+      serial_cb              : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:519
+      serial_cb_data         : System.Address;  -- openssl/ts.h:520
+      time_cb                : access function
+        (arg1 : access TS_resp_ctx;
+         arg2                   : System.Address;
+         arg3                   : access long;
+         arg4                   : access long) return int;  -- openssl/ts.h:522
+      time_cb_data           : System.Address;  -- openssl/ts.h:523
+      extension_cb           : access function
+        (arg1 : access TS_resp_ctx;
+         arg2                   : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
+         arg3                   : System.Address) return int;  -- openssl/ts.h:525
+      extension_cb_data      : System.Address;  -- openssl/ts.h:526
+      request                : access TS_REQ;  -- openssl/ts.h:529
+      response               : access TS_RESP;  -- openssl/ts.h:530
+      tst_info               : access TS_TST_INFO;  -- openssl/ts.h:531
    end record;
    pragma Convention (C_Pass_By_Copy, TS_resp_ctx);  -- openssl/ts.h:503
 
@@ -753,8 +752,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_RESP_CTX_add_md, "TS_RESP_CTX_add_md");
 
    function TS_RESP_CTX_set_accuracy
-     (ctx : access TS_RESP_CTX;
-      secs : int;
+     (ctx    : access TS_RESP_CTX;
+      secs   : int;
       millis : int;
       micros : int) return int;  -- openssl/ts.h:562
    pragma Import (C, TS_RESP_CTX_set_accuracy, "TS_RESP_CTX_set_accuracy");
@@ -766,14 +765,14 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_RESP_CTX_add_flags, "TS_RESP_CTX_add_flags");
 
    procedure TS_RESP_CTX_set_serial_cb
-     (ctx : access TS_RESP_CTX;
-      cb : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+     (ctx  : access TS_RESP_CTX;
+      cb   : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
       data : System.Address);  -- openssl/ts.h:576
    pragma Import (C, TS_RESP_CTX_set_serial_cb, "TS_RESP_CTX_set_serial_cb");
 
    procedure TS_RESP_CTX_set_time_cb
-     (ctx : access TS_RESP_CTX;
-      cb : access function
+     (ctx  : access TS_RESP_CTX;
+      cb   : access function
         (arg1 : access TS_resp_ctx;
          arg2 : System.Address;
          arg3 : access long;
@@ -782,8 +781,8 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_RESP_CTX_set_time_cb, "TS_RESP_CTX_set_time_cb");
 
    procedure TS_RESP_CTX_set_extension_cb
-     (ctx : access TS_RESP_CTX;
-      cb : access function
+     (ctx  : access TS_RESP_CTX;
+      cb   : access function
         (arg1 : access TS_resp_ctx;
          arg2 : access OpenSSL.Low_Level.x509_h.X509_EXTENSION;
          arg3 : System.Address) return int;
@@ -791,15 +790,15 @@ package OpenSSL.Low_Level.ts_h is
    pragma Import (C, TS_RESP_CTX_set_extension_cb, "TS_RESP_CTX_set_extension_cb");
 
    function TS_RESP_CTX_set_status_info
-     (ctx : access TS_RESP_CTX;
+     (ctx    : access TS_RESP_CTX;
       status : int;
-      text : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:588
+      text   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:588
    pragma Import (C, TS_RESP_CTX_set_status_info, "TS_RESP_CTX_set_status_info");
 
    function TS_RESP_CTX_set_status_info_cond
-     (ctx : access TS_RESP_CTX;
+     (ctx    : access TS_RESP_CTX;
       status : int;
-      text : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:592
+      text   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:592
    pragma Import (C, TS_RESP_CTX_set_status_info_cond, "TS_RESP_CTX_set_status_info_cond");
 
    function TS_RESP_CTX_add_failure_info (ctx : access TS_RESP_CTX; failure : int) return int;  -- openssl/ts.h:595
@@ -811,27 +810,27 @@ package OpenSSL.Low_Level.ts_h is
    function TS_RESP_CTX_get_tst_info (ctx : access TS_RESP_CTX) return access TS_TST_INFO;  -- openssl/ts.h:600
    pragma Import (C, TS_RESP_CTX_get_tst_info, "TS_RESP_CTX_get_tst_info");
 
-   function TS_RESP_create_response (ctx : access TS_RESP_CTX; req_bio : access OpenSSL.Low_Level.bio_h.BIO) return access TS_RESP;  -- openssl/ts.h:607
+   function TS_RESP_create_response (ctx : access TS_RESP_CTX; req_bio : access OpenSSL.Low_Level.bio_h.bio_st) return access TS_RESP;  -- openssl/ts.h:607
    pragma Import (C, TS_RESP_create_response, "TS_RESP_create_response");
 
    function TS_RESP_verify_signature
-     (token : access OpenSSL.Low_Level.pkcs7_h.PKCS7;
-      certs : access OpenSSL.Low_Level.x509_h.stack_st_X509;
-      store : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
+     (token      : access OpenSSL.Low_Level.pkcs7_h.PKCS7;
+      certs      : access OpenSSL.Low_Level.x509_h.stack_st_X509;
+      store      : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;
       signer_out : System.Address) return int;  -- openssl/ts.h:614
    pragma Import (C, TS_RESP_verify_signature, "TS_RESP_verify_signature");
 
    type TS_verify_ctx is record
-      flags : aliased unsigned;  -- openssl/ts.h:658
-      store : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/ts.h:661
-      certs : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:662
-      policy : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:665
-      md_alg : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:669
-      imprint : access unsigned_char;  -- openssl/ts.h:670
+      flags       : aliased unsigned;  -- openssl/ts.h:658
+      store       : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/ts.h:661
+      certs       : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:662
+      policy      : access OpenSSL.Low_Level.asn1_h.ASN1_OBJECT;  -- openssl/ts.h:665
+      md_alg      : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:669
+      imprint     : access unsigned_char;  -- openssl/ts.h:670
       imprint_len : aliased unsigned;  -- openssl/ts.h:671
-      data : access OpenSSL.Low_Level.bio_h.BIO;  -- openssl/ts.h:674
-      nonce : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:677
-      tsa_name : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:680
+      data        : access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ts.h:674
+      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:677
+      tsa_name    : access OpenSSL.Low_Level.x509v3_h.GENERAL_NAME;  -- openssl/ts.h:680
    end record;
    pragma Convention (C_Pass_By_Copy, TS_verify_ctx);  -- openssl/ts.h:655
 
@@ -856,28 +855,28 @@ package OpenSSL.Low_Level.ts_h is
    function TS_REQ_to_TS_VERIFY_CTX (req : access TS_REQ; ctx : access TS_VERIFY_CTX) return access TS_VERIFY_CTX;  -- openssl/ts.h:713
    pragma Import (C, TS_REQ_to_TS_VERIFY_CTX, "TS_REQ_to_TS_VERIFY_CTX");
 
-   function TS_RESP_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_RESP) return int;  -- openssl/ts.h:717
+   function TS_RESP_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_RESP) return int;  -- openssl/ts.h:717
    pragma Import (C, TS_RESP_print_bio, "TS_RESP_print_bio");
 
-   function TS_STATUS_INFO_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_STATUS_INFO) return int;  -- openssl/ts.h:718
+   function TS_STATUS_INFO_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_STATUS_INFO) return int;  -- openssl/ts.h:718
    pragma Import (C, TS_STATUS_INFO_print_bio, "TS_STATUS_INFO_print_bio");
 
-   function TS_TST_INFO_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; a : access TS_TST_INFO) return int;  -- openssl/ts.h:719
+   function TS_TST_INFO_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_TST_INFO) return int;  -- openssl/ts.h:719
    pragma Import (C, TS_TST_INFO_print_bio, "TS_TST_INFO_print_bio");
 
-   function TS_ASN1_INTEGER_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; num : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:723
+   function TS_ASN1_INTEGER_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; num : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:723
    pragma Import (C, TS_ASN1_INTEGER_print_bio, "TS_ASN1_INTEGER_print_bio");
 
-   function TS_OBJ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; obj : access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT) return int;  -- openssl/ts.h:724
+   function TS_OBJ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; obj : access constant OpenSSL.Low_Level.asn1_h.ASN1_OBJECT) return int;  -- openssl/ts.h:724
    pragma Import (C, TS_OBJ_print_bio, "TS_OBJ_print_bio");
 
-   function TS_ext_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; extensions : access constant OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION) return int;  -- openssl/ts.h:725
+   function TS_ext_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; extensions : access constant OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION) return int;  -- openssl/ts.h:725
    pragma Import (C, TS_ext_print_bio, "TS_ext_print_bio");
 
-   function TS_X509_ALGOR_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; alg : access constant OpenSSL.Low_Level.x509_h.X509_algor_st) return int;  -- openssl/ts.h:726
+   function TS_X509_ALGOR_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; alg : access constant OpenSSL.Low_Level.x509_h.X509_algor_st) return int;  -- openssl/ts.h:726
    pragma Import (C, TS_X509_ALGOR_print_bio, "TS_X509_ALGOR_print_bio");
 
-   function TS_MSG_IMPRINT_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.BIO; msg : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:727
+   function TS_MSG_IMPRINT_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; msg : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:727
    pragma Import (C, TS_MSG_IMPRINT_print_bio, "TS_MSG_IMPRINT_print_bio");
 
    function TS_CONF_load_cert (file : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ts.h:732
@@ -894,15 +893,15 @@ package OpenSSL.Low_Level.ts_h is
 
    function TS_CONF_set_serial
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      cb : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:736
+      section  : Interfaces.C.Strings.chars_ptr;
+      cb       : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:736
    pragma Import (C, TS_CONF_set_serial, "TS_CONF_set_serial");
 
    function TS_CONF_set_crypto_device
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      device : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:738
+      section  : Interfaces.C.Strings.chars_ptr;
+      device   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:738
    pragma Import (C, TS_CONF_set_crypto_device, "TS_CONF_set_crypto_device");
 
    function TS_CONF_set_default_engine (name : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ts.h:740
@@ -910,73 +909,73 @@ package OpenSSL.Low_Level.ts_h is
 
    function TS_CONF_set_signer_cert
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      cert : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:741
+      section  : Interfaces.C.Strings.chars_ptr;
+      cert     : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:741
    pragma Import (C, TS_CONF_set_signer_cert, "TS_CONF_set_signer_cert");
 
    function TS_CONF_set_certs
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      certs : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:743
+      section  : Interfaces.C.Strings.chars_ptr;
+      certs    : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:743
    pragma Import (C, TS_CONF_set_certs, "TS_CONF_set_certs");
 
    function TS_CONF_set_signer_key
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      key : Interfaces.C.Strings.chars_ptr;
-      pass : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:745
+      section  : Interfaces.C.Strings.chars_ptr;
+      key      : Interfaces.C.Strings.chars_ptr;
+      pass     : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:745
    pragma Import (C, TS_CONF_set_signer_key, "TS_CONF_set_signer_key");
 
    function TS_CONF_set_def_policy
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      policy : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:747
+      section  : Interfaces.C.Strings.chars_ptr;
+      policy   : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:747
    pragma Import (C, TS_CONF_set_def_policy, "TS_CONF_set_def_policy");
 
    function TS_CONF_set_policies
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:749
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:749
    pragma Import (C, TS_CONF_set_policies, "TS_CONF_set_policies");
 
    function TS_CONF_set_digests
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:750
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:750
    pragma Import (C, TS_CONF_set_digests, "TS_CONF_set_digests");
 
    function TS_CONF_set_accuracy
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:751
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:751
    pragma Import (C, TS_CONF_set_accuracy, "TS_CONF_set_accuracy");
 
    function TS_CONF_set_clock_precision_digits
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:752
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:752
    pragma Import (C, TS_CONF_set_clock_precision_digits, "TS_CONF_set_clock_precision_digits");
 
    function TS_CONF_set_ordering
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:754
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:754
    pragma Import (C, TS_CONF_set_ordering, "TS_CONF_set_ordering");
 
    function TS_CONF_set_tsa_name
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:755
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:755
    pragma Import (C, TS_CONF_set_tsa_name, "TS_CONF_set_tsa_name");
 
    function TS_CONF_set_ess_cert_id_chain
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      section : Interfaces.C.Strings.chars_ptr;
-      ctx : access TS_RESP_CTX) return int;  -- openssl/ts.h:756
+      section  : Interfaces.C.Strings.chars_ptr;
+      ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:756
    pragma Import (C, TS_CONF_set_ess_cert_id_chain, "TS_CONF_set_ess_cert_id_chain");
 
    procedure ERR_load_TS_strings;  -- openssl/ts.h:764

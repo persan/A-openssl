@@ -1,10 +1,11 @@
 with Interfaces.C; use Interfaces.C;
 with System;
 with Interfaces.C.Strings;
---  limited --  with Interfaces.C_Streams;
-limited with OpenSSL.Low_Level.bio_h;
+with OpenSSL.Low_Level.bio_h;
+with Interfaces.C_Streams;
 
 package OpenSSL.Low_Level.lhash_h is
+   package defs is
 
    --  unsupported macro: DECLARE_LHASH_HASH_FN(name,o_type) unsigned long name ##_LHASH_HASH(const void *);
    --  unsupported macro: IMPLEMENT_LHASH_HASH_FN(name,o_type) unsigned long name ##_LHASH_HASH(const void *arg) { const o_type *a = arg; return name ##_hash(a); }
@@ -19,7 +20,7 @@ package OpenSSL.Low_Level.lhash_h is
    --  unsupported macro: IMPLEMENT_LHASH_DOALL_ARG_FN(name,o_type,a_type) void name ##_LHASH_DOALL_ARG(void *arg1, void *arg2) { o_type *a = arg1; a_type *b = arg2; name ##_doall_arg(a, b); }
    --  unsupported macro: LHASH_DOALL_ARG_FN(name) name ##_LHASH_DOALL_ARG
 
-   LH_LOAD_MULT : constant := 256;  --  openssl/lhash.h:169
+      LH_LOAD_MULT : constant := 256;  --  openssl/lhash.h:169
    --  arg-macro: function lh_error (lh)
    --    return (lh).error;
    --  unsupported macro: LHASH_OF(type) struct lhash_st_ ##type
@@ -53,7 +54,7 @@ package OpenSSL.Low_Level.lhash_h is
    --    lh_stats_bio(CHECKED_LHASH_OF(type, lh), out)
    --  arg-macro: procedure LHM_lh_free (type, lh)
    --    lh_free(CHECKED_LHASH_OF(type, lh))
-
+   end defs;
    type lhash_node_st is record
       data : System.Address;  -- openssl/lhash.h:81
       next : access lhash_node_st;  -- openssl/lhash.h:82
@@ -140,13 +141,13 @@ package OpenSSL.Low_Level.lhash_h is
    procedure lh_node_usage_stats (lh : System.Address; c_out : access Interfaces.C_Streams.FILEs);  -- openssl/lhash.h:188
    pragma Import (C, lh_node_usage_stats, "lh_node_usage_stats");
 
-   procedure lh_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.BIO);  -- openssl/lhash.h:192
+   procedure lh_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.bio_st);  -- openssl/lhash.h:192
    pragma Import (C, lh_stats_bio, "lh_stats_bio");
 
-   procedure lh_node_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.BIO);  -- openssl/lhash.h:193
+   procedure lh_node_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.bio_st);  -- openssl/lhash.h:193
    pragma Import (C, lh_node_stats_bio, "lh_node_stats_bio");
 
-   procedure lh_node_usage_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.BIO);  -- openssl/lhash.h:194
+   procedure lh_node_usage_stats_bio (lh : System.Address; c_out : access OpenSSL.Low_Level.bio_h.bio_st);  -- openssl/lhash.h:194
    pragma Import (C, lh_node_usage_stats_bio, "lh_node_usage_stats_bio");
 
    type lhash_st_OPENSSL_STRING is record

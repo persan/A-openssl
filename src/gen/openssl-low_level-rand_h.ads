@@ -7,6 +7,7 @@ with Interfaces.C.Strings;
 package OpenSSL.Low_Level.rand_h is
 
    --  unsupported macro: FIPS_RAND_SIZE_T size_t
+   package defs is
 
    RAND_F_ENG_RAND_GET_RAND_METHOD : constant := 108;  --  openssl/rand.h:131
    RAND_F_FIPS_RAND : constant := 103;  --  openssl/rand.h:132
@@ -29,7 +30,7 @@ package OpenSSL.Low_Level.rand_h is
    RAND_R_PRNG_NOT_SEEDED : constant := 100;  --  openssl/rand.h:150
    RAND_R_PRNG_SEED_MUST_NOT_MATCH_KEY : constant := 110;  --  openssl/rand.h:151
    RAND_R_PRNG_STUCK : constant := 104;  --  openssl/rand.h:152
-
+end;
    type rand_meth_st is record
       seed : access procedure (arg1 : System.Address; arg2 : int);  -- openssl/rand.h:83
       bytes : access function (arg1 : access unsigned_char; arg2 : int) return int;  -- openssl/rand.h:84

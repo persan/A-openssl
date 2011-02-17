@@ -5,6 +5,7 @@ with System;
 
 package OpenSSL.Low_Level.kssl_h is
 
+   package defs is
 
    KRB5SVC : aliased constant String := "host" & ASCII.NUL;  --  openssl/kssl.h:100
 
@@ -25,7 +26,7 @@ package OpenSSL.Low_Level.kssl_h is
    KSSL_CTX_OK : constant := 0;  --  openssl/kssl.h:148
    KSSL_CTX_ERR : constant := 1;  --  openssl/kssl.h:149
    KSSL_NOMEM : constant := 2;  --  openssl/kssl.h:150
-
+end;
    subtype kssl_err_st_text_array is Interfaces.C.char_array (0 .. 255);
    type kssl_err_st is record
       reason : aliased int;  -- openssl/kssl.h:121

@@ -4,11 +4,12 @@ with System;
 
 package OpenSSL.Low_Level.whrlpool_h is
 
+   package defs is
 
    WHIRLPOOL_DIGEST_LENGTH : constant := (512/8);  --  openssl/whrlpool.h:11
    WHIRLPOOL_BBLOCK : constant := 512;  --  openssl/whrlpool.h:12
    WHIRLPOOL_COUNTER : constant := (256/8);  --  openssl/whrlpool.h:13
-
+end;
    type WHIRLPOOL_CTX_data_array is array (0 .. 63) of aliased unsigned_char;
    type WHIRLPOOL_CTX_bitlen_array is array (0 .. 7) of aliased size_t;
    type WHIRLPOOL_CTX_c_array is array (0 .. 63) of aliased unsigned_char;

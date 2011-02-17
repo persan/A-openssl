@@ -2,6 +2,7 @@ with Interfaces.C; use Interfaces.C;
 
 package OpenSSL.Low_Level.ssl2_h is
 
+   package defs is
 
    SSL2_VERSION : constant := 16#0002#;  --  openssl/ssl2.h:67
    SSL2_VERSION_MAJOR : constant := 16#00#;  --  openssl/ssl2.h:68
@@ -117,7 +118,7 @@ package OpenSSL.Low_Level.ssl2_h is
    --  unsupported macro: SSL2_ST_SEND_REQUEST_CERTIFICATE_D (0x73|SSL_ST_ACCEPT)
    --  unsupported macro: SSL2_ST_SERVER_START_ENCRYPTION (0x80|SSL_ST_ACCEPT)
    --  unsupported macro: SSL2_ST_X509_GET_SERVER_CERTIFICATE (0x90|SSL_ST_ACCEPT)
-
+end;
    type ssl2_state_st_challenge_array is array (0 .. 31) of aliased unsigned_char;
    type ssl2_state_st_conn_id_array is array (0 .. 15) of aliased unsigned_char;
    type ssl2_state_st_key_material_array is array (0 .. 47) of aliased unsigned_char;

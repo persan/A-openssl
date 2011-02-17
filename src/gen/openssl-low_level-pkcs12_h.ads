@@ -11,23 +11,24 @@ limited with OpenSSL.Low_Level.bio_h;
 
 package OpenSSL.Low_Level.pkcs12_h is
 
+   package defs is
 
-   PKCS12_KEY_ID : constant := 1;  --  openssl/pkcs12.h:69
-   PKCS12_IV_ID : constant := 2;  --  openssl/pkcs12.h:70
-   PKCS12_MAC_ID : constant := 3;  --  openssl/pkcs12.h:71
+      PKCS12_KEY_ID : constant := 1;  --  openssl/pkcs12.h:69
+      PKCS12_IV_ID  : constant := 2;  --  openssl/pkcs12.h:70
+      PKCS12_MAC_ID : constant := 3;  --  openssl/pkcs12.h:71
    --  unsupported macro: PKCS12_DEFAULT_ITER PKCS5_DEFAULT_ITER
 
-   PKCS12_MAC_KEY_LENGTH : constant := 20;  --  openssl/pkcs12.h:78
+      PKCS12_MAC_KEY_LENGTH : constant := 20;  --  openssl/pkcs12.h:78
 
-   PKCS12_SALT_LEN : constant := 8;  --  openssl/pkcs12.h:80
+      PKCS12_SALT_LEN : constant := 8;  --  openssl/pkcs12.h:80
    --  unsupported macro: PKCS12_key_gen PKCS12_key_gen_asc
    --  unsupported macro: PKCS12_add_friendlyname PKCS12_add_friendlyname_asc
 
-   KEY_EX : constant := 16#10#;  --  openssl/pkcs12.h:96
-   KEY_SIG : constant := 16#80#;  --  openssl/pkcs12.h:97
+      KEY_EX        : constant := 16#10#;  --  openssl/pkcs12.h:96
+      KEY_SIG       : constant := 16#80#;  --  openssl/pkcs12.h:97
 
-   PKCS12_ERROR : constant := 0;  --  openssl/pkcs12.h:138
-   PKCS12_OK : constant := 1;  --  openssl/pkcs12.h:139
+      PKCS12_ERROR  : constant := 0;  --  openssl/pkcs12.h:138
+      PKCS12_OK     : constant := 1;  --  openssl/pkcs12.h:139
    --  unsupported macro: M_PKCS12_x5092certbag PKCS12_x5092certbag
    --  unsupported macro: M_PKCS12_x509crl2certbag PKCS12_x509crl2certbag
    --  unsupported macro: M_PKCS12_certbag2x509 PKCS12_certbag2x509
@@ -50,59 +51,59 @@ package OpenSSL.Low_Level.pkcs12_h is
    --  arg-macro: function PKCS12_mac_present (p12)
    --    return (p12).mac ? 1 : 0;
 
-   PKCS12_F_PARSE_BAG : constant := 129;  --  openssl/pkcs12.h:274
-   PKCS12_F_PARSE_BAGS : constant := 103;  --  openssl/pkcs12.h:275
-   PKCS12_F_PKCS12_ADD_FRIENDLYNAME : constant := 100;  --  openssl/pkcs12.h:276
-   PKCS12_F_PKCS12_ADD_FRIENDLYNAME_ASC : constant := 127;  --  openssl/pkcs12.h:277
-   PKCS12_F_PKCS12_ADD_FRIENDLYNAME_UNI : constant := 102;  --  openssl/pkcs12.h:278
-   PKCS12_F_PKCS12_ADD_LOCALKEYID : constant := 104;  --  openssl/pkcs12.h:279
-   PKCS12_F_PKCS12_CREATE : constant := 105;  --  openssl/pkcs12.h:280
-   PKCS12_F_PKCS12_GEN_MAC : constant := 107;  --  openssl/pkcs12.h:281
-   PKCS12_F_PKCS12_INIT : constant := 109;  --  openssl/pkcs12.h:282
-   PKCS12_F_PKCS12_ITEM_DECRYPT_D2I : constant := 106;  --  openssl/pkcs12.h:283
-   PKCS12_F_PKCS12_ITEM_I2D_ENCRYPT : constant := 108;  --  openssl/pkcs12.h:284
-   PKCS12_F_PKCS12_ITEM_PACK_SAFEBAG : constant := 117;  --  openssl/pkcs12.h:285
-   PKCS12_F_PKCS12_KEY_GEN_ASC : constant := 110;  --  openssl/pkcs12.h:286
-   PKCS12_F_PKCS12_KEY_GEN_UNI : constant := 111;  --  openssl/pkcs12.h:287
-   PKCS12_F_PKCS12_MAKE_KEYBAG : constant := 112;  --  openssl/pkcs12.h:288
-   PKCS12_F_PKCS12_MAKE_SHKEYBAG : constant := 113;  --  openssl/pkcs12.h:289
-   PKCS12_F_PKCS12_NEWPASS : constant := 128;  --  openssl/pkcs12.h:290
-   PKCS12_F_PKCS12_PACK_P7DATA : constant := 114;  --  openssl/pkcs12.h:291
-   PKCS12_F_PKCS12_PACK_P7ENCDATA : constant := 115;  --  openssl/pkcs12.h:292
-   PKCS12_F_PKCS12_PARSE : constant := 118;  --  openssl/pkcs12.h:293
-   PKCS12_F_PKCS12_PBE_CRYPT : constant := 119;  --  openssl/pkcs12.h:294
-   PKCS12_F_PKCS12_PBE_KEYIVGEN : constant := 120;  --  openssl/pkcs12.h:295
-   PKCS12_F_PKCS12_SETUP_MAC : constant := 122;  --  openssl/pkcs12.h:296
-   PKCS12_F_PKCS12_SET_MAC : constant := 123;  --  openssl/pkcs12.h:297
-   PKCS12_F_PKCS12_UNPACK_AUTHSAFES : constant := 130;  --  openssl/pkcs12.h:298
-   PKCS12_F_PKCS12_UNPACK_P7DATA : constant := 131;  --  openssl/pkcs12.h:299
-   PKCS12_F_PKCS12_VERIFY_MAC : constant := 126;  --  openssl/pkcs12.h:300
-   PKCS12_F_PKCS8_ADD_KEYUSAGE : constant := 124;  --  openssl/pkcs12.h:301
-   PKCS12_F_PKCS8_ENCRYPT : constant := 125;  --  openssl/pkcs12.h:302
+      PKCS12_F_PARSE_BAG : constant := 129;  --  openssl/pkcs12.h:274
+      PKCS12_F_PARSE_BAGS : constant := 103;  --  openssl/pkcs12.h:275
+      PKCS12_F_PKCS12_ADD_FRIENDLYNAME : constant := 100;  --  openssl/pkcs12.h:276
+      PKCS12_F_PKCS12_ADD_FRIENDLYNAME_ASC : constant := 127;  --  openssl/pkcs12.h:277
+      PKCS12_F_PKCS12_ADD_FRIENDLYNAME_UNI : constant := 102;  --  openssl/pkcs12.h:278
+      PKCS12_F_PKCS12_ADD_LOCALKEYID : constant := 104;  --  openssl/pkcs12.h:279
+      PKCS12_F_PKCS12_CREATE : constant := 105;  --  openssl/pkcs12.h:280
+      PKCS12_F_PKCS12_GEN_MAC : constant := 107;  --  openssl/pkcs12.h:281
+      PKCS12_F_PKCS12_INIT : constant := 109;  --  openssl/pkcs12.h:282
+      PKCS12_F_PKCS12_ITEM_DECRYPT_D2I : constant := 106;  --  openssl/pkcs12.h:283
+      PKCS12_F_PKCS12_ITEM_I2D_ENCRYPT : constant := 108;  --  openssl/pkcs12.h:284
+      PKCS12_F_PKCS12_ITEM_PACK_SAFEBAG : constant := 117;  --  openssl/pkcs12.h:285
+      PKCS12_F_PKCS12_KEY_GEN_ASC : constant := 110;  --  openssl/pkcs12.h:286
+      PKCS12_F_PKCS12_KEY_GEN_UNI : constant := 111;  --  openssl/pkcs12.h:287
+      PKCS12_F_PKCS12_MAKE_KEYBAG : constant := 112;  --  openssl/pkcs12.h:288
+      PKCS12_F_PKCS12_MAKE_SHKEYBAG : constant := 113;  --  openssl/pkcs12.h:289
+      PKCS12_F_PKCS12_NEWPASS : constant := 128;  --  openssl/pkcs12.h:290
+      PKCS12_F_PKCS12_PACK_P7DATA : constant := 114;  --  openssl/pkcs12.h:291
+      PKCS12_F_PKCS12_PACK_P7ENCDATA : constant := 115;  --  openssl/pkcs12.h:292
+      PKCS12_F_PKCS12_PARSE : constant := 118;  --  openssl/pkcs12.h:293
+      PKCS12_F_PKCS12_PBE_CRYPT : constant := 119;  --  openssl/pkcs12.h:294
+      PKCS12_F_PKCS12_PBE_KEYIVGEN : constant := 120;  --  openssl/pkcs12.h:295
+      PKCS12_F_PKCS12_SETUP_MAC : constant := 122;  --  openssl/pkcs12.h:296
+      PKCS12_F_PKCS12_SET_MAC : constant := 123;  --  openssl/pkcs12.h:297
+      PKCS12_F_PKCS12_UNPACK_AUTHSAFES : constant := 130;  --  openssl/pkcs12.h:298
+      PKCS12_F_PKCS12_UNPACK_P7DATA : constant := 131;  --  openssl/pkcs12.h:299
+      PKCS12_F_PKCS12_VERIFY_MAC : constant := 126;  --  openssl/pkcs12.h:300
+      PKCS12_F_PKCS8_ADD_KEYUSAGE : constant := 124;  --  openssl/pkcs12.h:301
+      PKCS12_F_PKCS8_ENCRYPT : constant := 125;  --  openssl/pkcs12.h:302
 
-   PKCS12_R_CANT_PACK_STRUCTURE : constant := 100;  --  openssl/pkcs12.h:305
-   PKCS12_R_CONTENT_TYPE_NOT_DATA : constant := 121;  --  openssl/pkcs12.h:306
-   PKCS12_R_DECODE_ERROR : constant := 101;  --  openssl/pkcs12.h:307
-   PKCS12_R_ENCODE_ERROR : constant := 102;  --  openssl/pkcs12.h:308
-   PKCS12_R_ENCRYPT_ERROR : constant := 103;  --  openssl/pkcs12.h:309
-   PKCS12_R_ERROR_SETTING_ENCRYPTED_DATA_TYPE : constant := 120;  --  openssl/pkcs12.h:310
-   PKCS12_R_INVALID_NULL_ARGUMENT : constant := 104;  --  openssl/pkcs12.h:311
-   PKCS12_R_INVALID_NULL_PKCS12_POINTER : constant := 105;  --  openssl/pkcs12.h:312
-   PKCS12_R_IV_GEN_ERROR : constant := 106;  --  openssl/pkcs12.h:313
-   PKCS12_R_KEY_GEN_ERROR : constant := 107;  --  openssl/pkcs12.h:314
-   PKCS12_R_MAC_ABSENT : constant := 108;  --  openssl/pkcs12.h:315
-   PKCS12_R_MAC_GENERATION_ERROR : constant := 109;  --  openssl/pkcs12.h:316
-   PKCS12_R_MAC_SETUP_ERROR : constant := 110;  --  openssl/pkcs12.h:317
-   PKCS12_R_MAC_STRING_SET_ERROR : constant := 111;  --  openssl/pkcs12.h:318
-   PKCS12_R_MAC_VERIFY_ERROR : constant := 112;  --  openssl/pkcs12.h:319
-   PKCS12_R_MAC_VERIFY_FAILURE : constant := 113;  --  openssl/pkcs12.h:320
-   PKCS12_R_PARSE_ERROR : constant := 114;  --  openssl/pkcs12.h:321
-   PKCS12_R_PKCS12_ALGOR_CIPHERINIT_ERROR : constant := 115;  --  openssl/pkcs12.h:322
-   PKCS12_R_PKCS12_CIPHERFINAL_ERROR : constant := 116;  --  openssl/pkcs12.h:323
-   PKCS12_R_PKCS12_PBE_CRYPT_ERROR : constant := 117;  --  openssl/pkcs12.h:324
-   PKCS12_R_UNKNOWN_DIGEST_ALGORITHM : constant := 118;  --  openssl/pkcs12.h:325
-   PKCS12_R_UNSUPPORTED_PKCS12_MODE : constant := 119;  --  openssl/pkcs12.h:326
-
+      PKCS12_R_CANT_PACK_STRUCTURE : constant := 100;  --  openssl/pkcs12.h:305
+      PKCS12_R_CONTENT_TYPE_NOT_DATA : constant := 121;  --  openssl/pkcs12.h:306
+      PKCS12_R_DECODE_ERROR : constant := 101;  --  openssl/pkcs12.h:307
+      PKCS12_R_ENCODE_ERROR : constant := 102;  --  openssl/pkcs12.h:308
+      PKCS12_R_ENCRYPT_ERROR : constant := 103;  --  openssl/pkcs12.h:309
+      PKCS12_R_ERROR_SETTING_ENCRYPTED_DATA_TYPE : constant := 120;  --  openssl/pkcs12.h:310
+      PKCS12_R_INVALID_NULL_ARGUMENT : constant := 104;  --  openssl/pkcs12.h:311
+      PKCS12_R_INVALID_NULL_PKCS12_POINTER : constant := 105;  --  openssl/pkcs12.h:312
+      PKCS12_R_IV_GEN_ERROR : constant := 106;  --  openssl/pkcs12.h:313
+      PKCS12_R_KEY_GEN_ERROR : constant := 107;  --  openssl/pkcs12.h:314
+      PKCS12_R_MAC_ABSENT : constant := 108;  --  openssl/pkcs12.h:315
+      PKCS12_R_MAC_GENERATION_ERROR : constant := 109;  --  openssl/pkcs12.h:316
+      PKCS12_R_MAC_SETUP_ERROR : constant := 110;  --  openssl/pkcs12.h:317
+      PKCS12_R_MAC_STRING_SET_ERROR : constant := 111;  --  openssl/pkcs12.h:318
+      PKCS12_R_MAC_VERIFY_ERROR : constant := 112;  --  openssl/pkcs12.h:319
+      PKCS12_R_MAC_VERIFY_FAILURE : constant := 113;  --  openssl/pkcs12.h:320
+      PKCS12_R_PARSE_ERROR : constant := 114;  --  openssl/pkcs12.h:321
+      PKCS12_R_PKCS12_ALGOR_CIPHERINIT_ERROR : constant := 115;  --  openssl/pkcs12.h:322
+      PKCS12_R_PKCS12_CIPHERFINAL_ERROR : constant := 116;  --  openssl/pkcs12.h:323
+      PKCS12_R_PKCS12_PBE_CRYPT_ERROR : constant := 117;  --  openssl/pkcs12.h:324
+      PKCS12_R_UNKNOWN_DIGEST_ALGORITHM : constant := 118;  --  openssl/pkcs12.h:325
+      PKCS12_R_UNSUPPORTED_PKCS12_MODE : constant := 119;  --  openssl/pkcs12.h:326
+   end defs;
    type PKCS12_MAC_DATA is record
       dinfo : access OpenSSL.Low_Level.x509_h.X509_SIG;  -- openssl/pkcs12.h:100
       salt : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/pkcs12.h:101
@@ -510,13 +511,13 @@ package OpenSSL.Low_Level.pkcs12_h is
    function PKCS12_add_safes (safes : access OpenSSL.Low_Level.pkcs7_h.stack_st_PKCS7; p7_nid : int) return access PKCS12;  -- openssl/pkcs12.h:257
    pragma Import (C, PKCS12_add_safes, "PKCS12_add_safes");
 
-   function i2d_PKCS12_bio (bp : access OpenSSL.Low_Level.bio_h.BIO; p12 : access PKCS12) return int;  -- openssl/pkcs12.h:259
+   function i2d_PKCS12_bio (bp : access OpenSSL.Low_Level.bio_h.bio_st; p12 : access PKCS12) return int;  -- openssl/pkcs12.h:259
    pragma Import (C, i2d_PKCS12_bio, "i2d_PKCS12_bio");
 
    function i2d_PKCS12_fp (fp : access Interfaces.C_Streams.FILEs; p12 : access PKCS12) return int;  -- openssl/pkcs12.h:260
    pragma Import (C, i2d_PKCS12_fp, "i2d_PKCS12_fp");
 
-   function d2i_PKCS12_bio (bp : access OpenSSL.Low_Level.bio_h.BIO; p12 : System.Address) return access PKCS12;  -- openssl/pkcs12.h:261
+   function d2i_PKCS12_bio (bp : access OpenSSL.Low_Level.bio_h.bio_st; p12 : System.Address) return access PKCS12;  -- openssl/pkcs12.h:261
    pragma Import (C, d2i_PKCS12_bio, "d2i_PKCS12_bio");
 
    function d2i_PKCS12_fp (fp : access Interfaces.C_Streams.FILEs; p12 : System.Address) return access PKCS12;  -- openssl/pkcs12.h:262

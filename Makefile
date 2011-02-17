@@ -4,8 +4,9 @@ include Makefile.configuration
 
 # Default target
 compile:
-
 generate:
+
+generate_:
 
 	rm -rf src/gen .gen
 
@@ -13,6 +14,7 @@ generate:
 #	cd /usr/include; find openssl/ -name  "*.h" |  sed "s-^-#include <-" | sed "s-\$$->-" >${CURDIR}/.gen/gen.cpp
 	cd .gen; /opt/GNAT/6.5.0w-20110122-45/bin/g++ -c ../gen.cpp -fdump-ada-spec
 	./rename.py
+	mv src/gen/openssl-low_level-ossl_typ_h.ads src/gen/openssl-low_level-ossl_typ_h.txt
 	${MAKE} -C tests compile
 
 ################################################################

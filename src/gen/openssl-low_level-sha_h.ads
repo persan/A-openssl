@@ -4,6 +4,7 @@ with System;
 with Interfaces.C.Extensions;
 
 package OpenSSL.Low_Level.sha_h is
+   package defs is
 
    --  unsupported macro: FIPS_SHA_SIZE_T size_t
    --  unsupported macro: SHA_LONG unsigned int
@@ -23,7 +24,7 @@ package OpenSSL.Low_Level.sha_h is
    --  unsupported macro: SHA512_CBLOCK (SHA_LBLOCK*8)
    --  unsupported macro: SHA_LONG64 unsigned long long
    --  unsupported macro: U64(C) C ##ULL
-
+end;
    type SHAstate_st_data_array is array (0 .. 15) of aliased unsigned;
    type SHAstate_st is record
       h0 : aliased unsigned;  -- openssl/sha.h:102

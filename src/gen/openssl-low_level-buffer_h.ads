@@ -6,6 +6,7 @@ with System;
 
 package OpenSSL.Low_Level.buffer_h is
 
+   package defs is
 
    BUF_F_BUF_MEMDUP : constant := 103;  --  openssl/buffer.h:107
    BUF_F_BUF_MEM_GROW : constant := 100;  --  openssl/buffer.h:108
@@ -13,7 +14,7 @@ package OpenSSL.Low_Level.buffer_h is
    BUF_F_BUF_MEM_NEW : constant := 101;  --  openssl/buffer.h:110
    BUF_F_BUF_STRDUP : constant := 102;  --  openssl/buffer.h:111
    BUF_F_BUF_STRNDUP : constant := 104;  --  openssl/buffer.h:112
-
+end;
    type buf_mem_st is record
       length : aliased size_t;  -- openssl/buffer.h:79
       data : Interfaces.C.Strings.chars_ptr;  -- openssl/buffer.h:80

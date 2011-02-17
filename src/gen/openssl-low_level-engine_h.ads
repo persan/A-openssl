@@ -1,158 +1,162 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
---  limited --  with OpenSSL.Low_Level.ossl_typ_h;
-limited with OpenSSL.Low_Level.x509_h;
---  with stddef_h;
-
+with OpenSSL.Low_Level.x509_h;
+with OpenSSL.Low_Level.evp_h;
+with OpenSSL.Low_Level.ssl_h;
+with OpenSSL.Low_Level.dsa_h;
+with OpenSSL.Low_Level.dh_h;
+with OpenSSL.Low_Level.rand_h;
+with OpenSSL.Low_Level.crypto_h;
 package OpenSSL.Low_Level.engine_h is
+   package defs is
 
-   --  unsupported macro: ENGINE_METHOD_RSA (unsigned int)0x0001
-   --  unsupported macro: ENGINE_METHOD_DSA (unsigned int)0x0002
-   --  unsupported macro: ENGINE_METHOD_DH (unsigned int)0x0004
-   --  unsupported macro: ENGINE_METHOD_RAND (unsigned int)0x0008
-   --  unsupported macro: ENGINE_METHOD_ECDH (unsigned int)0x0010
-   --  unsupported macro: ENGINE_METHOD_ECDSA (unsigned int)0x0020
-   --  unsupported macro: ENGINE_METHOD_CIPHERS (unsigned int)0x0040
-   --  unsupported macro: ENGINE_METHOD_DIGESTS (unsigned int)0x0080
-   --  unsupported macro: ENGINE_METHOD_STORE (unsigned int)0x0100
-   --  unsupported macro: ENGINE_METHOD_PKEY_METHS (unsigned int)0x0200
-   --  unsupported macro: ENGINE_METHOD_PKEY_ASN1_METHS (unsigned int)0x0400
-   --  unsupported macro: ENGINE_METHOD_ALL (unsigned int)0xFFFF
-   --  unsupported macro: ENGINE_METHOD_NONE (unsigned int)0x0000
-   --  unsupported macro: ENGINE_TABLE_FLAG_NOINIT (unsigned int)0x0001
-   --  unsupported macro: ENGINE_FLAGS_MANUAL_CMD_CTRL (int)0x0002
-   --  unsupported macro: ENGINE_FLAGS_BY_ID_COPY (int)0x0004
-   --  unsupported macro: ENGINE_CMD_FLAG_NUMERIC (unsigned int)0x0001
-   --  unsupported macro: ENGINE_CMD_FLAG_STRING (unsigned int)0x0002
-   --  unsupported macro: ENGINE_CMD_FLAG_NO_INPUT (unsigned int)0x0004
-   --  unsupported macro: ENGINE_CMD_FLAG_INTERNAL (unsigned int)0x0008
+      --  unsupported macro: ENGINE_METHOD_RSA (unsigned int)0x0001
+      --  unsupported macro: ENGINE_METHOD_DSA (unsigned int)0x0002
+      --  unsupported macro: ENGINE_METHOD_DH (unsigned int)0x0004
+      --  unsupported macro: ENGINE_METHOD_RAND (unsigned int)0x0008
+      --  unsupported macro: ENGINE_METHOD_ECDH (unsigned int)0x0010
+      --  unsupported macro: ENGINE_METHOD_ECDSA (unsigned int)0x0020
+      --  unsupported macro: ENGINE_METHOD_CIPHERS (unsigned int)0x0040
+      --  unsupported macro: ENGINE_METHOD_DIGESTS (unsigned int)0x0080
+      --  unsupported macro: ENGINE_METHOD_STORE (unsigned int)0x0100
+      --  unsupported macro: ENGINE_METHOD_PKEY_METHS (unsigned int)0x0200
+      --  unsupported macro: ENGINE_METHOD_PKEY_ASN1_METHS (unsigned int)0x0400
+      --  unsupported macro: ENGINE_METHOD_ALL (unsigned int)0xFFFF
+      --  unsupported macro: ENGINE_METHOD_NONE (unsigned int)0x0000
+      --  unsupported macro: ENGINE_TABLE_FLAG_NOINIT (unsigned int)0x0001
+      --  unsupported macro: ENGINE_FLAGS_MANUAL_CMD_CTRL (int)0x0002
+      --  unsupported macro: ENGINE_FLAGS_BY_ID_COPY (int)0x0004
+      --  unsupported macro: ENGINE_CMD_FLAG_NUMERIC (unsigned int)0x0001
+      --  unsupported macro: ENGINE_CMD_FLAG_STRING (unsigned int)0x0002
+      --  unsupported macro: ENGINE_CMD_FLAG_NO_INPUT (unsigned int)0x0004
+      --  unsupported macro: ENGINE_CMD_FLAG_INTERNAL (unsigned int)0x0008
 
-   ENGINE_CTRL_SET_LOGSTREAM : constant := 1;  --  openssl/engine.h:174
-   ENGINE_CTRL_SET_PASSWORD_CALLBACK : constant := 2;  --  openssl/engine.h:175
-   ENGINE_CTRL_HUP : constant := 3;  --  openssl/engine.h:176
+      ENGINE_CTRL_SET_LOGSTREAM : constant := 1;  --  openssl/engine.h:174
+      ENGINE_CTRL_SET_PASSWORD_CALLBACK : constant := 2;  --  openssl/engine.h:175
+      ENGINE_CTRL_HUP : constant := 3;  --  openssl/engine.h:176
 
-   ENGINE_CTRL_SET_USER_INTERFACE : constant := 4;  --  openssl/engine.h:178
-   ENGINE_CTRL_SET_CALLBACK_DATA : constant := 5;  --  openssl/engine.h:179
+      ENGINE_CTRL_SET_USER_INTERFACE : constant := 4;  --  openssl/engine.h:178
+      ENGINE_CTRL_SET_CALLBACK_DATA : constant := 5;  --  openssl/engine.h:179
 
-   ENGINE_CTRL_LOAD_CONFIGURATION : constant := 6;  --  openssl/engine.h:183
+      ENGINE_CTRL_LOAD_CONFIGURATION : constant := 6;  --  openssl/engine.h:183
 
-   ENGINE_CTRL_LOAD_SECTION : constant := 7;  --  openssl/engine.h:186
+      ENGINE_CTRL_LOAD_SECTION : constant := 7;  --  openssl/engine.h:186
 
-   ENGINE_CTRL_HAS_CTRL_FUNCTION : constant := 10;  --  openssl/engine.h:207
+      ENGINE_CTRL_HAS_CTRL_FUNCTION : constant := 10;  --  openssl/engine.h:207
 
-   ENGINE_CTRL_GET_FIRST_CMD_TYPE : constant := 11;  --  openssl/engine.h:210
+      ENGINE_CTRL_GET_FIRST_CMD_TYPE : constant := 11;  --  openssl/engine.h:210
 
-   ENGINE_CTRL_GET_NEXT_CMD_TYPE : constant := 12;  --  openssl/engine.h:213
+      ENGINE_CTRL_GET_NEXT_CMD_TYPE : constant := 12;  --  openssl/engine.h:213
 
-   ENGINE_CTRL_GET_CMD_FROM_NAME : constant := 13;  --  openssl/engine.h:216
+      ENGINE_CTRL_GET_CMD_FROM_NAME : constant := 13;  --  openssl/engine.h:216
 
-   ENGINE_CTRL_GET_NAME_LEN_FROM_CMD : constant := 14;  --  openssl/engine.h:223
-   ENGINE_CTRL_GET_NAME_FROM_CMD : constant := 15;  --  openssl/engine.h:224
+      ENGINE_CTRL_GET_NAME_LEN_FROM_CMD : constant := 14;  --  openssl/engine.h:223
+      ENGINE_CTRL_GET_NAME_FROM_CMD : constant := 15;  --  openssl/engine.h:224
 
-   ENGINE_CTRL_GET_DESC_LEN_FROM_CMD : constant := 16;  --  openssl/engine.h:226
-   ENGINE_CTRL_GET_DESC_FROM_CMD : constant := 17;  --  openssl/engine.h:227
+      ENGINE_CTRL_GET_DESC_LEN_FROM_CMD : constant := 16;  --  openssl/engine.h:226
+      ENGINE_CTRL_GET_DESC_FROM_CMD : constant := 17;  --  openssl/engine.h:227
 
-   ENGINE_CTRL_GET_CMD_FLAGS : constant := 18;  --  openssl/engine.h:231
+      ENGINE_CTRL_GET_CMD_FLAGS : constant := 18;  --  openssl/engine.h:231
 
-   ENGINE_CMD_BASE : constant := 200;  --  openssl/engine.h:235
+      ENGINE_CMD_BASE : constant := 200;  --  openssl/engine.h:235
 
-   ENGINE_CTRL_CHIL_SET_FORKCHECK : constant := 100;  --  openssl/engine.h:244
+      ENGINE_CTRL_CHIL_SET_FORKCHECK : constant := 100;  --  openssl/engine.h:244
 
-   ENGINE_CTRL_CHIL_NO_LOCKING : constant := 101;  --  openssl/engine.h:249
-   --  unsupported macro: OSSL_DYNAMIC_VERSION (unsigned long)0x00020000
-   --  unsupported macro: OSSL_DYNAMIC_OLDEST (unsigned long)0x00020000
-   --  arg-macro: procedure IMPLEMENT_DYNAMIC_CHECK_FN ()
-   --    OPENSSL_EXPORT unsigned long v_check(unsigned long v); OPENSSL_EXPORT unsigned long v_check(unsigned long v) { if(v >= OSSL_DYNAMIC_OLDEST) return OSSL_DYNAMIC_VERSION; return 0; }
-   --  arg-macro: procedure IMPLEMENT_DYNAMIC_BIND_FN (fn)
-   --    OPENSSL_EXPORT int bind_engine(ENGINE *e, const char *id, const dynamic_fns *fns); OPENSSL_EXPORT int bind_engine(ENGINE *e, const char *id, const dynamic_fns *fns) { if(ENGINE_get_static_state() = fns.static_state) goto skip_cbs; if(notCRYPTO_set_mem_functions(fns.mem_fns.malloc_cb, fns.mem_fns.realloc_cb, fns.mem_fns.free_cb)) return 0; CRYPTO_set_locking_callback(fns.lock_fns.lock_locking_cb); CRYPTO_set_add_lock_callback(fns.lock_fns.lock_add_lock_cb); CRYPTO_set_dynlock_create_callback(fns.lock_fns.dynlock_create_cb); CRYPTO_set_dynlock_lock_callback(fns.lock_fns.dynlock_lock_cb); CRYPTO_set_dynlock_destroy_callback(fns.lock_fns.dynlock_destroy_cb); if(notCRYPTO_set_ex_data_implementation(fns.ex_data_fns)) return 0; if(notERR_set_implementation(fns.err_fns)) return 0; skip_cbs: if(notfn(e,id)) return 0; return 1; }
+      ENGINE_CTRL_CHIL_NO_LOCKING : constant := 101;  --  openssl/engine.h:249
+      --  unsupported macro: OSSL_DYNAMIC_VERSION (unsigned long)0x00020000
+      --  unsupported macro: OSSL_DYNAMIC_OLDEST (unsigned long)0x00020000
+      --  arg-macro: procedure IMPLEMENT_DYNAMIC_CHECK_FN ()
+      --    OPENSSL_EXPORT unsigned long v_check(unsigned long v); OPENSSL_EXPORT unsigned long v_check(unsigned long v) { if(v >= OSSL_DYNAMIC_OLDEST) return OSSL_DYNAMIC_VERSION; return 0; }
+      --  arg-macro: procedure IMPLEMENT_DYNAMIC_BIND_FN (fn)
+      --    OPENSSL_EXPORT int bind_engine(ENGINE *e, const char *id, const dynamic_fns *fns); OPENSSL_EXPORT int bind_engine(ENGINE *e, const char *id, const dynamic_fns *fns) { if(ENGINE_get_static_state() = fns.static_state) goto skip_cbs; if(notCRYPTO_set_mem_functions(fns.mem_fns.malloc_cb, fns.mem_fns.realloc_cb, fns.mem_fns.free_cb)) return 0; CRYPTO_set_locking_callback(fns.lock_fns.lock_locking_cb); CRYPTO_set_add_lock_callback(fns.lock_fns.lock_add_lock_cb); CRYPTO_set_dynlock_create_callback(fns.lock_fns.dynlock_create_cb); CRYPTO_set_dynlock_lock_callback(fns.lock_fns.dynlock_lock_cb); CRYPTO_set_dynlock_destroy_callback(fns.lock_fns.dynlock_destroy_cb); if(notCRYPTO_set_ex_data_implementation(fns.ex_data_fns)) return 0; if(notERR_set_implementation(fns.err_fns)) return 0; skip_cbs: if(notfn(e,id)) return 0; return 1; }
 
-   ENGINE_F_DYNAMIC_CTRL : constant := 180;  --  openssl/engine.h:742
-   ENGINE_F_DYNAMIC_GET_DATA_CTX : constant := 181;  --  openssl/engine.h:743
-   ENGINE_F_DYNAMIC_LOAD : constant := 182;  --  openssl/engine.h:744
-   ENGINE_F_DYNAMIC_SET_DATA_CTX : constant := 183;  --  openssl/engine.h:745
-   ENGINE_F_ENGINE_ADD : constant := 105;  --  openssl/engine.h:746
-   ENGINE_F_ENGINE_BY_ID : constant := 106;  --  openssl/engine.h:747
-   ENGINE_F_ENGINE_CMD_IS_EXECUTABLE : constant := 170;  --  openssl/engine.h:748
-   ENGINE_F_ENGINE_CTRL : constant := 142;  --  openssl/engine.h:749
-   ENGINE_F_ENGINE_CTRL_CMD : constant := 178;  --  openssl/engine.h:750
-   ENGINE_F_ENGINE_CTRL_CMD_STRING : constant := 171;  --  openssl/engine.h:751
-   ENGINE_F_ENGINE_FINISH : constant := 107;  --  openssl/engine.h:752
-   ENGINE_F_ENGINE_FREE_UTIL : constant := 108;  --  openssl/engine.h:753
-   ENGINE_F_ENGINE_GET_CIPHER : constant := 185;  --  openssl/engine.h:754
-   ENGINE_F_ENGINE_GET_DEFAULT_TYPE : constant := 177;  --  openssl/engine.h:755
-   ENGINE_F_ENGINE_GET_DIGEST : constant := 186;  --  openssl/engine.h:756
-   ENGINE_F_ENGINE_GET_NEXT : constant := 115;  --  openssl/engine.h:757
-   ENGINE_F_ENGINE_GET_PKEY_ASN1_METH : constant := 193;  --  openssl/engine.h:758
-   ENGINE_F_ENGINE_GET_PKEY_METH : constant := 192;  --  openssl/engine.h:759
-   ENGINE_F_ENGINE_GET_PREV : constant := 116;  --  openssl/engine.h:760
-   ENGINE_F_ENGINE_INIT : constant := 119;  --  openssl/engine.h:761
-   ENGINE_F_ENGINE_LIST_ADD : constant := 120;  --  openssl/engine.h:762
-   ENGINE_F_ENGINE_LIST_REMOVE : constant := 121;  --  openssl/engine.h:763
-   ENGINE_F_ENGINE_LOAD_PRIVATE_KEY : constant := 150;  --  openssl/engine.h:764
-   ENGINE_F_ENGINE_LOAD_PUBLIC_KEY : constant := 151;  --  openssl/engine.h:765
-   ENGINE_F_ENGINE_LOAD_SSL_CLIENT_CERT : constant := 194;  --  openssl/engine.h:766
-   ENGINE_F_ENGINE_NEW : constant := 122;  --  openssl/engine.h:767
-   ENGINE_F_ENGINE_REMOVE : constant := 123;  --  openssl/engine.h:768
-   ENGINE_F_ENGINE_SET_DEFAULT_STRING : constant := 189;  --  openssl/engine.h:769
-   ENGINE_F_ENGINE_SET_DEFAULT_TYPE : constant := 126;  --  openssl/engine.h:770
-   ENGINE_F_ENGINE_SET_ID : constant := 129;  --  openssl/engine.h:771
-   ENGINE_F_ENGINE_SET_NAME : constant := 130;  --  openssl/engine.h:772
-   ENGINE_F_ENGINE_TABLE_REGISTER : constant := 184;  --  openssl/engine.h:773
-   ENGINE_F_ENGINE_UNLOAD_KEY : constant := 152;  --  openssl/engine.h:774
-   ENGINE_F_ENGINE_UNLOCKED_FINISH : constant := 191;  --  openssl/engine.h:775
-   ENGINE_F_ENGINE_UP_REF : constant := 190;  --  openssl/engine.h:776
-   ENGINE_F_INT_CTRL_HELPER : constant := 172;  --  openssl/engine.h:777
-   ENGINE_F_INT_ENGINE_CONFIGURE : constant := 188;  --  openssl/engine.h:778
-   ENGINE_F_INT_ENGINE_MODULE_INIT : constant := 187;  --  openssl/engine.h:779
-   ENGINE_F_LOG_MESSAGE : constant := 141;  --  openssl/engine.h:780
+      ENGINE_F_DYNAMIC_CTRL : constant := 180;  --  openssl/engine.h:742
+      ENGINE_F_DYNAMIC_GET_DATA_CTX : constant := 181;  --  openssl/engine.h:743
+      ENGINE_F_DYNAMIC_LOAD : constant := 182;  --  openssl/engine.h:744
+      ENGINE_F_DYNAMIC_SET_DATA_CTX : constant := 183;  --  openssl/engine.h:745
+      ENGINE_F_ENGINE_ADD : constant := 105;  --  openssl/engine.h:746
+      ENGINE_F_ENGINE_BY_ID : constant := 106;  --  openssl/engine.h:747
+      ENGINE_F_ENGINE_CMD_IS_EXECUTABLE : constant := 170;  --  openssl/engine.h:748
+      ENGINE_F_ENGINE_CTRL : constant := 142;  --  openssl/engine.h:749
+      ENGINE_F_ENGINE_CTRL_CMD : constant := 178;  --  openssl/engine.h:750
+      ENGINE_F_ENGINE_CTRL_CMD_STRING : constant := 171;  --  openssl/engine.h:751
+      ENGINE_F_ENGINE_FINISH : constant := 107;  --  openssl/engine.h:752
+      ENGINE_F_ENGINE_FREE_UTIL : constant := 108;  --  openssl/engine.h:753
+      ENGINE_F_ENGINE_GET_CIPHER : constant := 185;  --  openssl/engine.h:754
+      ENGINE_F_ENGINE_GET_DEFAULT_TYPE : constant := 177;  --  openssl/engine.h:755
+      ENGINE_F_ENGINE_GET_DIGEST : constant := 186;  --  openssl/engine.h:756
+      ENGINE_F_ENGINE_GET_NEXT : constant := 115;  --  openssl/engine.h:757
+      ENGINE_F_ENGINE_GET_PKEY_ASN1_METH : constant := 193;  --  openssl/engine.h:758
+      ENGINE_F_ENGINE_GET_PKEY_METH : constant := 192;  --  openssl/engine.h:759
+      ENGINE_F_ENGINE_GET_PREV : constant := 116;  --  openssl/engine.h:760
+      ENGINE_F_ENGINE_INIT : constant := 119;  --  openssl/engine.h:761
+      ENGINE_F_ENGINE_LIST_ADD : constant := 120;  --  openssl/engine.h:762
+      ENGINE_F_ENGINE_LIST_REMOVE : constant := 121;  --  openssl/engine.h:763
+      ENGINE_F_ENGINE_LOAD_PRIVATE_KEY : constant := 150;  --  openssl/engine.h:764
+      ENGINE_F_ENGINE_LOAD_PUBLIC_KEY : constant := 151;  --  openssl/engine.h:765
+      ENGINE_F_ENGINE_LOAD_SSL_CLIENT_CERT : constant := 194;  --  openssl/engine.h:766
+      ENGINE_F_ENGINE_NEW : constant := 122;  --  openssl/engine.h:767
+      ENGINE_F_ENGINE_REMOVE : constant := 123;  --  openssl/engine.h:768
+      ENGINE_F_ENGINE_SET_DEFAULT_STRING : constant := 189;  --  openssl/engine.h:769
+      ENGINE_F_ENGINE_SET_DEFAULT_TYPE : constant := 126;  --  openssl/engine.h:770
+      ENGINE_F_ENGINE_SET_ID : constant := 129;  --  openssl/engine.h:771
+      ENGINE_F_ENGINE_SET_NAME : constant := 130;  --  openssl/engine.h:772
+      ENGINE_F_ENGINE_TABLE_REGISTER : constant := 184;  --  openssl/engine.h:773
+      ENGINE_F_ENGINE_UNLOAD_KEY : constant := 152;  --  openssl/engine.h:774
+      ENGINE_F_ENGINE_UNLOCKED_FINISH : constant := 191;  --  openssl/engine.h:775
+      ENGINE_F_ENGINE_UP_REF : constant := 190;  --  openssl/engine.h:776
+      ENGINE_F_INT_CTRL_HELPER : constant := 172;  --  openssl/engine.h:777
+      ENGINE_F_INT_ENGINE_CONFIGURE : constant := 188;  --  openssl/engine.h:778
+      ENGINE_F_INT_ENGINE_MODULE_INIT : constant := 187;  --  openssl/engine.h:779
+      ENGINE_F_LOG_MESSAGE : constant := 141;  --  openssl/engine.h:780
 
-   ENGINE_R_ALREADY_LOADED : constant := 100;  --  openssl/engine.h:783
-   ENGINE_R_ARGUMENT_IS_NOT_A_NUMBER : constant := 133;  --  openssl/engine.h:784
-   ENGINE_R_CMD_NOT_EXECUTABLE : constant := 134;  --  openssl/engine.h:785
-   ENGINE_R_COMMAND_TAKES_INPUT : constant := 135;  --  openssl/engine.h:786
-   ENGINE_R_COMMAND_TAKES_NO_INPUT : constant := 136;  --  openssl/engine.h:787
-   ENGINE_R_CONFLICTING_ENGINE_ID : constant := 103;  --  openssl/engine.h:788
-   ENGINE_R_CTRL_COMMAND_NOT_IMPLEMENTED : constant := 119;  --  openssl/engine.h:789
-   ENGINE_R_DH_NOT_IMPLEMENTED : constant := 139;  --  openssl/engine.h:790
-   ENGINE_R_DSA_NOT_IMPLEMENTED : constant := 140;  --  openssl/engine.h:791
-   ENGINE_R_DSO_FAILURE : constant := 104;  --  openssl/engine.h:792
-   ENGINE_R_DSO_NOT_FOUND : constant := 132;  --  openssl/engine.h:793
-   ENGINE_R_ENGINES_SECTION_ERROR : constant := 148;  --  openssl/engine.h:794
-   ENGINE_R_ENGINE_CONFIGURATION_ERROR : constant := 102;  --  openssl/engine.h:795
-   ENGINE_R_ENGINE_IS_NOT_IN_LIST : constant := 105;  --  openssl/engine.h:796
-   ENGINE_R_ENGINE_SECTION_ERROR : constant := 149;  --  openssl/engine.h:797
-   ENGINE_R_FAILED_LOADING_PRIVATE_KEY : constant := 128;  --  openssl/engine.h:798
-   ENGINE_R_FAILED_LOADING_PUBLIC_KEY : constant := 129;  --  openssl/engine.h:799
-   ENGINE_R_FINISH_FAILED : constant := 106;  --  openssl/engine.h:800
-   ENGINE_R_GET_HANDLE_FAILED : constant := 107;  --  openssl/engine.h:801
-   ENGINE_R_ID_OR_NAME_MISSING : constant := 108;  --  openssl/engine.h:802
-   ENGINE_R_INIT_FAILED : constant := 109;  --  openssl/engine.h:803
-   ENGINE_R_INTERNAL_LIST_ERROR : constant := 110;  --  openssl/engine.h:804
-   ENGINE_R_INVALID_ARGUMENT : constant := 143;  --  openssl/engine.h:805
-   ENGINE_R_INVALID_CMD_NAME : constant := 137;  --  openssl/engine.h:806
-   ENGINE_R_INVALID_CMD_NUMBER : constant := 138;  --  openssl/engine.h:807
-   ENGINE_R_INVALID_INIT_VALUE : constant := 151;  --  openssl/engine.h:808
-   ENGINE_R_INVALID_STRING : constant := 150;  --  openssl/engine.h:809
-   ENGINE_R_NOT_INITIALISED : constant := 117;  --  openssl/engine.h:810
-   ENGINE_R_NOT_LOADED : constant := 112;  --  openssl/engine.h:811
-   ENGINE_R_NO_CONTROL_FUNCTION : constant := 120;  --  openssl/engine.h:812
-   ENGINE_R_NO_INDEX : constant := 144;  --  openssl/engine.h:813
-   ENGINE_R_NO_LOAD_FUNCTION : constant := 125;  --  openssl/engine.h:814
-   ENGINE_R_NO_REFERENCE : constant := 130;  --  openssl/engine.h:815
-   ENGINE_R_NO_SUCH_ENGINE : constant := 116;  --  openssl/engine.h:816
-   ENGINE_R_NO_UNLOAD_FUNCTION : constant := 126;  --  openssl/engine.h:817
-   ENGINE_R_PROVIDE_PARAMETERS : constant := 113;  --  openssl/engine.h:818
-   ENGINE_R_RSA_NOT_IMPLEMENTED : constant := 141;  --  openssl/engine.h:819
-   ENGINE_R_UNIMPLEMENTED_CIPHER : constant := 146;  --  openssl/engine.h:820
-   ENGINE_R_UNIMPLEMENTED_DIGEST : constant := 147;  --  openssl/engine.h:821
-   ENGINE_R_UNIMPLEMENTED_PUBLIC_KEY_METHOD : constant := 101;  --  openssl/engine.h:822
-   ENGINE_R_VERSION_INCOMPATIBILITY : constant := 145;  --  openssl/engine.h:823
-
+      ENGINE_R_ALREADY_LOADED : constant := 100;  --  openssl/engine.h:783
+      ENGINE_R_ARGUMENT_IS_NOT_A_NUMBER : constant := 133;  --  openssl/engine.h:784
+      ENGINE_R_CMD_NOT_EXECUTABLE : constant := 134;  --  openssl/engine.h:785
+      ENGINE_R_COMMAND_TAKES_INPUT : constant := 135;  --  openssl/engine.h:786
+      ENGINE_R_COMMAND_TAKES_NO_INPUT : constant := 136;  --  openssl/engine.h:787
+      ENGINE_R_CONFLICTING_ENGINE_ID : constant := 103;  --  openssl/engine.h:788
+      ENGINE_R_CTRL_COMMAND_NOT_IMPLEMENTED : constant := 119;  --  openssl/engine.h:789
+      ENGINE_R_DH_NOT_IMPLEMENTED : constant := 139;  --  openssl/engine.h:790
+      ENGINE_R_DSA_NOT_IMPLEMENTED : constant := 140;  --  openssl/engine.h:791
+      ENGINE_R_DSO_FAILURE : constant := 104;  --  openssl/engine.h:792
+      ENGINE_R_DSO_NOT_FOUND : constant := 132;  --  openssl/engine.h:793
+      ENGINE_R_ENGINES_SECTION_ERROR : constant := 148;  --  openssl/engine.h:794
+      ENGINE_R_ENGINE_CONFIGURATION_ERROR : constant := 102;  --  openssl/engine.h:795
+      ENGINE_R_ENGINE_IS_NOT_IN_LIST : constant := 105;  --  openssl/engine.h:796
+      ENGINE_R_ENGINE_SECTION_ERROR : constant := 149;  --  openssl/engine.h:797
+      ENGINE_R_FAILED_LOADING_PRIVATE_KEY : constant := 128;  --  openssl/engine.h:798
+      ENGINE_R_FAILED_LOADING_PUBLIC_KEY : constant := 129;  --  openssl/engine.h:799
+      ENGINE_R_FINISH_FAILED : constant := 106;  --  openssl/engine.h:800
+      ENGINE_R_GET_HANDLE_FAILED : constant := 107;  --  openssl/engine.h:801
+      ENGINE_R_ID_OR_NAME_MISSING : constant := 108;  --  openssl/engine.h:802
+      ENGINE_R_INIT_FAILED : constant := 109;  --  openssl/engine.h:803
+      ENGINE_R_INTERNAL_LIST_ERROR : constant := 110;  --  openssl/engine.h:804
+      ENGINE_R_INVALID_ARGUMENT : constant := 143;  --  openssl/engine.h:805
+      ENGINE_R_INVALID_CMD_NAME : constant := 137;  --  openssl/engine.h:806
+      ENGINE_R_INVALID_CMD_NUMBER : constant := 138;  --  openssl/engine.h:807
+      ENGINE_R_INVALID_INIT_VALUE : constant := 151;  --  openssl/engine.h:808
+      ENGINE_R_INVALID_STRING : constant := 150;  --  openssl/engine.h:809
+      ENGINE_R_NOT_INITIALISED : constant := 117;  --  openssl/engine.h:810
+      ENGINE_R_NOT_LOADED : constant := 112;  --  openssl/engine.h:811
+      ENGINE_R_NO_CONTROL_FUNCTION : constant := 120;  --  openssl/engine.h:812
+      ENGINE_R_NO_INDEX : constant := 144;  --  openssl/engine.h:813
+      ENGINE_R_NO_LOAD_FUNCTION : constant := 125;  --  openssl/engine.h:814
+      ENGINE_R_NO_REFERENCE : constant := 130;  --  openssl/engine.h:815
+      ENGINE_R_NO_SUCH_ENGINE : constant := 116;  --  openssl/engine.h:816
+      ENGINE_R_NO_UNLOAD_FUNCTION : constant := 126;  --  openssl/engine.h:817
+      ENGINE_R_PROVIDE_PARAMETERS : constant := 113;  --  openssl/engine.h:818
+      ENGINE_R_RSA_NOT_IMPLEMENTED : constant := 141;  --  openssl/engine.h:819
+      ENGINE_R_UNIMPLEMENTED_CIPHER : constant := 146;  --  openssl/engine.h:820
+      ENGINE_R_UNIMPLEMENTED_DIGEST : constant := 147;  --  openssl/engine.h:821
+      ENGINE_R_UNIMPLEMENTED_PUBLIC_KEY_METHOD : constant := 101;  --  openssl/engine.h:822
+      ENGINE_R_VERSION_INCOMPATIBILITY : constant := 145;  --  openssl/engine.h:823
+   end defs;
    type ENGINE_CMD_DEFN_st is record
-      cmd_num : aliased unsigned;  -- openssl/engine.h:263
-      cmd_name : Interfaces.C.Strings.chars_ptr;  -- openssl/engine.h:264
-      cmd_desc : Interfaces.C.Strings.chars_ptr;  -- openssl/engine.h:265
+      cmd_num   : aliased unsigned;  -- openssl/engine.h:263
+      cmd_name  : Interfaces.C.Strings.chars_ptr;  -- openssl/engine.h:264
+      cmd_desc  : Interfaces.C.Strings.chars_ptr;  -- openssl/engine.h:265
       cmd_flags : aliased unsigned;  -- openssl/engine.h:266
    end record;
    pragma Convention (C_Pass_By_Copy, ENGINE_CMD_DEFN_st);  -- openssl/engine.h:261
@@ -164,51 +168,51 @@ package OpenSSL.Low_Level.engine_h is
    type ENGINE_GEN_INT_FUNC_PTR is access function (arg1 : System.Address) return int;  -- openssl/engine.h:272
 
    type ENGINE_CTRL_FUNC_PTR is access function
-        (arg1 : System.Address;
-         arg2 : int;
-         arg3 : long;
-         arg4 : System.Address;
-         arg5 : access procedure) return int;  -- openssl/engine.h:274
+     (arg1 : System.Address;
+      arg2 : int;
+      arg3 : long;
+      arg4 : System.Address;
+      arg5 : access procedure) return int;  -- openssl/engine.h:274
 
    type ENGINE_LOAD_KEY_PTR is access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address;
-         arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:276
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : System.Address;
+      arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:276
 
    type ENGINE_SSL_CLIENT_CERT_PTR is access function
-        (arg1 : System.Address;
-         arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
-         arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
-         arg4 : System.Address;
-         arg5 : System.Address;
-         arg6 : System.Address;
-         arg7 : System.Address;
-         arg8 : System.Address) return int;  -- openssl/engine.h:278
+     (arg1 : System.Address;
+      arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+      arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
+      arg4 : System.Address;
+      arg5 : System.Address;
+      arg6 : System.Address;
+      arg7 : System.Address;
+      arg8 : System.Address) return int;  -- openssl/engine.h:278
 
    type ENGINE_CIPHERS_PTR is access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:293
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:293
 
    type ENGINE_DIGESTS_PTR is access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:294
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:294
 
    type ENGINE_PKEY_METHS_PTR is access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:295
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:295
 
    type ENGINE_PKEY_ASN1_METHS_PTR is access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:296
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:296
 
    function ENGINE_get_first return System.Address;  -- openssl/engine.h:308
    pragma Import (C, ENGINE_get_first, "ENGINE_get_first");
@@ -358,29 +362,29 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_register_all_complete, "ENGINE_register_all_complete");
 
    function ENGINE_ctrl
-     (e : System.Address;
+     (e   : System.Address;
       cmd : int;
-      i : long;
-      p : System.Address;
-      f : access procedure) return int;  -- openssl/engine.h:415
+      i   : long;
+      p   : System.Address;
+      f   : access procedure) return int;  -- openssl/engine.h:415
    pragma Import (C, ENGINE_ctrl, "ENGINE_ctrl");
 
    function ENGINE_cmd_is_executable (e : System.Address; cmd : int) return int;  -- openssl/engine.h:421
    pragma Import (C, ENGINE_cmd_is_executable, "ENGINE_cmd_is_executable");
 
    function ENGINE_ctrl_cmd
-     (e : System.Address;
-      cmd_name : Interfaces.C.Strings.chars_ptr;
-      i : long;
-      p : System.Address;
-      f : access procedure;
+     (e            : System.Address;
+      cmd_name     : Interfaces.C.Strings.chars_ptr;
+      i            : long;
+      p            : System.Address;
+      f            : access procedure;
       cmd_optional : int) return int;  -- openssl/engine.h:427
    pragma Import (C, ENGINE_ctrl_cmd, "ENGINE_ctrl_cmd");
 
    function ENGINE_ctrl_cmd_string
-     (e : System.Address;
-      cmd_name : Interfaces.C.Strings.chars_ptr;
-      arg : Interfaces.C.Strings.chars_ptr;
+     (e            : System.Address;
+      cmd_name     : Interfaces.C.Strings.chars_ptr;
+      arg          : Interfaces.C.Strings.chars_ptr;
       cmd_optional : int) return int;  -- openssl/engine.h:449
    pragma Import (C, ENGINE_ctrl_cmd_string, "ENGINE_ctrl_cmd_string");
 
@@ -399,7 +403,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_set_name (e : System.Address; name : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/engine.h:462
    pragma Import (C, ENGINE_set_name, "ENGINE_set_name");
 
-   function ENGINE_set_RSA (e : System.Address; rsa_meth : access constant OpenSSL.Low_Level.rsa_h.rsa_st_METHOD) return int;  -- openssl/engine.h:463
+   function ENGINE_set_RSA (e : System.Address; rsa_meth : access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st) return int;  -- openssl/engine.h:463
    pragma Import (C, ENGINE_set_RSA, "ENGINE_set_RSA");
 
    function ENGINE_set_DSA (e : System.Address; dsa_meth : access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD) return int;  -- openssl/engine.h:464
@@ -430,64 +434,64 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_set_finish_function, "ENGINE_set_finish_function");
 
    function ENGINE_set_ctrl_function (e : System.Address; ctrl_f : access function
-        (arg1 : System.Address;
-         arg2 : int;
-         arg3 : long;
-         arg4 : System.Address;
-         arg5 : access procedure) return int) return int;  -- openssl/engine.h:473
+                                        (arg1 : System.Address;
+                                         arg2 : int;
+                                         arg3 : long;
+                                         arg4 : System.Address;
+                                         arg5 : access procedure) return int) return int;  -- openssl/engine.h:473
    pragma Import (C, ENGINE_set_ctrl_function, "ENGINE_set_ctrl_function");
 
    function ENGINE_set_load_privkey_function (e : System.Address; loadpriv_f : access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address;
-         arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/engine.h:474
+                                                (arg1 : System.Address;
+                                                 arg2 : Interfaces.C.Strings.chars_ptr;
+                                                 arg3 : System.Address;
+                                                 arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/engine.h:474
    pragma Import (C, ENGINE_set_load_privkey_function, "ENGINE_set_load_privkey_function");
 
    function ENGINE_set_load_pubkey_function (e : System.Address; loadpub_f : access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address;
-         arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/engine.h:475
+                                               (arg1 : System.Address;
+                                                arg2 : Interfaces.C.Strings.chars_ptr;
+                                                arg3 : System.Address;
+                                                arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/engine.h:475
    pragma Import (C, ENGINE_set_load_pubkey_function, "ENGINE_set_load_pubkey_function");
 
    function ENGINE_set_load_ssl_client_cert_function (e : System.Address; loadssl_f : access function
-        (arg1 : System.Address;
-         arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
-         arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
-         arg4 : System.Address;
-         arg5 : System.Address;
-         arg6 : System.Address;
-         arg7 : System.Address;
-         arg8 : System.Address) return int) return int;  -- openssl/engine.h:476
+                                                        (arg1 : System.Address;
+                                                         arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+                                                         arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
+                                                         arg4 : System.Address;
+                                                         arg5 : System.Address;
+                                                         arg6 : System.Address;
+                                                         arg7 : System.Address;
+                                                         arg8 : System.Address) return int) return int;  -- openssl/engine.h:476
    pragma Import (C, ENGINE_set_load_ssl_client_cert_function, "ENGINE_set_load_ssl_client_cert_function");
 
    function ENGINE_set_ciphers (e : System.Address; f : access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int) return int;  -- openssl/engine.h:478
+                                  (arg1 : System.Address;
+                                   arg2 : System.Address;
+                                   arg3 : System.Address;
+                                   arg4 : int) return int) return int;  -- openssl/engine.h:478
    pragma Import (C, ENGINE_set_ciphers, "ENGINE_set_ciphers");
 
    function ENGINE_set_digests (e : System.Address; f : access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int) return int;  -- openssl/engine.h:479
+                                  (arg1 : System.Address;
+                                   arg2 : System.Address;
+                                   arg3 : System.Address;
+                                   arg4 : int) return int) return int;  -- openssl/engine.h:479
    pragma Import (C, ENGINE_set_digests, "ENGINE_set_digests");
 
    function ENGINE_set_pkey_meths (e : System.Address; f : access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int) return int;  -- openssl/engine.h:480
+                                     (arg1 : System.Address;
+                                      arg2 : System.Address;
+                                      arg3 : System.Address;
+                                      arg4 : int) return int) return int;  -- openssl/engine.h:480
    pragma Import (C, ENGINE_set_pkey_meths, "ENGINE_set_pkey_meths");
 
    function ENGINE_set_pkey_asn1_meths (e : System.Address; f : access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int) return int;  -- openssl/engine.h:481
+                                          (arg1 : System.Address;
+                                           arg2 : System.Address;
+                                           arg3 : System.Address;
+                                           arg4 : int) return int) return int;  -- openssl/engine.h:481
    pragma Import (C, ENGINE_set_pkey_asn1_meths, "ENGINE_set_pkey_asn1_meths");
 
    function ENGINE_set_flags (e : System.Address; flags : int) return int;  -- openssl/engine.h:482
@@ -497,16 +501,16 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_set_cmd_defns, "ENGINE_set_cmd_defns");
 
    function ENGINE_get_ex_new_index
-     (argl : long;
-      argp : System.Address;
-      new_func : access function
+     (argl      : long;
+      argp      : System.Address;
+      new_func  : access function
         (arg1 : System.Address;
          arg2 : System.Address;
          arg3 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg4 : int;
          arg5 : long;
          arg6 : System.Address) return int;
-      dup_func : access function
+      dup_func  : access function
         (arg1 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg2 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg3 : System.Address;
@@ -523,7 +527,7 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_get_ex_new_index, "ENGINE_get_ex_new_index");
 
    function ENGINE_set_ex_data
-     (e : System.Address;
+     (e   : System.Address;
       idx : int;
       arg : System.Address) return int;  -- openssl/engine.h:487
    pragma Import (C, ENGINE_set_ex_data, "ENGINE_set_ex_data");
@@ -540,7 +544,7 @@ package OpenSSL.Low_Level.engine_h is
    function ENGINE_get_name (e : System.Address) return Interfaces.C.Strings.chars_ptr;  -- openssl/engine.h:501
    pragma Import (C, ENGINE_get_name, "ENGINE_get_name");
 
-   function ENGINE_get_RSA (e : System.Address) return access constant OpenSSL.Low_Level.rsa_h.rsa_st_METHOD;  -- openssl/engine.h:502
+   function ENGINE_get_RSA (e : System.Address) return access constant OpenSSL.Low_Level.rsa_h.rsa_meth_st;  -- openssl/engine.h:502
    pragma Import (C, ENGINE_get_RSA, "ENGINE_get_RSA");
 
    function ENGINE_get_DSA (e : System.Address) return access constant OpenSSL.Low_Level.dsa_h.dsa_st_METHOD;  -- openssl/engine.h:503
@@ -571,64 +575,64 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_get_finish_function, "ENGINE_get_finish_function");
 
    function ENGINE_get_ctrl_function (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : int;
-         arg3 : long;
-         arg4 : System.Address;
-         arg5 : access procedure) return int;  -- openssl/engine.h:512
+     (arg1 : System.Address;
+      arg2 : int;
+      arg3 : long;
+      arg4 : System.Address;
+      arg5 : access procedure) return int;  -- openssl/engine.h:512
    pragma Import (C, ENGINE_get_ctrl_function, "ENGINE_get_ctrl_function");
 
    function ENGINE_get_load_privkey_function (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address;
-         arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:513
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : System.Address;
+      arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:513
    pragma Import (C, ENGINE_get_load_privkey_function, "ENGINE_get_load_privkey_function");
 
    function ENGINE_get_load_pubkey_function (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address;
-         arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:514
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : System.Address;
+      arg4 : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:514
    pragma Import (C, ENGINE_get_load_pubkey_function, "ENGINE_get_load_pubkey_function");
 
    function ENGINE_get_ssl_client_cert_function (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
-         arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
-         arg4 : System.Address;
-         arg5 : System.Address;
-         arg6 : System.Address;
-         arg7 : System.Address;
-         arg8 : System.Address) return int;  -- openssl/engine.h:515
+     (arg1 : System.Address;
+      arg2 : access OpenSSL.Low_Level.ssl_h.ssl_st;
+      arg3 : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
+      arg4 : System.Address;
+      arg5 : System.Address;
+      arg6 : System.Address;
+      arg7 : System.Address;
+      arg8 : System.Address) return int;  -- openssl/engine.h:515
    pragma Import (C, ENGINE_get_ssl_client_cert_function, "ENGINE_get_ssl_client_cert_function");
 
    function ENGINE_get_ciphers (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:516
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:516
    pragma Import (C, ENGINE_get_ciphers, "ENGINE_get_ciphers");
 
    function ENGINE_get_digests (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:517
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:517
    pragma Import (C, ENGINE_get_digests, "ENGINE_get_digests");
 
    function ENGINE_get_pkey_meths (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:518
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:518
    pragma Import (C, ENGINE_get_pkey_meths, "ENGINE_get_pkey_meths");
 
    function ENGINE_get_pkey_asn1_meths (e : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : System.Address;
-         arg3 : System.Address;
-         arg4 : int) return int;  -- openssl/engine.h:519
+     (arg1 : System.Address;
+      arg2 : System.Address;
+      arg3 : System.Address;
+      arg4 : int) return int;  -- openssl/engine.h:519
    pragma Import (C, ENGINE_get_pkey_asn1_meths, "ENGINE_get_pkey_asn1_meths");
 
    function ENGINE_get_cipher (e : System.Address; nid : int) return access constant OpenSSL.Low_Level.evp_h.evp_cipher_st;  -- openssl/engine.h:520
@@ -644,13 +648,13 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_get_pkey_asn1_meth, "ENGINE_get_pkey_asn1_meth");
 
    function ENGINE_get_pkey_asn1_meth_str
-     (e : System.Address;
+     (e   : System.Address;
       str : Interfaces.C.Strings.chars_ptr;
       len : int) return System.Address;  -- openssl/engine.h:524
    pragma Import (C, ENGINE_get_pkey_asn1_meth_str, "ENGINE_get_pkey_asn1_meth_str");
 
    function ENGINE_pkey_asn1_find_str
-     (pe : System.Address;
+     (pe  : System.Address;
       str : Interfaces.C.Strings.chars_ptr;
       len : int) return System.Address;  -- openssl/engine.h:526
    pragma Import (C, ENGINE_pkey_asn1_find_str, "ENGINE_pkey_asn1_find_str");
@@ -668,26 +672,26 @@ package OpenSSL.Low_Level.engine_h is
    pragma Import (C, ENGINE_finish, "ENGINE_finish");
 
    function ENGINE_load_private_key
-     (e : System.Address;
-      key_id : Interfaces.C.Strings.chars_ptr;
+     (e             : System.Address;
+      key_id        : Interfaces.C.Strings.chars_ptr;
       the_ui_method : System.Address;
       callback_data : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:555
    pragma Import (C, ENGINE_load_private_key, "ENGINE_load_private_key");
 
    function ENGINE_load_public_key
-     (e : System.Address;
-      key_id : Interfaces.C.Strings.chars_ptr;
+     (e             : System.Address;
+      key_id        : Interfaces.C.Strings.chars_ptr;
       the_ui_method : System.Address;
       callback_data : System.Address) return access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/engine.h:557
    pragma Import (C, ENGINE_load_public_key, "ENGINE_load_public_key");
 
    function ENGINE_load_ssl_client_cert
-     (e : System.Address;
-      s : access OpenSSL.Low_Level.ssl_h.ssl_st;
-      ca_dn : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
-      pcert : System.Address;
-      ppkey : System.Address;
-      pother : System.Address;
+     (e             : System.Address;
+      s             : access OpenSSL.Low_Level.ssl_h.ssl_st;
+      ca_dn         : access OpenSSL.Low_Level.x509_h.stack_st_X509_NAME;
+      pcert         : System.Address;
+      ppkey         : System.Address;
+      pother        : System.Address;
       the_ui_method : System.Address;
       callback_data : System.Address) return int;  -- openssl/engine.h:559
    pragma Import (C, ENGINE_load_ssl_client_cert, "ENGINE_load_ssl_client_cert");
@@ -768,62 +772,62 @@ package OpenSSL.Low_Level.engine_h is
    type dyn_MEM_free_cb is access procedure (arg1 : System.Address);  -- openssl/engine.h:632
 
    type st_dynamic_MEM_fns is record
-      malloc_cb : access function (arg1 : size_t) return System.Address;  -- openssl/engine.h:634
+      malloc_cb  : access function (arg1 : size_t) return System.Address;  -- openssl/engine.h:634
       realloc_cb : access function (arg1 : System.Address; arg2 : size_t) return System.Address;  -- openssl/engine.h:635
-      free_cb : access procedure (arg1 : System.Address);  -- openssl/engine.h:636
+      free_cb    : access procedure (arg1 : System.Address);  -- openssl/engine.h:636
    end record;
    pragma Convention (C_Pass_By_Copy, st_dynamic_MEM_fns);  -- openssl/engine.h:633
 
    subtype dynamic_MEM_fns is st_dynamic_MEM_fns;
 
    type dyn_lock_locking_cb is access procedure
-        (arg1 : int;
-         arg2 : int;
-         arg3 : Interfaces.C.Strings.chars_ptr;
-         arg4 : int);  -- openssl/engine.h:640
+     (arg1 : int;
+      arg2 : int;
+      arg3 : Interfaces.C.Strings.chars_ptr;
+      arg4 : int);  -- openssl/engine.h:640
 
    type dyn_lock_add_lock_cb is access function
-        (arg1 : access int;
-         arg2 : int;
-         arg3 : int;
-         arg4 : Interfaces.C.Strings.chars_ptr;
-         arg5 : int) return int;  -- openssl/engine.h:641
+     (arg1 : access int;
+      arg2 : int;
+      arg3 : int;
+      arg4 : Interfaces.C.Strings.chars_ptr;
+      arg5 : int) return int;  -- openssl/engine.h:641
 
    type dyn_dynlock_create_cb is access function (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- openssl/engine.h:642
 
    type dyn_dynlock_lock_cb is access procedure
-        (arg1 : int;
-         arg2 : System.Address;
-         arg3 : Interfaces.C.Strings.chars_ptr;
-         arg4 : int);  -- openssl/engine.h:644
+     (arg1 : int;
+      arg2 : System.Address;
+      arg3 : Interfaces.C.Strings.chars_ptr;
+      arg4 : int);  -- openssl/engine.h:644
 
    type dyn_dynlock_destroy_cb is access procedure
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : int);  -- openssl/engine.h:646
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : int);  -- openssl/engine.h:646
 
    type st_dynamic_LOCK_fns is record
-      lock_locking_cb : access procedure
-           (arg1 : int;
-            arg2 : int;
-            arg3 : Interfaces.C.Strings.chars_ptr;
-            arg4 : int);  -- openssl/engine.h:649
-      lock_add_lock_cb : access function
-           (arg1 : access int;
-            arg2 : int;
-            arg3 : int;
-            arg4 : Interfaces.C.Strings.chars_ptr;
-            arg5 : int) return int;  -- openssl/engine.h:650
-      dynlock_create_cb : access function (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- openssl/engine.h:651
-      dynlock_lock_cb : access procedure
-           (arg1 : int;
-            arg2 : System.Address;
-            arg3 : Interfaces.C.Strings.chars_ptr;
-            arg4 : int);  -- openssl/engine.h:652
+      lock_locking_cb    : access procedure
+        (arg1 : int;
+         arg2               : int;
+         arg3               : Interfaces.C.Strings.chars_ptr;
+         arg4               : int);  -- openssl/engine.h:649
+      lock_add_lock_cb   : access function
+        (arg1 : access int;
+         arg2               : int;
+         arg3               : int;
+         arg4               : Interfaces.C.Strings.chars_ptr;
+         arg5               : int) return int;  -- openssl/engine.h:650
+      dynlock_create_cb  : access function (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- openssl/engine.h:651
+      dynlock_lock_cb    : access procedure
+        (arg1 : int;
+         arg2               : System.Address;
+         arg3               : Interfaces.C.Strings.chars_ptr;
+         arg4               : int);  -- openssl/engine.h:652
       dynlock_destroy_cb : access procedure
-           (arg1 : System.Address;
-            arg2 : Interfaces.C.Strings.chars_ptr;
-            arg3 : int);  -- openssl/engine.h:653
+        (arg1 : System.Address;
+         arg2               : Interfaces.C.Strings.chars_ptr;
+         arg3               : int);  -- openssl/engine.h:653
    end record;
    pragma Convention (C_Pass_By_Copy, st_dynamic_LOCK_fns);  -- openssl/engine.h:648
 
@@ -831,10 +835,10 @@ package OpenSSL.Low_Level.engine_h is
 
    type st_dynamic_fns is record
       static_state : System.Address;  -- openssl/engine.h:657
-      the_err_fns : System.Address;  -- openssl/engine.h:658
-      ex_data_fns : System.Address;  -- openssl/engine.h:659
-      mem_fns : aliased dynamic_MEM_fns;  -- openssl/engine.h:660
-      lock_fns : aliased dynamic_LOCK_fns;  -- openssl/engine.h:661
+      the_err_fns  : System.Address;  -- openssl/engine.h:658
+      ex_data_fns  : System.Address;  -- openssl/engine.h:659
+      mem_fns      : aliased dynamic_MEM_fns;  -- openssl/engine.h:660
+      lock_fns     : aliased dynamic_LOCK_fns;  -- openssl/engine.h:661
    end record;
    pragma Convention (C_Pass_By_Copy, st_dynamic_fns);  -- openssl/engine.h:656
 
@@ -843,9 +847,9 @@ package OpenSSL.Low_Level.engine_h is
    type dynamic_v_check_fn is access function (arg1 : unsigned_long) return unsigned_long;  -- openssl/engine.h:673
 
    type dynamic_bind_engine is access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : System.Address) return int;  -- openssl/engine.h:695
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : System.Address) return int;  -- openssl/engine.h:695
 
    function ENGINE_get_static_state return System.Address;  -- openssl/engine.h:727
    pragma Import (C, ENGINE_get_static_state, "ENGINE_get_static_state");

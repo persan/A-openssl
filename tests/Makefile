@@ -17,5 +17,5 @@ all:
 
 ################################################################
 compile:
-	gprbuild -p -P protobuff-tests.gpr
+	gprbuild -d -Popenssl-tests.gpr openssl-tests-testharnesses-test_all.adb -p -k
 

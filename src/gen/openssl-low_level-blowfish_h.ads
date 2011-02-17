@@ -4,6 +4,7 @@ with Interfaces.C.Strings;
 
 package OpenSSL.Low_Level.blowfish_h is
 
+   package defs is
 
    BF_ENCRYPT : constant := 1;  --  openssl/blowfish.h:72
    BF_DECRYPT : constant := 0;  --  openssl/blowfish.h:73
@@ -11,7 +12,7 @@ package OpenSSL.Low_Level.blowfish_h is
 
    BF_ROUNDS : constant := 16;  --  openssl/blowfish.h:98
    BF_BLOCK : constant := 8;  --  openssl/blowfish.h:99
-
+end;
    type bf_key_st_P_array is array (0 .. 17) of aliased unsigned;
    type bf_key_st_S_array is array (0 .. 1023) of aliased unsigned;
    type bf_key_st is record

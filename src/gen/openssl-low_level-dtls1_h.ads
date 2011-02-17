@@ -1,35 +1,34 @@
 with Interfaces.C; use Interfaces.C;
---  limited --  with OpenSSL.Low_Level.ossl_typ_h;
-limited with OpenSSL.Low_Level.comp_h;
-limited with OpenSSL.Low_Level.ssl_h;
+with OpenSSL.Low_Level.comp_h;
+with OpenSSL.Low_Level.ssl_h;
 with OpenSSL.Low_Level.pqueue_h;
-with bits_time_h;
 with OpenSSL.Low_Level.ssl3_h;
-
+with OpenSSL.Low_Level.evp_h;
 package OpenSSL.Low_Level.dtls1_h is
 
+   package defs is
 
-   DTLS1_VERSION : constant := 16#FEFF#;  --  openssl/dtls1.h:82
-   DTLS1_BAD_VER : constant := 16#0100#;  --  openssl/dtls1.h:83
+      DTLS1_VERSION : constant := 16#FEFF#;  --  openssl/dtls1.h:82
+      DTLS1_BAD_VER : constant := 16#0100#;  --  openssl/dtls1.h:83
 
-   DTLS1_COOKIE_LENGTH : constant := 256;  --  openssl/dtls1.h:91
+      DTLS1_COOKIE_LENGTH : constant := 256;  --  openssl/dtls1.h:91
 
-   DTLS1_RT_HEADER_LENGTH : constant := 13;  --  openssl/dtls1.h:93
+      DTLS1_RT_HEADER_LENGTH : constant := 13;  --  openssl/dtls1.h:93
 
-   DTLS1_HM_HEADER_LENGTH : constant := 12;  --  openssl/dtls1.h:95
+      DTLS1_HM_HEADER_LENGTH : constant := 12;  --  openssl/dtls1.h:95
 
-   DTLS1_HM_BAD_FRAGMENT : constant := -2;  --  openssl/dtls1.h:97
-   DTLS1_HM_FRAGMENT_RETRY : constant := -3;  --  openssl/dtls1.h:98
+      DTLS1_HM_BAD_FRAGMENT : constant := -2;  --  openssl/dtls1.h:97
+      DTLS1_HM_FRAGMENT_RETRY : constant := -3;  --  openssl/dtls1.h:98
 
-   DTLS1_CCS_HEADER_LENGTH : constant := 1;  --  openssl/dtls1.h:100
+      DTLS1_CCS_HEADER_LENGTH : constant := 1;  --  openssl/dtls1.h:100
 
-   DTLS1_AL_HEADER_LENGTH : constant := 2;  --  openssl/dtls1.h:105
+      DTLS1_AL_HEADER_LENGTH : constant := 2;  --  openssl/dtls1.h:105
 
-   DTLS1_TMO_READ_COUNT : constant := 2;  --  openssl/dtls1.h:258
-   DTLS1_TMO_WRITE_COUNT : constant := 2;  --  openssl/dtls1.h:259
+      DTLS1_TMO_READ_COUNT : constant := 2;  --  openssl/dtls1.h:258
+      DTLS1_TMO_WRITE_COUNT : constant := 2;  --  openssl/dtls1.h:259
 
-   DTLS1_TMO_ALERT_COUNT : constant := 12;  --  openssl/dtls1.h:261
-
+      DTLS1_TMO_ALERT_COUNT : constant := 12;  --  openssl/dtls1.h:261
+   end defs;
    type dtls1_bitmap_st_max_seq_num_array is array (0 .. 7) of aliased unsigned_char;
    type dtls1_bitmap_st is record
       map : aliased unsigned_long;  -- openssl/dtls1.h:111

@@ -2,158 +2,160 @@ with Interfaces.C; use Interfaces.C;
 limited with OpenSSL.Low_Level.asn1_h;
 
 package OpenSSL.Low_Level.asn1_mac_h is
+   package defs is
 
-   --  unsupported macro: ASN1_MAC_ERR_LIB ERR_LIB_ASN1
-   --  arg-macro: procedure ASN1_MAC_H_err (f, r, line)
-   --    ERR_PUT_error(ASN1_MAC_ERR_LIB,(f),(r),_FILE_,(line))
-   --  arg-macro: procedure M_ASN1_D2I_vars (a, type, func)
-   --    ASN1_const_CTX c; type ret:=NULL; c.pp:=(const unsigned char **)pp; c.q:= *(const unsigned char **)pp; c.error:=ERR_R_NESTED_ASN1_ERROR; if ((a = NULL)  or else  ((*a) = NULL)) { if ((ret:=(type)func()) = NULL) { c.line:=_LINE_; goto err; } } else ret:=(*a);
-   --  arg-macro: procedure M_ASN1_D2I_Init ()
-   --    c.p:= *(const unsigned char **)pp; c.max:=(length = 0)?0:(c.p+length);
-   --  arg-macro: procedure M_ASN1_D2I_Finish_2 (a)
-   --    if (notasn1_const_Finish(andc)) { c.line:=_LINE_; goto err; } *(const unsigned char **)pp:=c.p; if (a /= NULL) (*a):=ret; return(ret);
-   --  arg-macro: procedure M_ASN1_D2I_Finish (a, func, e)
-   --    M_ASN1_D2I_Finish_2(a); err: ASN1_MAC_H_err((e),c.error,c.line); asn1_add_error(*(const unsigned char **)pp,(int)(c.q- *pp)); if ((ret /= NULL)  and then  ((a = NULL)  or else  (*a /= ret))) func(ret); return(NULL)
-   --  arg-macro: procedure M_ASN1_D2I_start_sequence ()
-   --    if (notasn1_GetSequence(andc,andlength)) { c.line:=_LINE_; goto err; }
-   --  arg-macro: procedure M_ASN1_D2I_begin ()
-   --    c.slen := length;
-   --  arg-macro: procedure M_ASN1_D2I_Finish_nolen (a, func, e)
-   --    *pp:=c.p; if (a /= NULL) (*a):=ret; return(ret); err: ASN1_MAC_H_err((e),c.error,c.line); asn1_add_error(*pp,(int)(c.q- *pp)); if ((ret /= NULL)  and then  ((a = NULL)  or else  (*a /= ret))) func(ret); return(NULL)
-   --  arg-macro: function M_ASN1_D2I_end_sequence ()
-   --    return ((c.infand1) = 0)?(c.slen <= 0): (c.eos:=ASN1_const_check_infinite_end(andc.p,c.slen));
-   --  arg-macro: procedure M_ASN1_D2I_get (b, func)
-   --    c.q:=c.p; if (func(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  arg-macro: procedure M_ASN1_D2I_get_x (type, b, func)
-   --    c.q:=c.p; if (((D2I_OF(type))func)(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  arg-macro: procedure M_ASN1_D2I_get_int (b, func)
-   --    c.q:=c.p; if (func(and(b),andc.p,c.slen) < 0) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  arg-macro: procedure M_ASN1_D2I_get_opt (b, func, type)
-   --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_UNIVERSALor(type)))) { M_ASN1_D2I_get(b,func); }
-   --  arg-macro: procedure M_ASN1_D2I_get_int_opt (b, func, type)
-   --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_UNIVERSALor(type)))) { M_ASN1_D2I_get_int(b,func); }
-   --  arg-macro: procedure M_ASN1_D2I_get_imp (b, func, type)
-   --    M_ASN1_next:=(_tmpand V_ASN1_CONSTRUCTED)ortype; c.q:=c.p; if (func(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; M_ASN1_next_prev := _tmp; goto err; } c.slen-=(c.p-c.q); M_ASN1_next_prev:=_tmp;
-   --  arg-macro: procedure M_ASN1_D2I_get_IMP_opt (b, func, tag, tif ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_CONTEXT_SPECIFICor(tag)))) { unsigned char _tmp := M_ASN1_next; M_ASN1_D2I_get_imp(b,func, type); }
-   --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_CONTEXT_SPECIFICor(tag)))) { unsigned char _tmp := M_ASN1_next; M_ASN1_D2I_get_imp(b,func, type); }
-   --  arg-macro: procedure M_ASN1_D2I_get_set (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
-   --    M_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
-   --  arg-macro: procedure M_ASN1_D2I_get_set_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
-   --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
-   --  arg-macro: procedure M_ASN1_D2I_get_set_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set(r,func,free_func); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set(r,func,free_func); }
-   --  arg-macro: procedure M_ASN1_D2I_get_set_opt_type (type, r, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set_type(type,r,func,free_func); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set_type(type,r,func,free_func); }
-   --  arg-macro: procedure M_ASN1_I2D_len_SET_opt (a, f)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_len_SET(a,f);
-   --  arg-macro: procedure M_ASN1_I2D_put_SET_opt (a, f)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_put_SET(a,f);
-   --  unsupported macro: M_ASN1_I2D_put_SEQUENCE_opt_type(type,a,f) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) M_ASN1_I2D_put_SEQUENCE_type(type,a,f);
-   --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_opt (b, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set(b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set(b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
-   --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_opt_type (type, b, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set_type(type,b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set_type(type,b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
-   --  arg-macro: procedure M_ASN1_D2I_get_seq (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL);
-   --    M_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL);
-   --  arg-macro: procedure M_ASN1_D2I_get_seq_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
-   --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
-   --  arg-macro: procedure M_ASN1_D2I_get_seq_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq(r,func,free_func); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq(r,func,free_func); }
-   --  arg-macro: procedure M_ASN1_D2I_get_seq_opt_type (type, r, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq_type(type,r,func,free_func); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq_type(type,r,func,free_func); }
-   --  arg-macro: procedure M_ASN1_D2I_get_IMP_set (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
-   --    M_ASN1_D2I_get_imp_set(r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
-   --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
-   --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
-   --  arg-macro: procedure M_ASN1_D2I_get_imp_set (r, func, free_fc.q:=c.p; if (d2i_ASN1_SET(and(r),andc.p,c.slen,(char *(*)())func, (void (*)())free_func,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --    c.q:=c.p; if (d2i_ASN1_SET(and(r),andc.p,c.slen,(char *(*)())func, (void (*)())free_func,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  unsupported macro: M_ASN1_D2I_get_imp_set_type(type,r,func,free_func,a,b) c.q=c.p; if (d2i_ASN1_SET_OF_ ##type(&(r),&c.p,c.slen,func, free_func,a,b) == NULL) { c.line=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  arg-macro: procedure M_ASN1_D2I_get_set_strings (r, func, a, b)
-   --    c.q:=c.p; if (d2i_ASN1_STRING_SET(and(r),andc.p,c.slen,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
-   --  arg-macro: procedure M_ASN1_D2I_get_EXP_opt (r, func, tag)
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (func(and(r),andc.p,Tlen) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_const_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
-   --  arg-macro: procedure M_ASN1_D2I_get_EXP_set_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET(and(r),andc.p,Tlen,(char *(*)())func, (void (*)())free_func, b,V_ASN1_UNIVERSAL) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
-   --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET(and(r),andc.p,Tlen,(char *(*)())func, (void (*)())free_func, b,V_ASN1_UNIVERSAL) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
-   --  unsupported macro: M_ASN1_D2I_get_EXP_set_opt_type(type,r,func,free_func,tag,b) if ((c.slen != 0) && (M_ASN1_next == (V_ASN1_CONSTRUCTED|V_ASN1_CONTEXT_SPECIFIC|tag))) { int Tinf,Ttag,Tclass; long Tlen; c.q=c.p; Tinf=ASN1_get_object(&c.p,&Tlen,&Ttag,&Tclass,c.slen); if (Tinf & 0x80) { c.error=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line=_LINE_; goto err; } if (Tinf == (V_ASN1_CONSTRUCTED+1)) Tlen = c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET_OF_ ##type(&(r),&c.p,Tlen,func, free_func,b,V_ASN1_UNIVERSAL) == NULL) { c.line=_LINE_; goto err; } if (Tinf == (V_ASN1_CONSTRUCTED+1)) { Tlen = c.slen - (c.p - c.q); if(!ASN1_check_infinite_end(&c.p, Tlen)) { c.error=ERR_R_MISSING_ASN1_EOS; c.line=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
-   --  arg-macro: procedure M_ASN1_New_Malloc (ret, type)
-   --    if ((ret:=(type *)OPENSSL_malloc(sizeof(type))) = NULL) { c.line:=_LINE_; goto err2; }
-   --  arg-macro: procedure M_ASN1_New (arg, func)
-   --    if (((arg):=func()) = NULL) return(NULL)
-   --  arg-macro: procedure M_ASN1_New_Error (a)
-   --    err2: ASN1_MAC_H_err((a),ERR_R_MALLOC_FAILURE,c.line); return(NULL)
-   --  unsupported macro: M_ASN1_next (*((unsigned char *)(c.p)))
-   --  unsupported macro: M_ASN1_next_prev (*((unsigned char *)(c.q)))
-   --  arg-macro: procedure M_ASN1_I2D_vars (a)
-   --    int r:=0,ret:=0; unsigned char *p; if (a = NULL) return(0)
-   --  arg-macro: procedure M_ASN1_I2D_len (a, f)
-   --    ret+=f(a,NULL)
-   --  arg-macro: procedure M_ASN1_I2D_len_IMP_opt (a, f)
-   --    if (a /= NULL) M_ASN1_I2D_len(a,f)
-   --  arg-macro: procedure M_ASN1_I2D_len_SET (a, f)
-   --    ret+=i2d_ASN1_SET(a,NULL,f,V_ASN1_SET,V_ASN1_UNIVERSAL,IS_SET);
-   --  unsupported macro: M_ASN1_I2D_len_SET_type(type,a,f) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,V_ASN1_SET, V_ASN1_UNIVERSAL,IS_SET);
-   --  arg-macro: procedure M_ASN1_I2D_len_SEQUENCE (a, f)
-   --    ret+=i2d_ASN1_SET(a,NULL,f,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL, IS_SEQUENCE);
-   --  unsupported macro: M_ASN1_I2D_len_SEQUENCE_type(type,a,f) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,V_ASN1_SEQUENCE, V_ASN1_UNIVERSAL,IS_SEQUENCE)
-   --  arg-macro: procedure M_ASN1_I2D_len_SEQUENCE_opt (a, f)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_len_SEQUENCE(a,f);
-   --  unsupported macro: M_ASN1_I2D_len_SEQUENCE_opt_type(type,a,f) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) M_ASN1_I2D_len_SEQUENCE_type(type,a,f);
-   --  arg-macro: procedure M_ASN1_I2D_len_IMP_SET (a, f, x)
-   --    ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC,IS_SET);
-   --  unsupported macro: M_ASN1_I2D_len_IMP_SET_type(type,a,f,x) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET);
-   --  arg-macro: procedure M_ASN1_I2D_len_IMP_SET_opt (a, f, x)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SET);
-   --  unsupported macro: M_ASN1_I2D_len_IMP_SET_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET);
-   --  arg-macro: procedure M_ASN1_I2D_len_IMP_SEQUENCE (a, f, x)
-   --    ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
-   --  arg-macro: procedure M_ASN1_I2D_len_IMP_SEQUENCE_opt (a, f, x)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
-   --  unsupported macro: M_ASN1_I2D_len_IMP_SEQUENCE_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
-   --  arg-macro: procedure M_ASN1_I2D_len_EXP_opt (a, f, mtag, v)
-   --    if (a /= NULL) { v:=f(a,NULL); ret+=ASN1_object_size(1,v,mtag); }
-   --  arg-macro: procedure M_ASN1_I2D_len_EXP_SET_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL,IS_SET); ret+=ASN1_object_size(1,v,mtag); }
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL,IS_SET); ret+=ASN1_object_size(1,v,mtag); }
-   --  arg-macro: procedure M_ASN1_I2D_len_EXP_SEQUENCE_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
-   --  unsupported macro: M_ASN1_I2D_len_EXP_SEQUENCE_opt_type(type,a,f,mtag,tag,v) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { v=i2d_ASN1_SET_OF_ ##type(a,NULL,f,tag, V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
-   --  arg-macro: procedure M_ASN1_I2D_put (a, f)
-   --    f(a,andp)
-   --  arg-macro: procedure M_ASN1_I2D_put_IMP_opt (a, f, t)
-   --    if (a /= NULL) { unsigned char *q:=p; f(a,andp); *q:=(V_ASN1_CONTEXT_SPECIFICortor(*qandV_ASN1_CONSTRUCTED)); }
-   --  arg-macro: procedure M_ASN1_I2D_put_SET (a, f)
-   --    i2d_ASN1_SET(a,andp,f,V_ASN1_SET, V_ASN1_UNIVERSAL,IS_SET)
-   --  unsupported macro: M_ASN1_I2D_put_SET_type(type,a,f) i2d_ASN1_SET_OF_ ##type(a,&p,f,V_ASN1_SET,V_ASN1_UNIVERSAL,IS_SET)
-   --  arg-macro: procedure M_ASN1_I2D_put_IMP_SET (a, f, x)
-   --    i2d_ASN1_SET(a,andp,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET)
-   --  unsupported macro: M_ASN1_I2D_put_IMP_SET_type(type,a,f,x) i2d_ASN1_SET_OF_ ##type(a,&p,f,x,V_ASN1_CONTEXT_SPECIFIC,IS_SET)
-   --  arg-macro: procedure M_ASN1_I2D_put_IMP_SEQUENCE (a, f, x)
-   --    i2d_ASN1_SET(a,andp,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SEQUENCE)
-   --  arg-macro: procedure M_ASN1_I2D_put_SEQUENCE (a, f)
-   --    i2d_ASN1_SET(a,andp,f,V_ASN1_SEQUENCE, V_ASN1_UNIVERSAL,IS_SEQUENCE)
-   --  unsupported macro: M_ASN1_I2D_put_SEQUENCE_type(type,a,f) i2d_ASN1_SET_OF_ ##type(a,&p,f,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL, IS_SEQUENCE)
-   --  arg-macro: procedure M_ASN1_I2D_put_SEQUENCE_opt (a, f)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_put_SEQUENCE(a,f);
-   --  arg-macro: procedure M_ASN1_I2D_put_IMP_SET_opt (a, f, x)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { i2d_ASN1_SET(a,andp,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SET); }
-   --  unsupported macro: M_ASN1_I2D_put_IMP_SET_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { i2d_ASN1_SET_OF_ ##type(a,&p,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SET); }
-   --  arg-macro: procedure M_ASN1_I2D_put_IMP_SEQUENCE_opt (a, f, x)
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { i2d_ASN1_SET(a,andp,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE); }
-   --  unsupported macro: M_ASN1_I2D_put_IMP_SEQUENCE_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { i2d_ASN1_SET_OF_ ##type(a,&p,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE); }
-   --  arg-macro: procedure M_ASN1_I2D_put_EXP_opt (a, f, tag, v)
-   --    if (a /= NULL) { ASN1_put_object(andp,1,v,tag,V_ASN1_CONTEXT_SPECIFIC); f(a,andp); }
-   --  arg-macro: procedure M_ASN1_I2D_put_EXP_SET_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SET); }
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SET); }
-   --  arg-macro: procedure M_ASN1_I2D_put_EXP_SEQUENCE_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SEQUENCE); }
-   --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SEQUENCE); }
-   --  unsupported macro: M_ASN1_I2D_put_EXP_SEQUENCE_opt_type(type,a,f,mtag,tag,v) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { ASN1_put_object(&p,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET_OF_ ##type(a,&p,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); }
-   --  arg-macro: procedure M_ASN1_I2D_seq_total ()
-   --    r:=ASN1_object_size(1,ret,V_ASN1_SEQUENCE); if (pp = NULL) return(r); p:= *pp; ASN1_put_object(andp,1,ret,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
-   --  arg-macro: procedure M_ASN1_I2D_INF_seq_start (tag, ctx)
-   --    *(p++):=(V_ASN1_CONSTRUCTEDor(tag)or(ctx)); *(p++):=16#80#
-   --  arg-macro: procedure M_ASN1_I2D_INF_seq_end ()
-   --    *(p++):=16#00#; *(p++):=16#00#
-   --  arg-macro: procedure M_ASN1_I2D_finish ()
-   --    *pp:=p; return(r);
+      --  unsupported macro: ASN1_MAC_ERR_LIB ERR_LIB_ASN1
+      --  arg-macro: procedure ASN1_MAC_H_err (f, r, line)
+      --    ERR_PUT_error(ASN1_MAC_ERR_LIB,(f),(r),_FILE_,(line))
+      --  arg-macro: procedure M_ASN1_D2I_vars (a, type, func)
+      --    ASN1_const_CTX c; type ret:=NULL; c.pp:=(const unsigned char **)pp; c.q:= *(const unsigned char **)pp; c.error:=ERR_R_NESTED_ASN1_ERROR; if ((a = NULL)  or else  ((*a) = NULL)) { if ((ret:=(type)func()) = NULL) { c.line:=_LINE_; goto err; } } else ret:=(*a);
+      --  arg-macro: procedure M_ASN1_D2I_Init ()
+      --    c.p:= *(const unsigned char **)pp; c.max:=(length = 0)?0:(c.p+length);
+      --  arg-macro: procedure M_ASN1_D2I_Finish_2 (a)
+      --    if (notasn1_const_Finish(andc)) { c.line:=_LINE_; goto err; } *(const unsigned char **)pp:=c.p; if (a /= NULL) (*a):=ret; return(ret);
+      --  arg-macro: procedure M_ASN1_D2I_Finish (a, func, e)
+      --    M_ASN1_D2I_Finish_2(a); err: ASN1_MAC_H_err((e),c.error,c.line); asn1_add_error(*(const unsigned char **)pp,(int)(c.q- *pp)); if ((ret /= NULL)  and then  ((a = NULL)  or else  (*a /= ret))) func(ret); return(NULL)
+      --  arg-macro: procedure M_ASN1_D2I_start_sequence ()
+      --    if (notasn1_GetSequence(andc,andlength)) { c.line:=_LINE_; goto err; }
+      --  arg-macro: procedure M_ASN1_D2I_begin ()
+      --    c.slen := length;
+      --  arg-macro: procedure M_ASN1_D2I_Finish_nolen (a, func, e)
+      --    *pp:=c.p; if (a /= NULL) (*a):=ret; return(ret); err: ASN1_MAC_H_err((e),c.error,c.line); asn1_add_error(*pp,(int)(c.q- *pp)); if ((ret /= NULL)  and then  ((a = NULL)  or else  (*a /= ret))) func(ret); return(NULL)
+      --  arg-macro: function M_ASN1_D2I_end_sequence ()
+      --    return ((c.infand1) = 0)?(c.slen <= 0): (c.eos:=ASN1_const_check_infinite_end(andc.p,c.slen));
+      --  arg-macro: procedure M_ASN1_D2I_get (b, func)
+      --    c.q:=c.p; if (func(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  arg-macro: procedure M_ASN1_D2I_get_x (type, b, func)
+      --    c.q:=c.p; if (((D2I_OF(type))func)(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  arg-macro: procedure M_ASN1_D2I_get_int (b, func)
+      --    c.q:=c.p; if (func(and(b),andc.p,c.slen) < 0) {c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  arg-macro: procedure M_ASN1_D2I_get_opt (b, func, type)
+      --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_UNIVERSALor(type)))) { M_ASN1_D2I_get(b,func); }
+      --  arg-macro: procedure M_ASN1_D2I_get_int_opt (b, func, type)
+      --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_UNIVERSALor(type)))) { M_ASN1_D2I_get_int(b,func); }
+      --  arg-macro: procedure M_ASN1_D2I_get_imp (b, func, type)
+      --    M_ASN1_next:=(_tmpand V_ASN1_CONSTRUCTED)ortype; c.q:=c.p; if (func(and(b),andc.p,c.slen) = NULL) {c.line:=_LINE_; M_ASN1_next_prev := _tmp; goto err; } c.slen-=(c.p-c.q); M_ASN1_next_prev:=_tmp;
+      --  arg-macro: procedure M_ASN1_D2I_get_IMP_opt (b, func, tag, tif ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_CONTEXT_SPECIFICor(tag)))) { unsigned char _tmp := M_ASN1_next; M_ASN1_D2I_get_imp(b,func, type); }
+      --    if ((c.slen /= 0)  and then  ((M_ASN1_next and (~V_ASN1_CONSTRUCTED)) = (V_ASN1_CONTEXT_SPECIFICor(tag)))) { unsigned char _tmp := M_ASN1_next; M_ASN1_D2I_get_imp(b,func, type); }
+      --  arg-macro: procedure M_ASN1_D2I_get_set (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
+      --    M_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
+      --  arg-macro: procedure M_ASN1_D2I_get_set_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
+      --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SET,V_ASN1_UNIVERSAL);
+      --  arg-macro: procedure M_ASN1_D2I_get_set_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set(r,func,free_func); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set(r,func,free_func); }
+      --  arg-macro: procedure M_ASN1_D2I_get_set_opt_type (type, r, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set_type(type,r,func,free_func); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SET))) { M_ASN1_D2I_get_set_type(type,r,func,free_func); }
+      --  arg-macro: procedure M_ASN1_I2D_len_SET_opt (a, f)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_len_SET(a,f);
+      --  arg-macro: procedure M_ASN1_I2D_put_SET_opt (a, f)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_put_SET(a,f);
+      --  unsupported macro: M_ASN1_I2D_put_SEQUENCE_opt_type(type,a,f) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) M_ASN1_I2D_put_SEQUENCE_type(type,a,f);
+      --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_opt (b, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set(b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set(b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
+      --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_opt_type (type, b, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set_type(type,b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONTEXT_SPECIFICorV_ASN1_CONSTRUCTEDor(tag)))) { M_ASN1_D2I_get_imp_set_type(type,b,func,free_func, tag,V_ASN1_CONTEXT_SPECIFIC); }
+      --  arg-macro: procedure M_ASN1_D2I_get_seq (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL);
+      --    M_ASN1_D2I_get_imp_set(r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL);
+      --  arg-macro: procedure M_ASN1_D2I_get_seq_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
+      --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
+      --  arg-macro: procedure M_ASN1_D2I_get_seq_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq(r,func,free_func); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq(r,func,free_func); }
+      --  arg-macro: procedure M_ASN1_D2I_get_seq_opt_type (type, r, func, if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq_type(type,r,func,free_func); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_UNIVERSALor V_ASN1_CONSTRUCTEDorV_ASN1_SEQUENCE))) { M_ASN1_D2I_get_seq_type(type,r,func,free_func); }
+      --  arg-macro: procedure M_ASN1_D2I_get_IMP_set (r, func, free_fM_ASN1_D2I_get_imp_set(r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
+      --    M_ASN1_D2I_get_imp_set(r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
+      --  arg-macro: procedure M_ASN1_D2I_get_IMP_set_type (type, r, func, M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
+      --    M_ASN1_D2I_get_imp_set_type(type,r,func,free_func, x,V_ASN1_CONTEXT_SPECIFIC);
+      --  arg-macro: procedure M_ASN1_D2I_get_imp_set (r, func, free_fc.q:=c.p; if (d2i_ASN1_SET(and(r),andc.p,c.slen,(char *(*)())func, (void (*)())free_func,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --    c.q:=c.p; if (d2i_ASN1_SET(and(r),andc.p,c.slen,(char *(*)())func, (void (*)())free_func,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  unsupported macro: M_ASN1_D2I_get_imp_set_type(type,r,func,free_func,a,b) c.q=c.p; if (d2i_ASN1_SET_OF_ ##type(&(r),&c.p,c.slen,func, free_func,a,b) == NULL) { c.line=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  arg-macro: procedure M_ASN1_D2I_get_set_strings (r, func, a, b)
+      --    c.q:=c.p; if (d2i_ASN1_STRING_SET(and(r),andc.p,c.slen,a,b) = NULL) { c.line:=_LINE_; goto err; } c.slen-=(c.p-c.q);
+      --  arg-macro: procedure M_ASN1_D2I_get_EXP_opt (r, func, tag)
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (func(and(r),andc.p,Tlen) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_const_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
+      --  arg-macro: procedure M_ASN1_D2I_get_EXP_set_opt (r, func, free_fif ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET(and(r),andc.p,Tlen,(char *(*)())func, (void (*)())free_func, b,V_ASN1_UNIVERSAL) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
+      --    if ((c.slen /= 0)  and then  (M_ASN1_next = (V_ASN1_CONSTRUCTEDorV_ASN1_CONTEXT_SPECIFICortag))) { int Tinf,Ttag,Tclass; long Tlen; c.q:=c.p; Tinf:=ASN1_get_object(andc.p,andTlen,andTtag,andTclass,c.slen); if (Tinf and 16#80#) { c.error:=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) Tlen := c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET(and(r),andc.p,Tlen,(char *(*)())func, (void (*)())free_func, b,V_ASN1_UNIVERSAL) = NULL) { c.line:=_LINE_; goto err; } if (Tinf = (V_ASN1_CONSTRUCTED+1)) { Tlen := c.slen - (c.p - c.q); if(notASN1_check_infinite_end(andc.p, Tlen)) { c.error:=ERR_R_MISSING_ASN1_EOS; c.line:=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
+      --  unsupported macro: M_ASN1_D2I_get_EXP_set_opt_type(type,r,func,free_func,tag,b) if ((c.slen != 0) && (M_ASN1_next == (V_ASN1_CONSTRUCTED|V_ASN1_CONTEXT_SPECIFIC|tag))) { int Tinf,Ttag,Tclass; long Tlen; c.q=c.p; Tinf=ASN1_get_object(&c.p,&Tlen,&Ttag,&Tclass,c.slen); if (Tinf & 0x80) { c.error=ERR_R_BAD_ASN1_OBJECT_HEADER; c.line=_LINE_; goto err; } if (Tinf == (V_ASN1_CONSTRUCTED+1)) Tlen = c.slen - (c.p - c.q) - 2; if (d2i_ASN1_SET_OF_ ##type(&(r),&c.p,Tlen,func, free_func,b,V_ASN1_UNIVERSAL) == NULL) { c.line=_LINE_; goto err; } if (Tinf == (V_ASN1_CONSTRUCTED+1)) { Tlen = c.slen - (c.p - c.q); if(!ASN1_check_infinite_end(&c.p, Tlen)) { c.error=ERR_R_MISSING_ASN1_EOS; c.line=_LINE_; goto err; } } c.slen-=(c.p-c.q); }
+      --  arg-macro: procedure M_ASN1_New_Malloc (ret, type)
+      --    if ((ret:=(type *)OPENSSL_malloc(sizeof(type))) = NULL) { c.line:=_LINE_; goto err2; }
+      --  arg-macro: procedure M_ASN1_New (arg, func)
+      --    if (((arg):=func()) = NULL) return(NULL)
+      --  arg-macro: procedure M_ASN1_New_Error (a)
+      --    err2: ASN1_MAC_H_err((a),ERR_R_MALLOC_FAILURE,c.line); return(NULL)
+      --  unsupported macro: M_ASN1_next (*((unsigned char *)(c.p)))
+      --  unsupported macro: M_ASN1_next_prev (*((unsigned char *)(c.q)))
+      --  arg-macro: procedure M_ASN1_I2D_vars (a)
+      --    int r:=0,ret:=0; unsigned char *p; if (a = NULL) return(0)
+      --  arg-macro: procedure M_ASN1_I2D_len (a, f)
+      --    ret+=f(a,NULL)
+      --  arg-macro: procedure M_ASN1_I2D_len_IMP_opt (a, f)
+      --    if (a /= NULL) M_ASN1_I2D_len(a,f)
+      --  arg-macro: procedure M_ASN1_I2D_len_SET (a, f)
+      --    ret+=i2d_ASN1_SET(a,NULL,f,V_ASN1_SET,V_ASN1_UNIVERSAL,IS_SET);
+      --  unsupported macro: M_ASN1_I2D_len_SET_type(type,a,f) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,V_ASN1_SET, V_ASN1_UNIVERSAL,IS_SET);
+      --  arg-macro: procedure M_ASN1_I2D_len_SEQUENCE (a, f)
+      --    ret+=i2d_ASN1_SET(a,NULL,f,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL, IS_SEQUENCE);
+      --  unsupported macro: M_ASN1_I2D_len_SEQUENCE_type(type,a,f) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,V_ASN1_SEQUENCE, V_ASN1_UNIVERSAL,IS_SEQUENCE)
+      --  arg-macro: procedure M_ASN1_I2D_len_SEQUENCE_opt (a, f)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_len_SEQUENCE(a,f);
+      --  unsupported macro: M_ASN1_I2D_len_SEQUENCE_opt_type(type,a,f) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) M_ASN1_I2D_len_SEQUENCE_type(type,a,f);
+      --  arg-macro: procedure M_ASN1_I2D_len_IMP_SET (a, f, x)
+      --    ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC,IS_SET);
+      --  unsupported macro: M_ASN1_I2D_len_IMP_SET_type(type,a,f,x) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET);
+      --  arg-macro: procedure M_ASN1_I2D_len_IMP_SET_opt (a, f, x)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SET);
+      --  unsupported macro: M_ASN1_I2D_len_IMP_SET_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET);
+      --  arg-macro: procedure M_ASN1_I2D_len_IMP_SEQUENCE (a, f, x)
+      --    ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
+      --  arg-macro: procedure M_ASN1_I2D_len_IMP_SEQUENCE_opt (a, f, x)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) ret+=i2d_ASN1_SET(a,NULL,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
+      --  unsupported macro: M_ASN1_I2D_len_IMP_SEQUENCE_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) ret+=i2d_ASN1_SET_OF_ ##type(a,NULL,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE);
+      --  arg-macro: procedure M_ASN1_I2D_len_EXP_opt (a, f, mtag, v)
+      --    if (a /= NULL) { v:=f(a,NULL); ret+=ASN1_object_size(1,v,mtag); }
+      --  arg-macro: procedure M_ASN1_I2D_len_EXP_SET_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL,IS_SET); ret+=ASN1_object_size(1,v,mtag); }
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL,IS_SET); ret+=ASN1_object_size(1,v,mtag); }
+      --  arg-macro: procedure M_ASN1_I2D_len_EXP_SEQUENCE_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { v:=i2d_ASN1_SET(a,NULL,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
+      --  unsupported macro: M_ASN1_I2D_len_EXP_SEQUENCE_opt_type(type,a,f,mtag,tag,v) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { v=i2d_ASN1_SET_OF_ ##type(a,NULL,f,tag, V_ASN1_UNIVERSAL, IS_SEQUENCE); ret+=ASN1_object_size(1,v,mtag); }
+      --  arg-macro: procedure M_ASN1_I2D_put (a, f)
+      --    f(a,andp)
+      --  arg-macro: procedure M_ASN1_I2D_put_IMP_opt (a, f, t)
+      --    if (a /= NULL) { unsigned char *q:=p; f(a,andp); *q:=(V_ASN1_CONTEXT_SPECIFICortor(*qandV_ASN1_CONSTRUCTED)); }
+      --  arg-macro: procedure M_ASN1_I2D_put_SET (a, f)
+      --    i2d_ASN1_SET(a,andp,f,V_ASN1_SET, V_ASN1_UNIVERSAL,IS_SET)
+      --  unsupported macro: M_ASN1_I2D_put_SET_type(type,a,f) i2d_ASN1_SET_OF_ ##type(a,&p,f,V_ASN1_SET,V_ASN1_UNIVERSAL,IS_SET)
+      --  arg-macro: procedure M_ASN1_I2D_put_IMP_SET (a, f, x)
+      --    i2d_ASN1_SET(a,andp,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SET)
+      --  unsupported macro: M_ASN1_I2D_put_IMP_SET_type(type,a,f,x) i2d_ASN1_SET_OF_ ##type(a,&p,f,x,V_ASN1_CONTEXT_SPECIFIC,IS_SET)
+      --  arg-macro: procedure M_ASN1_I2D_put_IMP_SEQUENCE (a, f, x)
+      --    i2d_ASN1_SET(a,andp,f,x, V_ASN1_CONTEXT_SPECIFIC,IS_SEQUENCE)
+      --  arg-macro: procedure M_ASN1_I2D_put_SEQUENCE (a, f)
+      --    i2d_ASN1_SET(a,andp,f,V_ASN1_SEQUENCE, V_ASN1_UNIVERSAL,IS_SEQUENCE)
+      --  unsupported macro: M_ASN1_I2D_put_SEQUENCE_type(type,a,f) i2d_ASN1_SET_OF_ ##type(a,&p,f,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL, IS_SEQUENCE)
+      --  arg-macro: procedure M_ASN1_I2D_put_SEQUENCE_opt (a, f)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) M_ASN1_I2D_put_SEQUENCE(a,f);
+      --  arg-macro: procedure M_ASN1_I2D_put_IMP_SET_opt (a, f, x)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { i2d_ASN1_SET(a,andp,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SET); }
+      --  unsupported macro: M_ASN1_I2D_put_IMP_SET_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { i2d_ASN1_SET_OF_ ##type(a,&p,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SET); }
+      --  arg-macro: procedure M_ASN1_I2D_put_IMP_SEQUENCE_opt (a, f, x)
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { i2d_ASN1_SET(a,andp,f,x,V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE); }
+      --  unsupported macro: M_ASN1_I2D_put_IMP_SEQUENCE_opt_type(type,a,f,x) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { i2d_ASN1_SET_OF_ ##type(a,&p,f,x, V_ASN1_CONTEXT_SPECIFIC, IS_SEQUENCE); }
+      --  arg-macro: procedure M_ASN1_I2D_put_EXP_opt (a, f, tag, v)
+      --    if (a /= NULL) { ASN1_put_object(andp,1,v,tag,V_ASN1_CONTEXT_SPECIFIC); f(a,andp); }
+      --  arg-macro: procedure M_ASN1_I2D_put_EXP_SET_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SET); }
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SET); }
+      --  arg-macro: procedure M_ASN1_I2D_put_EXP_SEQUENCE_opt (a, f, mtag, tagif ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SEQUENCE); }
+      --    if ((a /= NULL)  and then  (sk_num(a) /= 0)) { ASN1_put_object(andp,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET(a,andp,f,tag,V_ASN1_UNIVERSAL,IS_SEQUENCE); }
+      --  unsupported macro: M_ASN1_I2D_put_EXP_SEQUENCE_opt_type(type,a,f,mtag,tag,v) if ((a != NULL) && (sk_ ##type ##_num(a) != 0)) { ASN1_put_object(&p,1,v,mtag,V_ASN1_CONTEXT_SPECIFIC); i2d_ASN1_SET_OF_ ##type(a,&p,f,tag,V_ASN1_UNIVERSAL, IS_SEQUENCE); }
+      --  arg-macro: procedure M_ASN1_I2D_seq_total ()
+      --    r:=ASN1_object_size(1,ret,V_ASN1_SEQUENCE); if (pp = NULL) return(r); p:= *pp; ASN1_put_object(andp,1,ret,V_ASN1_SEQUENCE,V_ASN1_UNIVERSAL)
+      --  arg-macro: procedure M_ASN1_I2D_INF_seq_start (tag, ctx)
+      --    *(p++):=(V_ASN1_CONSTRUCTEDor(tag)or(ctx)); *(p++):=16#80#
+      --  arg-macro: procedure M_ASN1_I2D_INF_seq_end ()
+      --    *(p++):=16#00#; *(p++):=16#00#
+      --  arg-macro: procedure M_ASN1_I2D_finish ()
+      --    *pp:=p; return(r);
+   end defs;
    function asn1_GetSequence (c : access OpenSSL.Low_Level.asn1_h.ASN1_const_CTX; length : access long) return int;  -- openssl/asn1_mac.h:572
    pragma Import (C, asn1_GetSequence, "asn1_GetSequence");
 

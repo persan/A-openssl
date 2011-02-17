@@ -5,12 +5,13 @@ with System;
 
 package OpenSSL.Low_Level.aes_h is
 
-
+   package defs is
    AES_ENCRYPT : constant := 1;  --  openssl/aes.h:63
    AES_DECRYPT : constant := 0;  --  openssl/aes.h:64
 
    AES_MAXNR : constant := 14;  --  openssl/aes.h:68
    AES_BLOCK_SIZE : constant := 16;  --  openssl/aes.h:69
+   end defs;
 
    type aes_key_st_rd_key_array is array (0 .. 59) of aliased unsigned;
    type aes_key_st is record

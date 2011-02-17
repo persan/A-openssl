@@ -3,45 +3,46 @@ with System;
 with Interfaces.C.Strings;
 --  limited --  with OpenSSL.Low_Level.ossl_typ_h;
 with OpenSSL.Low_Level.stack_h;
-
+with OpenSSL.Low_Level.crypto_h;
 package OpenSSL.Low_Level.ui_h is
 
+   package defs is
 
-   UI_INPUT_FLAG_ECHO : constant := 16#01#;  --  openssl/ui.h:151
+      UI_INPUT_FLAG_ECHO : constant := 16#01#;  --  openssl/ui.h:151
 
-   UI_INPUT_FLAG_DEFAULT_PWD : constant := 16#02#;  --  openssl/ui.h:157
+      UI_INPUT_FLAG_DEFAULT_PWD : constant := 16#02#;  --  openssl/ui.h:157
 
-   UI_INPUT_FLAG_USER_BASE : constant := 16;  --  openssl/ui.h:168
+      UI_INPUT_FLAG_USER_BASE : constant := 16;  --  openssl/ui.h:168
 
-   UI_CTRL_PRINT_ERRORS : constant := 1;  --  openssl/ui.h:220
+      UI_CTRL_PRINT_ERRORS : constant := 1;  --  openssl/ui.h:220
 
-   UI_CTRL_IS_REDOABLE : constant := 2;  --  openssl/ui.h:224
-   --  arg-macro: procedure UI_set_app_data (s, arg)
-   --    UI_set_ex_data(s,0,arg)
-   --  arg-macro: procedure UI_get_app_data (s)
-   --    UI_get_ex_data(s,0)
+      UI_CTRL_IS_REDOABLE : constant := 2;  --  openssl/ui.h:224
+      --  arg-macro: procedure UI_set_app_data (s, arg)
+      --    UI_set_ex_data(s,0,arg)
+      --  arg-macro: procedure UI_get_app_data (s)
+      --    UI_get_ex_data(s,0)
 
-   UI_F_GENERAL_ALLOCATE_BOOLEAN : constant := 108;  --  openssl/ui.h:358
-   UI_F_GENERAL_ALLOCATE_PROMPT : constant := 109;  --  openssl/ui.h:359
-   UI_F_GENERAL_ALLOCATE_STRING : constant := 100;  --  openssl/ui.h:360
-   UI_F_UI_CTRL : constant := 111;  --  openssl/ui.h:361
-   UI_F_UI_DUP_ERROR_STRING : constant := 101;  --  openssl/ui.h:362
-   UI_F_UI_DUP_INFO_STRING : constant := 102;  --  openssl/ui.h:363
-   UI_F_UI_DUP_INPUT_BOOLEAN : constant := 110;  --  openssl/ui.h:364
-   UI_F_UI_DUP_INPUT_STRING : constant := 103;  --  openssl/ui.h:365
-   UI_F_UI_DUP_VERIFY_STRING : constant := 106;  --  openssl/ui.h:366
-   UI_F_UI_GET0_RESULT : constant := 107;  --  openssl/ui.h:367
-   UI_F_UI_NEW_METHOD : constant := 104;  --  openssl/ui.h:368
-   UI_F_UI_SET_RESULT : constant := 105;  --  openssl/ui.h:369
+      UI_F_GENERAL_ALLOCATE_BOOLEAN : constant := 108;  --  openssl/ui.h:358
+      UI_F_GENERAL_ALLOCATE_PROMPT : constant := 109;  --  openssl/ui.h:359
+      UI_F_GENERAL_ALLOCATE_STRING : constant := 100;  --  openssl/ui.h:360
+      UI_F_UI_CTRL       : constant := 111;  --  openssl/ui.h:361
+      UI_F_UI_DUP_ERROR_STRING : constant := 101;  --  openssl/ui.h:362
+      UI_F_UI_DUP_INFO_STRING : constant := 102;  --  openssl/ui.h:363
+      UI_F_UI_DUP_INPUT_BOOLEAN : constant := 110;  --  openssl/ui.h:364
+      UI_F_UI_DUP_INPUT_STRING : constant := 103;  --  openssl/ui.h:365
+      UI_F_UI_DUP_VERIFY_STRING : constant := 106;  --  openssl/ui.h:366
+      UI_F_UI_GET0_RESULT : constant := 107;  --  openssl/ui.h:367
+      UI_F_UI_NEW_METHOD : constant := 104;  --  openssl/ui.h:368
+      UI_F_UI_SET_RESULT : constant := 105;  --  openssl/ui.h:369
 
-   UI_R_COMMON_OK_AND_CANCEL_CHARACTERS : constant := 104;  --  openssl/ui.h:372
-   UI_R_INDEX_TOO_LARGE : constant := 102;  --  openssl/ui.h:373
-   UI_R_INDEX_TOO_SMALL : constant := 103;  --  openssl/ui.h:374
-   UI_R_NO_RESULT_BUFFER : constant := 105;  --  openssl/ui.h:375
-   UI_R_RESULT_TOO_LARGE : constant := 100;  --  openssl/ui.h:376
-   UI_R_RESULT_TOO_SMALL : constant := 101;  --  openssl/ui.h:377
-   UI_R_UNKNOWN_CONTROL_COMMAND : constant := 106;  --  openssl/ui.h:378
-
+      UI_R_COMMON_OK_AND_CANCEL_CHARACTERS : constant := 104;  --  openssl/ui.h:372
+      UI_R_INDEX_TOO_LARGE : constant := 102;  --  openssl/ui.h:373
+      UI_R_INDEX_TOO_SMALL : constant := 103;  --  openssl/ui.h:374
+      UI_R_NO_RESULT_BUFFER : constant := 105;  --  openssl/ui.h:375
+      UI_R_RESULT_TOO_LARGE : constant := 100;  --  openssl/ui.h:376
+      UI_R_RESULT_TOO_SMALL : constant := 101;  --  openssl/ui.h:377
+      UI_R_UNKNOWN_CONTROL_COMMAND : constant := 106;  --  openssl/ui.h:378
+   end defs;
    function UI_new return System.Address;  -- openssl/ui.h:83
    pragma Import (C, UI_new, "UI_new");
 
@@ -52,61 +53,61 @@ package OpenSSL.Low_Level.ui_h is
    pragma Import (C, UI_free, "UI_free");
 
    function UI_add_input_string
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      flags : int;
+     (the_ui     : System.Address;
+      prompt     : Interfaces.C.Strings.chars_ptr;
+      flags      : int;
       result_buf : Interfaces.C.Strings.chars_ptr;
-      minsize : int;
-      maxsize : int) return int;  -- openssl/ui.h:130
+      minsize    : int;
+      maxsize    : int) return int;  -- openssl/ui.h:130
    pragma Import (C, UI_add_input_string, "UI_add_input_string");
 
    function UI_dup_input_string
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      flags : int;
+     (the_ui     : System.Address;
+      prompt     : Interfaces.C.Strings.chars_ptr;
+      flags      : int;
       result_buf : Interfaces.C.Strings.chars_ptr;
-      minsize : int;
-      maxsize : int) return int;  -- openssl/ui.h:132
+      minsize    : int;
+      maxsize    : int) return int;  -- openssl/ui.h:132
    pragma Import (C, UI_dup_input_string, "UI_dup_input_string");
 
    function UI_add_verify_string
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      flags : int;
+     (the_ui     : System.Address;
+      prompt     : Interfaces.C.Strings.chars_ptr;
+      flags      : int;
       result_buf : Interfaces.C.Strings.chars_ptr;
-      minsize : int;
-      maxsize : int;
-      test_buf : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:134
+      minsize    : int;
+      maxsize    : int;
+      test_buf   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:134
    pragma Import (C, UI_add_verify_string, "UI_add_verify_string");
 
    function UI_dup_verify_string
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      flags : int;
+     (the_ui     : System.Address;
+      prompt     : Interfaces.C.Strings.chars_ptr;
+      flags      : int;
       result_buf : Interfaces.C.Strings.chars_ptr;
-      minsize : int;
-      maxsize : int;
-      test_buf : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:136
+      minsize    : int;
+      maxsize    : int;
+      test_buf   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:136
    pragma Import (C, UI_dup_verify_string, "UI_dup_verify_string");
 
    function UI_add_input_boolean
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      action_desc : Interfaces.C.Strings.chars_ptr;
-      ok_chars : Interfaces.C.Strings.chars_ptr;
+     (the_ui       : System.Address;
+      prompt       : Interfaces.C.Strings.chars_ptr;
+      action_desc  : Interfaces.C.Strings.chars_ptr;
+      ok_chars     : Interfaces.C.Strings.chars_ptr;
       cancel_chars : Interfaces.C.Strings.chars_ptr;
-      flags : int;
-      result_buf : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:138
+      flags        : int;
+      result_buf   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:138
    pragma Import (C, UI_add_input_boolean, "UI_add_input_boolean");
 
    function UI_dup_input_boolean
-     (the_ui : System.Address;
-      prompt : Interfaces.C.Strings.chars_ptr;
-      action_desc : Interfaces.C.Strings.chars_ptr;
-      ok_chars : Interfaces.C.Strings.chars_ptr;
+     (the_ui       : System.Address;
+      prompt       : Interfaces.C.Strings.chars_ptr;
+      action_desc  : Interfaces.C.Strings.chars_ptr;
+      ok_chars     : Interfaces.C.Strings.chars_ptr;
       cancel_chars : Interfaces.C.Strings.chars_ptr;
-      flags : int;
-      result_buf : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:141
+      flags        : int;
+      result_buf   : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:141
    pragma Import (C, UI_dup_input_boolean, "UI_dup_input_boolean");
 
    function UI_add_info_string (the_ui : System.Address; text : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:144
@@ -122,7 +123,7 @@ package OpenSSL.Low_Level.ui_h is
    pragma Import (C, UI_dup_error_string, "UI_dup_error_string");
 
    function UI_construct_prompt
-     (ui_method : System.Address;
+     (ui_method   : System.Address;
       object_desc : Interfaces.C.Strings.chars_ptr;
       object_name : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- openssl/ui.h:188
    pragma Import (C, UI_construct_prompt, "UI_construct_prompt");
@@ -141,23 +142,23 @@ package OpenSSL.Low_Level.ui_h is
 
    function UI_ctrl
      (the_ui : System.Address;
-      cmd : int;
-      i : long;
-      p : System.Address;
-      f : access procedure) return int;  -- openssl/ui.h:214
+      cmd    : int;
+      i      : long;
+      p      : System.Address;
+      f      : access procedure) return int;  -- openssl/ui.h:214
    pragma Import (C, UI_ctrl, "UI_ctrl");
 
    function UI_get_ex_new_index
-     (argl : long;
-      argp : System.Address;
-      new_func : access function
+     (argl      : long;
+      argp      : System.Address;
+      new_func  : access function
         (arg1 : System.Address;
          arg2 : System.Address;
          arg3 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg4 : int;
          arg5 : long;
          arg6 : System.Address) return int;
-      dup_func : access function
+      dup_func  : access function
         (arg1 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg2 : access OpenSSL.Low_Level.crypto_h.crypto_ex_data_st;
          arg3 : System.Address;
@@ -174,7 +175,7 @@ package OpenSSL.Low_Level.ui_h is
    pragma Import (C, UI_get_ex_new_index, "UI_get_ex_new_index");
 
    function UI_set_ex_data
-     (r : System.Address;
+     (r   : System.Address;
       idx : int;
       arg : System.Address) return int;  -- openssl/ui.h:232
    pragma Import (C, UI_set_ex_data, "UI_set_ex_data");
@@ -206,7 +207,7 @@ package OpenSSL.Low_Level.ui_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_UI_STRING);  -- openssl/ui.h:291
 
-   type UI_string_types is 
+   type UI_string_types is
      (UIT_NONE,
       UIT_PROMPT,
       UIT_VERIFY,
@@ -237,9 +238,9 @@ package OpenSSL.Low_Level.ui_h is
    pragma Import (C, UI_method_set_closer, "UI_method_set_closer");
 
    function UI_method_set_prompt_constructor (method : System.Address; prompt_constructor : access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:313
+                                                (arg1 : System.Address;
+                                                 arg2 : Interfaces.C.Strings.chars_ptr;
+                                                 arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:313
    pragma Import (C, UI_method_set_prompt_constructor, "UI_method_set_prompt_constructor");
 
    function UI_method_get_opener (method : System.Address) return access function (arg1 : System.Address) return int;  -- openssl/ui.h:314
@@ -258,9 +259,9 @@ package OpenSSL.Low_Level.ui_h is
    pragma Import (C, UI_method_get_closer, "UI_method_get_closer");
 
    function UI_method_get_prompt_constructor (method : System.Address) return access function
-        (arg1 : System.Address;
-         arg2 : Interfaces.C.Strings.chars_ptr;
-         arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- openssl/ui.h:319
+     (arg1 : System.Address;
+      arg2 : Interfaces.C.Strings.chars_ptr;
+      arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- openssl/ui.h:319
    pragma Import (C, UI_method_get_prompt_constructor, "UI_method_get_prompt_constructor");
 
    function UI_get_string_type (uis : System.Address) return UI_string_types;  -- openssl/ui.h:325
@@ -289,21 +290,21 @@ package OpenSSL.Low_Level.ui_h is
 
    function UI_set_result
      (the_ui : System.Address;
-      uis : System.Address;
+      uis    : System.Address;
       result : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/ui.h:341
    pragma Import (C, UI_set_result, "UI_set_result");
 
    function UI_UTIL_read_pw_string
-     (buf : Interfaces.C.Strings.chars_ptr;
+     (buf    : Interfaces.C.Strings.chars_ptr;
       length : int;
       prompt : Interfaces.C.Strings.chars_ptr;
       verify : int) return int;  -- openssl/ui.h:345
    pragma Import (C, UI_UTIL_read_pw_string, "UI_UTIL_read_pw_string");
 
    function UI_UTIL_read_pw
-     (buf : Interfaces.C.Strings.chars_ptr;
-      buff : Interfaces.C.Strings.chars_ptr;
-      size : int;
+     (buf    : Interfaces.C.Strings.chars_ptr;
+      buff   : Interfaces.C.Strings.chars_ptr;
+      size   : int;
       prompt : Interfaces.C.Strings.chars_ptr;
       verify : int) return int;  -- openssl/ui.h:346
    pragma Import (C, UI_UTIL_read_pw, "UI_UTIL_read_pw");

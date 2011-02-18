@@ -1,7 +1,7 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
-limited with OpenSSL.Low_Level.asn1_h;
+limited with OpenSSL.Low_Level.asnl_h;
 limited with OpenSSL.Low_Level.bio_h;
 
 package OpenSSL.Low_Level.objects_h is
@@ -89,10 +89,10 @@ package OpenSSL.Low_Level.objects_h is
       arg    : System.Address);  -- openssl/objects.h:1000
    pragma Import (C, OBJ_NAME_do_all_sorted, "OBJ_NAME_do_all_sorted");
 
-   function OBJ_dup (o : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/objects.h:1003
+   function OBJ_dup (o : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st) return access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/objects.h:1003
    pragma Import (C, OBJ_dup, "OBJ_dup");
 
-   function OBJ_nid2obj (n : int) return access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/objects.h:1004
+   function OBJ_nid2obj (n : int) return access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/objects.h:1004
    pragma Import (C, OBJ_nid2obj, "OBJ_nid2obj");
 
    function OBJ_nid2ln (n : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/objects.h:1005
@@ -101,16 +101,16 @@ package OpenSSL.Low_Level.objects_h is
    function OBJ_nid2sn (n : int) return Interfaces.C.Strings.chars_ptr;  -- openssl/objects.h:1006
    pragma Import (C, OBJ_nid2sn, "OBJ_nid2sn");
 
-   function OBJ_obj2nid (o : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/objects.h:1007
+   function OBJ_obj2nid (o : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/objects.h:1007
    pragma Import (C, OBJ_obj2nid, "OBJ_obj2nid");
 
-   function OBJ_txt2obj (s : Interfaces.C.Strings.chars_ptr; no_name : int) return access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/objects.h:1008
+   function OBJ_txt2obj (s : Interfaces.C.Strings.chars_ptr; no_name : int) return access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/objects.h:1008
    pragma Import (C, OBJ_txt2obj, "OBJ_txt2obj");
 
    function OBJ_obj2txt
      (buf     : Interfaces.C.Strings.chars_ptr;
       buf_len : int;
-      a       : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      a       : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st;
       no_name : int) return int;  -- openssl/objects.h:1009
    pragma Import (C, OBJ_obj2txt, "OBJ_obj2txt");
 
@@ -123,7 +123,7 @@ package OpenSSL.Low_Level.objects_h is
    function OBJ_sn2nid (s : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/objects.h:1012
    pragma Import (C, OBJ_sn2nid, "OBJ_sn2nid");
 
-   function OBJ_cmp (a : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st; b : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/objects.h:1013
+   function OBJ_cmp (a : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st; b : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/objects.h:1013
    pragma Import (C, OBJ_cmp, "OBJ_cmp");
 
    function OBJ_bsearch_u
@@ -146,7 +146,7 @@ package OpenSSL.Low_Level.objects_h is
    function OBJ_new_nid (num : int) return int;  -- openssl/objects.h:1100
    pragma Import (C, OBJ_new_nid, "OBJ_new_nid");
 
-   function OBJ_add_object (obj : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/objects.h:1101
+   function OBJ_add_object (obj : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/objects.h:1101
    pragma Import (C, OBJ_add_object, "OBJ_add_object");
 
    function OBJ_create

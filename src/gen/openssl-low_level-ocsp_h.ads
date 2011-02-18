@@ -3,7 +3,7 @@ with Interfaces.C; use Interfaces.C;
 with OpenSSL.Low_Level.stack_h;
 limited with OpenSSL.Low_Level.x509_h;
 limited with OpenSSL.Low_Level.x509v3_h;
-with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.asnl_h;
 with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.bio_h;
 with Interfaces.C.Strings;
@@ -11,7 +11,7 @@ with System;
 with OpenSSL.Low_Level.evp_h;
 with OpenSSL.Low_Level.x509_vfy_h;
 with OpenSSL.Low_Level.x509_vfy_h;
-with OpenSSL.Low_Level.asn1t_h;
+with OpenSSL.Low_Level.asnlt_h;
 package OpenSSL.Low_Level.ocsp_h is
 
    package defs is
@@ -139,9 +139,9 @@ package OpenSSL.Low_Level.ocsp_h is
    end defs;
    type ocsp_cert_id_st is record
       hashAlgorithm  : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ocsp.h:101
-      issuerNameHash : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:102
-      issuerKeyHash  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:103
-      serialNumber   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:104
+      issuerNameHash : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:102
+      issuerKeyHash  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:103
+      serialNumber   : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:104
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_cert_id_st);  -- openssl/ocsp.h:99
 
@@ -166,7 +166,7 @@ package OpenSSL.Low_Level.ocsp_h is
    pragma Convention (C_Pass_By_Copy, stack_st_OCSP_ONEREQ);  -- openssl/ocsp.h:119
 
    type ocsp_req_info_st is record
-      version           : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:131
+      version           : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:131
       requestorName     : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ocsp.h:132
       requestList       : access stack_st_OCSP_ONEREQ;  -- openssl/ocsp.h:133
       requestExtensions : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ocsp.h:134
@@ -177,7 +177,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    type ocsp_signature_st is record
       signatureAlgorithm : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ocsp.h:144
-      signature          : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:145
+      signature          : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:145
       certs              : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ocsp.h:146
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_signature_st);  -- openssl/ocsp.h:142
@@ -193,15 +193,15 @@ package OpenSSL.Low_Level.ocsp_h is
    subtype OCSP_REQUEST is ocsp_request_st;
 
    type ocsp_resp_bytes_st is record
-      responseType : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ocsp.h:182
-      response     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:183
+      responseType : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ocsp.h:182
+      response     : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:183
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_resp_bytes_st);  -- openssl/ocsp.h:180
 
    subtype OCSP_RESPBYTES is ocsp_resp_bytes_st;
 
    type ocsp_response_st is record
-      responseStatus : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:192
+      responseStatus : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:192
       responseBytes  : access OCSP_RESPBYTES;  -- openssl/ocsp.h:193
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_response_st);  -- openssl/ocsp.h:190
@@ -211,7 +211,7 @@ package OpenSSL.Low_Level.ocsp_h is
          when 0 =>
             byName : access OpenSSL.Low_Level.x509_h.X509_name_st;  -- openssl/ocsp.h:206
          when others =>
-            byKey  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:207
+            byKey  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:207
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_51);
@@ -228,8 +228,8 @@ package OpenSSL.Low_Level.ocsp_h is
    pragma Convention (C_Pass_By_Copy, stack_st_OCSP_RESPID);  -- openssl/ocsp.h:211
 
    type ocsp_revoked_info_st is record
-      revocationTime   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:224
-      revocationReason : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:225
+      revocationTime   : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:224
+      revocationReason : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:225
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_revoked_info_st);  -- openssl/ocsp.h:222
 
@@ -258,8 +258,8 @@ package OpenSSL.Low_Level.ocsp_h is
    type ocsp_single_response_st is record
       certId           : access OCSP_CERTID;  -- openssl/ocsp.h:255
       certStatus       : access OCSP_CERTSTATUS;  -- openssl/ocsp.h:256
-      thisUpdate       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:257
-      nextUpdate       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:258
+      thisUpdate       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:257
+      nextUpdate       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:258
       singleExtensions : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ocsp.h:259
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_single_response_st);  -- openssl/ocsp.h:253
@@ -272,9 +272,9 @@ package OpenSSL.Low_Level.ocsp_h is
    pragma Convention (C_Pass_By_Copy, stack_st_OCSP_SINGLERESP);  -- openssl/ocsp.h:262
 
    type ocsp_response_data_st is record
-      version            : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:274
+      version            : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:274
       responderId        : access OpenSSL.Low_Level.ocsp_h.ocsp_responder_id_st;  -- openssl/ocsp.h:275
-      producedAt         : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:276
+      producedAt         : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:276
       responses          : access stack_st_OCSP_SINGLERESP;  -- openssl/ocsp.h:277
       responseExtensions : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ocsp.h:278
    end record;
@@ -285,7 +285,7 @@ package OpenSSL.Low_Level.ocsp_h is
    type ocsp_basic_response_st is record
       tbsResponseData    : access OCSP_RESPDATA;  -- openssl/ocsp.h:305
       signatureAlgorithm : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ocsp.h:306
-      signature          : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:307
+      signature          : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:307
       certs              : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ocsp.h:308
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_basic_response_st);  -- openssl/ocsp.h:303
@@ -293,9 +293,9 @@ package OpenSSL.Low_Level.ocsp_h is
    subtype OCSP_BASICRESP is ocsp_basic_response_st;
 
    type ocsp_crl_id_st is record
-      crlUrl  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:339
-      crlNum  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:340
-      crlTime : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ocsp.h:341
+      crlUrl  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:339
+      crlNum  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:340
+      crlTime : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ocsp.h:341
    end record;
    pragma Convention (C_Pass_By_Copy, ocsp_crl_id_st);  -- openssl/ocsp.h:337
 
@@ -349,8 +349,8 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_cert_id_new
      (dgst         : access constant OpenSSL.Low_Level.evp_h.env_md_st;
       issuerName   : access OpenSSL.Low_Level.x509_h.X509_name_st;
-      issuerKey    : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      serialNumber : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return access OCSP_CERTID;  -- openssl/ocsp.h:415
+      issuerKey    : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
+      serialNumber : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return access OCSP_CERTID;  -- openssl/ocsp.h:415
    pragma Import (C, OCSP_cert_id_new, "OCSP_cert_id_new");
 
    function OCSP_request_add0_id (req : access OCSP_REQUEST; cid : access OCSP_CERTID) return access OCSP_ONEREQ;  -- openssl/ocsp.h:420
@@ -426,8 +426,8 @@ package OpenSSL.Low_Level.ocsp_h is
    pragma Import (C, OCSP_resp_find_status, "OCSP_resp_find_status");
 
    function OCSP_check_validity
-     (thisupd : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      nextupd : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+     (thisupd : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
+      nextupd : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       sec     : long;
       maxsec  : long) return int;  -- openssl/ocsp.h:452
    pragma Import (C, OCSP_check_validity, "OCSP_check_validity");
@@ -481,9 +481,9 @@ package OpenSSL.Low_Level.ocsp_h is
       cid     : access OCSP_CERTID;
       status  : int;
       reason  : int;
-      revtime : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      thisupd : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      nextupd : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return access OCSP_SINGLERESP;  -- openssl/ocsp.h:471
+      revtime : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
+      thisupd : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
+      nextupd : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return access OCSP_SINGLERESP;  -- openssl/ocsp.h:471
    pragma Import (C, OCSP_basic_add1_status, "OCSP_basic_add1_status");
 
    function OCSP_basic_add1_cert (resp : access OCSP_BASICRESP; cert : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/ocsp.h:476
@@ -524,7 +524,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_REQUEST_get_ext_by_OBJ
      (x       : access OCSP_REQUEST;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:491
    pragma Import (C, OCSP_REQUEST_get_ext_by_OBJ, "OCSP_REQUEST_get_ext_by_OBJ");
 
@@ -572,7 +572,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_ONEREQ_get_ext_by_OBJ
      (x       : access OCSP_ONEREQ;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:502
    pragma Import (C, OCSP_ONEREQ_get_ext_by_OBJ, "OCSP_ONEREQ_get_ext_by_OBJ");
 
@@ -620,7 +620,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_BASICRESP_get_ext_by_OBJ
      (x       : access OCSP_BASICRESP;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:513
    pragma Import (C, OCSP_BASICRESP_get_ext_by_OBJ, "OCSP_BASICRESP_get_ext_by_OBJ");
 
@@ -668,7 +668,7 @@ package OpenSSL.Low_Level.ocsp_h is
 
    function OCSP_SINGLERESP_get_ext_by_OBJ
      (x       : access OCSP_SINGLERESP;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ocsp.h:524
    pragma Import (C, OCSP_SINGLERESP_get_ext_by_OBJ, "OCSP_SINGLERESP_get_ext_by_OBJ");
 
@@ -705,7 +705,7 @@ package OpenSSL.Low_Level.ocsp_h is
       loc : int) return int;  -- openssl/ocsp.h:531
    pragma Import (C, OCSP_SINGLERESP_add_ext, "OCSP_SINGLERESP_add_ext");
 
-   OCSP_SINGLERESP_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:533
+   OCSP_SINGLERESP_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:533
    pragma Import (C, OCSP_SINGLERESP_it, "OCSP_SINGLERESP_it");
 
    function i2d_OCSP_SINGLERESP (a : access OCSP_SINGLERESP; c_out : System.Address) return int;  -- openssl/ocsp.h:533
@@ -723,7 +723,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_SINGLERESP_new return access OCSP_SINGLERESP;  -- openssl/ocsp.h:533
    pragma Import (C, OCSP_SINGLERESP_new, "OCSP_SINGLERESP_new");
 
-   OCSP_CERTSTATUS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:534
+   OCSP_CERTSTATUS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:534
    pragma Import (C, OCSP_CERTSTATUS_it, "OCSP_CERTSTATUS_it");
 
    function i2d_OCSP_CERTSTATUS (a : access OCSP_CERTSTATUS; c_out : System.Address) return int;  -- openssl/ocsp.h:534
@@ -741,7 +741,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_CERTSTATUS_new return access OCSP_CERTSTATUS;  -- openssl/ocsp.h:534
    pragma Import (C, OCSP_CERTSTATUS_new, "OCSP_CERTSTATUS_new");
 
-   OCSP_REVOKEDINFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:535
+   OCSP_REVOKEDINFO_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:535
    pragma Import (C, OCSP_REVOKEDINFO_it, "OCSP_REVOKEDINFO_it");
 
    function i2d_OCSP_REVOKEDINFO (a : access OCSP_REVOKEDINFO; c_out : System.Address) return int;  -- openssl/ocsp.h:535
@@ -759,7 +759,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_REVOKEDINFO_new return access OCSP_REVOKEDINFO;  -- openssl/ocsp.h:535
    pragma Import (C, OCSP_REVOKEDINFO_new, "OCSP_REVOKEDINFO_new");
 
-   OCSP_BASICRESP_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:536
+   OCSP_BASICRESP_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:536
    pragma Import (C, OCSP_BASICRESP_it, "OCSP_BASICRESP_it");
 
    function i2d_OCSP_BASICRESP (a : access OCSP_BASICRESP; c_out : System.Address) return int;  -- openssl/ocsp.h:536
@@ -777,7 +777,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_BASICRESP_new return access OCSP_BASICRESP;  -- openssl/ocsp.h:536
    pragma Import (C, OCSP_BASICRESP_new, "OCSP_BASICRESP_new");
 
-   OCSP_RESPDATA_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:537
+   OCSP_RESPDATA_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:537
    pragma Import (C, OCSP_RESPDATA_it, "OCSP_RESPDATA_it");
 
    function i2d_OCSP_RESPDATA (a : access OCSP_RESPDATA; c_out : System.Address) return int;  -- openssl/ocsp.h:537
@@ -795,7 +795,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_RESPDATA_new return access OCSP_RESPDATA;  -- openssl/ocsp.h:537
    pragma Import (C, OCSP_RESPDATA_new, "OCSP_RESPDATA_new");
 
-   OCSP_RESPID_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:538
+   OCSP_RESPID_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:538
    pragma Import (C, OCSP_RESPID_it, "OCSP_RESPID_it");
 
    function i2d_OCSP_RESPID (a : access OpenSSL.Low_Level.ocsp_h.ocsp_responder_id_st; c_out : System.Address) return int;  -- openssl/ocsp.h:538
@@ -813,7 +813,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_RESPID_new return access OpenSSL.Low_Level.ocsp_h.ocsp_responder_id_st;  -- openssl/ocsp.h:538
    pragma Import (C, OCSP_RESPID_new, "OCSP_RESPID_new");
 
-   OCSP_RESPONSE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:539
+   OCSP_RESPONSE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:539
    pragma Import (C, OCSP_RESPONSE_it, "OCSP_RESPONSE_it");
 
    function i2d_OCSP_RESPONSE (a : access OpenSSL.Low_Level.ocsp_h.ocsp_response_st; c_out : System.Address) return int;  -- openssl/ocsp.h:539
@@ -831,7 +831,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_RESPONSE_new return access OpenSSL.Low_Level.ocsp_h.ocsp_response_st;  -- openssl/ocsp.h:539
    pragma Import (C, OCSP_RESPONSE_new, "OCSP_RESPONSE_new");
 
-   OCSP_RESPBYTES_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:540
+   OCSP_RESPBYTES_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:540
    pragma Import (C, OCSP_RESPBYTES_it, "OCSP_RESPBYTES_it");
 
    function i2d_OCSP_RESPBYTES (a : access OCSP_RESPBYTES; c_out : System.Address) return int;  -- openssl/ocsp.h:540
@@ -849,7 +849,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_RESPBYTES_new return access OCSP_RESPBYTES;  -- openssl/ocsp.h:540
    pragma Import (C, OCSP_RESPBYTES_new, "OCSP_RESPBYTES_new");
 
-   OCSP_ONEREQ_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:541
+   OCSP_ONEREQ_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:541
    pragma Import (C, OCSP_ONEREQ_it, "OCSP_ONEREQ_it");
 
    function i2d_OCSP_ONEREQ (a : access OCSP_ONEREQ; c_out : System.Address) return int;  -- openssl/ocsp.h:541
@@ -867,7 +867,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_ONEREQ_new return access OCSP_ONEREQ;  -- openssl/ocsp.h:541
    pragma Import (C, OCSP_ONEREQ_new, "OCSP_ONEREQ_new");
 
-   OCSP_CERTID_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:542
+   OCSP_CERTID_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:542
    pragma Import (C, OCSP_CERTID_it, "OCSP_CERTID_it");
 
    function i2d_OCSP_CERTID (a : access OCSP_CERTID; c_out : System.Address) return int;  -- openssl/ocsp.h:542
@@ -885,7 +885,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_CERTID_new return access OCSP_CERTID;  -- openssl/ocsp.h:542
    pragma Import (C, OCSP_CERTID_new, "OCSP_CERTID_new");
 
-   OCSP_REQUEST_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:543
+   OCSP_REQUEST_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:543
    pragma Import (C, OCSP_REQUEST_it, "OCSP_REQUEST_it");
 
    function i2d_OCSP_REQUEST (a : access OCSP_REQUEST; c_out : System.Address) return int;  -- openssl/ocsp.h:543
@@ -903,7 +903,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_REQUEST_new return access OCSP_REQUEST;  -- openssl/ocsp.h:543
    pragma Import (C, OCSP_REQUEST_new, "OCSP_REQUEST_new");
 
-   OCSP_SIGNATURE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:544
+   OCSP_SIGNATURE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:544
    pragma Import (C, OCSP_SIGNATURE_it, "OCSP_SIGNATURE_it");
 
    function i2d_OCSP_SIGNATURE (a : access OCSP_SIGNATURE; c_out : System.Address) return int;  -- openssl/ocsp.h:544
@@ -921,7 +921,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_SIGNATURE_new return access OCSP_SIGNATURE;  -- openssl/ocsp.h:544
    pragma Import (C, OCSP_SIGNATURE_new, "OCSP_SIGNATURE_new");
 
-   OCSP_REQINFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:545
+   OCSP_REQINFO_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:545
    pragma Import (C, OCSP_REQINFO_it, "OCSP_REQINFO_it");
 
    function i2d_OCSP_REQINFO (a : access OCSP_REQINFO; c_out : System.Address) return int;  -- openssl/ocsp.h:545
@@ -939,7 +939,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_REQINFO_new return access OCSP_REQINFO;  -- openssl/ocsp.h:545
    pragma Import (C, OCSP_REQINFO_new, "OCSP_REQINFO_new");
 
-   OCSP_CRLID_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:546
+   OCSP_CRLID_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:546
    pragma Import (C, OCSP_CRLID_it, "OCSP_CRLID_it");
 
    function i2d_OCSP_CRLID (a : access OCSP_CRLID; c_out : System.Address) return int;  -- openssl/ocsp.h:546
@@ -957,7 +957,7 @@ package OpenSSL.Low_Level.ocsp_h is
    function OCSP_CRLID_new_2 return access OCSP_CRLID;  -- openssl/ocsp.h:546
    pragma Import (C, OCSP_CRLID_new_2, "OCSP_CRLID_new");
 
-   OCSP_SERVICELOC_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/ocsp.h:547
+   OCSP_SERVICELOC_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/ocsp.h:547
    pragma Import (C, OCSP_SERVICELOC_it, "OCSP_SERVICELOC_it");
 
    function i2d_OCSP_SERVICELOC (a : access OCSP_SERVICELOC; c_out : System.Address) return int;  -- openssl/ocsp.h:547

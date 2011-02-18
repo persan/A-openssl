@@ -1,13 +1,13 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
-with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.asnl_h;
 limited with OpenSSL.Low_Level.bio_h;
 with Interfaces.C_Streams;
 with OpenSSL.Low_Level.bn_h;
 with OpenSSL.Low_Level.crypto_h;
 with OpenSSL.Low_Level.evp_h;
-with OpenSSL.Low_Level.asn1t_h;
+with OpenSSL.Low_Level.asnlt_h;
 package OpenSSL.Low_Level.rsa_h is
    package defs is
 
@@ -378,7 +378,7 @@ package OpenSSL.Low_Level.rsa_h is
    function RSA_null_method return access constant  rsa_meth_st;  -- openssl/rsa.h:320
    pragma Import (C, RSA_null_method, "RSA_null_method");
 
-   RSAPublicKey_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/rsa.h:322
+   RSAPublicKey_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/rsa.h:322
    pragma Import (C, RSAPublicKey_it, "RSAPublicKey_it");
 
    function i2d_RSAPublicKey (a : access constant  rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:322
@@ -390,7 +390,7 @@ package OpenSSL.Low_Level.rsa_h is
       len  : long) return access  rsa_st;  -- openssl/rsa.h:322
    pragma Import (C, d2i_RSAPublicKey, "d2i_RSAPublicKey");
 
-   RSAPrivateKey_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/rsa.h:323
+   RSAPrivateKey_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/rsa.h:323
    pragma Import (C, RSAPrivateKey_it, "RSAPrivateKey_it");
 
    function i2d_RSAPrivateKey (a : access constant  rsa_st; c_out : System.Address) return int;  -- openssl/rsa.h:323

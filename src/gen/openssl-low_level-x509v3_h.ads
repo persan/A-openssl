@@ -3,14 +3,15 @@ with System;
 limited with OpenSSL.Low_Level.conf_h;
 with Interfaces.C.Strings;
 limited with OpenSSL.Low_Level.bio_h;
-with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.asnl_h;
 --  with OpenSSL.Low_Level.ossl_typ_h;
 limited with OpenSSL.Low_Level.x509_h;
 with OpenSSL.Low_Level.stack_h;
 --  limited --  with Interfaces.C_Streams;
 limited with OpenSSL.Low_Level.safestack_h;
-with OpenSSL.Low_Level.asn1t_h;
-
+with OpenSSL.Low_Level.asnlt_h;
+with Interfaces.C_Streams;
+limited with OpenSSL.Low_Level.x509_vfy_h;
 package OpenSSL.Low_Level.x509v3_h is
 
    package defs is
@@ -343,7 +344,7 @@ package OpenSSL.Low_Level.x509v3_h is
    type v3_ext_method is record
       ext_nid   : aliased int;  -- openssl/x509v3.h:96
       ext_flags : aliased int;  -- openssl/x509v3.h:97
-      it        : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st_EXP;  -- openssl/x509v3.h:99
+      it        : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:99
       ext_new   : access function return System.Address;  -- openssl/x509v3.h:101
       ext_free  : access procedure (arg1 : System.Address);  -- openssl/x509v3.h:102
       d2i       : access function
@@ -408,35 +409,35 @@ package OpenSSL.Low_Level.x509v3_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_X509V3_EXT_METHOD);  -- openssl/x509v3.h:143
 
-   subtype ENUMERATED_NAMES is OpenSSL.Low_Level.asn1_h.BIT_STRING_BITNAME_st;
+   subtype ENUMERATED_NAMES is OpenSSL.Low_Level.asnl_h.BIT_STRING_BITNAME_st;
 
    type BASIC_CONSTRAINTS_st is record
       ca      : aliased int;  -- openssl/x509v3.h:153
-      pathlen : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:154
+      pathlen : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:154
    end record;
    pragma Convention (C_Pass_By_Copy, BASIC_CONSTRAINTS_st);  -- openssl/x509v3.h:152
 
    subtype BASIC_CONSTRAINTS is BASIC_CONSTRAINTS_st;
 
    type PKEY_USAGE_PERIOD_st is record
-      notBefore : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:159
-      notAfter  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:160
+      notBefore : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:159
+      notAfter  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:160
    end record;
    pragma Convention (C_Pass_By_Copy, PKEY_USAGE_PERIOD_st);  -- openssl/x509v3.h:158
 
    subtype PKEY_USAGE_PERIOD is PKEY_USAGE_PERIOD_st;
 
    type otherName_st is record
-      type_id : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:164
-      value   : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:165
+      type_id : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:164
+      value   : access OpenSSL.Low_Level.asnl_h.asn1_type_st;  -- openssl/x509v3.h:165
    end record;
    pragma Convention (C_Pass_By_Copy, otherName_st);  -- openssl/x509v3.h:163
 
    subtype OTHERNAME is otherName_st;
 
    type EDIPartyName_st is record
-      nameAssigner : access OpenSSL.Low_Level.asn1_h.ASN1_STRING;  -- openssl/x509v3.h:169
-      partyName    : access OpenSSL.Low_Level.asn1_h.ASN1_STRING;  -- openssl/x509v3.h:170
+      nameAssigner : access OpenSSL.Low_Level.asnl_h.ASN1_STRING;  -- openssl/x509v3.h:169
+      partyName    : access OpenSSL.Low_Level.asnl_h.ASN1_STRING;  -- openssl/x509v3.h:170
    end record;
    pragma Convention (C_Pass_By_Copy, EDIPartyName_st);  -- openssl/x509v3.h:168
 
@@ -449,31 +450,31 @@ package OpenSSL.Low_Level.x509v3_h is
          when 1 =>
             the_otherName             : access OTHERNAME;  -- openssl/x509v3.h:188
          when 2 =>
-            rfc822Name                : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:189
+            rfc822Name                : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:189
          when 3 =>
-            dNSName                   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:190
+            dNSName                   : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:190
          when 4 =>
-            x400Address               : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:191
+            x400Address               : access OpenSSL.Low_Level.asnl_h.asn1_type_st;  -- openssl/x509v3.h:191
          when 5 =>
             directoryName             : access OpenSSL.Low_Level.x509_h.X509_name_st;  -- openssl/x509v3.h:192
          when 6 =>
             the_ediPartyName          : access EDIPARTYNAME;  -- openssl/x509v3.h:193
          when 7 =>
-            uniformResourceIdentifier : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:194
+            uniformResourceIdentifier : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:194
          when 8 =>
-            iPAddress                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:195
+            iPAddress                 : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:195
          when 9 =>
-            registeredID              : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:196
+            registeredID              : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:196
          when 10 =>
-            ip                        : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:199
+            ip                        : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:199
          when 11 =>
             dirn                      : access OpenSSL.Low_Level.x509_h.X509_name_st;  -- openssl/x509v3.h:200
          when 12 =>
-            ia5                       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:201
+            ia5                       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:201
          when 13 =>
-            rid                       : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:202
+            rid                       : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:202
          when others =>
-            other                     : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:203
+            other                     : access OpenSSL.Low_Level.asnl_h.asn1_type_st;  -- openssl/x509v3.h:203
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_44);
@@ -490,7 +491,7 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype GENERAL_NAMES is stack_st_GENERAL_NAME;
 
    type ACCESS_DESCRIPTION_st is record
-      method   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:210
+      method   : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:210
       location : access GENERAL_NAME;  -- openssl/x509v3.h:211
    end record;
    pragma Convention (C_Pass_By_Copy, ACCESS_DESCRIPTION_st);  -- openssl/x509v3.h:209
@@ -500,7 +501,7 @@ package OpenSSL.Low_Level.x509v3_h is
    type stack_st_ACCESS_DESCRIPTION;
    subtype AUTHORITY_INFO_ACCESS is stack_st_ACCESS_DESCRIPTION;
 
-   subtype EXTENDED_KEY_USAGE is OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;
+   subtype EXTENDED_KEY_USAGE is OpenSSL.Low_Level.asnl_h.stack_st_ASN1_OBJECT;
 
    type stack_st_GENERAL_NAME is record
       stack : aliased OpenSSL.Low_Level.stack_h.u_STACK;  -- openssl/x509v3.h:218
@@ -533,7 +534,7 @@ package OpenSSL.Low_Level.x509v3_h is
 
    type DIST_POINT_st is record
       distpoint  : access DIST_POINT_NAME;  -- openssl/x509v3.h:249
-      reasons    : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:250
+      reasons    : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:250
       CRLissuer  : access GENERAL_NAMES;  -- openssl/x509v3.h:251
       dp_reasons : aliased int;  -- openssl/x509v3.h:252
    end record;
@@ -548,15 +549,15 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_DIST_POINT);  -- openssl/x509v3.h:257
 
    type AUTHORITY_KEYID_st is record
-      keyid  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:261
+      keyid  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:261
       issuer : access GENERAL_NAMES;  -- openssl/x509v3.h:262
-      serial : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:263
+      serial : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:263
    end record;
    pragma Convention (C_Pass_By_Copy, AUTHORITY_KEYID_st);  -- openssl/x509v3.h:260
 
    type SXNET_ID_st is record
-      zone : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:269
-      user : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:270
+      zone : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:269
+      user : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:270
    end record;
    pragma Convention (C_Pass_By_Copy, SXNET_ID_st);  -- openssl/x509v3.h:268
 
@@ -568,7 +569,7 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_SXNETID);  -- openssl/x509v3.h:273
 
    type SXNET_st is record
-      version : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:277
+      version : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:277
       ids     : access stack_st_SXNETID;  -- openssl/x509v3.h:278
    end record;
    pragma Convention (C_Pass_By_Copy, SXNET_st);  -- openssl/x509v3.h:276
@@ -576,8 +577,8 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype SXNET is SXNET_st;
 
    type NOTICEREF_st is record
-      organization : access OpenSSL.Low_Level.asn1_h.ASN1_STRING;  -- openssl/x509v3.h:282
-      noticenos    : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_INTEGER;  -- openssl/x509v3.h:283
+      organization : access OpenSSL.Low_Level.asnl_h.ASN1_STRING;  -- openssl/x509v3.h:282
+      noticenos    : access OpenSSL.Low_Level.asnl_h.stack_st_ASN1_INTEGER;  -- openssl/x509v3.h:283
    end record;
    pragma Convention (C_Pass_By_Copy, NOTICEREF_st);  -- openssl/x509v3.h:281
 
@@ -585,7 +586,7 @@ package OpenSSL.Low_Level.x509v3_h is
 
    type USERNOTICE_st is record
       the_noticeref : access NOTICEREF;  -- openssl/x509v3.h:287
-      exptext       : access OpenSSL.Low_Level.asn1_h.ASN1_STRING;  -- openssl/x509v3.h:288
+      exptext       : access OpenSSL.Low_Level.asnl_h.ASN1_STRING;  -- openssl/x509v3.h:288
    end record;
    pragma Convention (C_Pass_By_Copy, USERNOTICE_st);  -- openssl/x509v3.h:286
 
@@ -594,17 +595,17 @@ package OpenSSL.Low_Level.x509v3_h is
    type anon_46 (discr : unsigned := 0) is record
       case discr is
          when 0 =>
-            cpsuri         : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:294
+            cpsuri         : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:294
          when 1 =>
             the_usernotice : access USERNOTICE;  -- openssl/x509v3.h:295
          when others =>
-            other          : access OpenSSL.Low_Level.asn1_h.asn1_type_st;  -- openssl/x509v3.h:296
+            other          : access OpenSSL.Low_Level.asnl_h.asn1_type_st;  -- openssl/x509v3.h:296
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, anon_46);
    pragma Unchecked_Union (anon_46);
    type POLICYQUALINFO_st is record
-      pqualid : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:292
+      pqualid : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:292
       d       : anon_46;  -- openssl/x509v3.h:297
    end record;
    pragma Convention (C_Pass_By_Copy, POLICYQUALINFO_st);  -- openssl/x509v3.h:291
@@ -617,7 +618,7 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_POLICYQUALINFO);  -- openssl/x509v3.h:300
 
    type POLICYINFO_st is record
-      policyid   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:304
+      policyid   : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:304
       qualifiers : access stack_st_POLICYQUALINFO;  -- openssl/x509v3.h:305
    end record;
    pragma Convention (C_Pass_By_Copy, POLICYINFO_st);  -- openssl/x509v3.h:303
@@ -633,8 +634,8 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_POLICYINFO);  -- openssl/x509v3.h:310
 
    type POLICY_MAPPING_st is record
-      issuerDomainPolicy  : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:314
-      subjectDomainPolicy : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:315
+      issuerDomainPolicy  : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:314
+      subjectDomainPolicy : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:315
    end record;
    pragma Convention (C_Pass_By_Copy, POLICY_MAPPING_st);  -- openssl/x509v3.h:313
 
@@ -649,8 +650,8 @@ package OpenSSL.Low_Level.x509v3_h is
 
    type GENERAL_SUBTREE_st is record
       base    : access GENERAL_NAME;  -- openssl/x509v3.h:323
-      minimum : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:324
-      maximum : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:325
+      minimum : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:324
+      maximum : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:325
    end record;
    pragma Convention (C_Pass_By_Copy, GENERAL_SUBTREE_st);  -- openssl/x509v3.h:322
 
@@ -668,30 +669,30 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, NAME_CONSTRAINTS_st);  -- openssl/x509v3.h:330
 
    type POLICY_CONSTRAINTS_st is record
-      requireExplicitPolicy : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:336
-      inhibitPolicyMapping  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:337
+      requireExplicitPolicy : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:336
+      inhibitPolicyMapping  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:337
    end record;
    pragma Convention (C_Pass_By_Copy, POLICY_CONSTRAINTS_st);  -- openssl/x509v3.h:335
 
    subtype POLICY_CONSTRAINTS is POLICY_CONSTRAINTS_st;
 
    type PROXY_POLICY_st is record
-      policyLanguage : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509v3.h:343
-      policy         : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:344
+      policyLanguage : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509v3.h:343
+      policy         : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:344
    end record;
    pragma Convention (C_Pass_By_Copy, PROXY_POLICY_st);  -- openssl/x509v3.h:341
 
    subtype PROXY_POLICY is PROXY_POLICY_st;
 
    type PROXY_CERT_INFO_EXTENSION_st is record
-      pcPathLengthConstraint : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:349
+      pcPathLengthConstraint : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:349
       proxyPolicy            : access PROXY_POLICY;  -- openssl/x509v3.h:350
    end record;
    pragma Convention (C_Pass_By_Copy, PROXY_CERT_INFO_EXTENSION_st);  -- openssl/x509v3.h:347
 
    subtype PROXY_CERT_INFO_EXTENSION is PROXY_CERT_INFO_EXTENSION_st;
 
-   PROXY_POLICY_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:353
+   PROXY_POLICY_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:353
    pragma Import (C, PROXY_POLICY_it, "PROXY_POLICY_it");
 
    function i2d_PROXY_POLICY (a : access PROXY_POLICY; c_out : System.Address) return int;  -- openssl/x509v3.h:353
@@ -709,7 +710,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function PROXY_POLICY_new return access PROXY_POLICY;  -- openssl/x509v3.h:353
    pragma Import (C, PROXY_POLICY_new, "PROXY_POLICY_new");
 
-   PROXY_CERT_INFO_EXTENSION_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:354
+   PROXY_CERT_INFO_EXTENSION_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:354
    pragma Import (C, PROXY_CERT_INFO_EXTENSION_it, "PROXY_CERT_INFO_EXTENSION_it");
 
    function i2d_PROXY_CERT_INFO_EXTENSION (a : access PROXY_CERT_INFO_EXTENSION; c_out : System.Address) return int;  -- openssl/x509v3.h:354
@@ -731,7 +732,7 @@ package OpenSSL.Low_Level.x509v3_h is
       distpoint       : access DIST_POINT_NAME;  -- openssl/x509v3.h:358
       onlyuser        : aliased int;  -- openssl/x509v3.h:359
       onlyCA          : aliased int;  -- openssl/x509v3.h:360
-      onlysomereasons : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:361
+      onlysomereasons : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:361
       indirectCRL     : aliased int;  -- openssl/x509v3.h:362
       onlyattr        : aliased int;  -- openssl/x509v3.h:363
    end record;
@@ -758,7 +759,7 @@ package OpenSSL.Low_Level.x509v3_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_X509_PURPOSE);  -- openssl/x509v3.h:505
 
-   BASIC_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:507
+   BASIC_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:507
    pragma Import (C, BASIC_CONSTRAINTS_it, "BASIC_CONSTRAINTS_it");
 
    function i2d_BASIC_CONSTRAINTS (a : access BASIC_CONSTRAINTS; c_out : System.Address) return int;  -- openssl/x509v3.h:507
@@ -776,7 +777,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function BASIC_CONSTRAINTS_new return access BASIC_CONSTRAINTS;  -- openssl/x509v3.h:507
    pragma Import (C, BASIC_CONSTRAINTS_new, "BASIC_CONSTRAINTS_new");
 
-   SXNET_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:509
+   SXNET_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:509
    pragma Import (C, SXNET_it, "SXNET_it");
 
    function i2d_SXNET (a : access SXNET; c_out : System.Address) return int;  -- openssl/x509v3.h:509
@@ -794,7 +795,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function SXNET_new return access SXNET;  -- openssl/x509v3.h:509
    pragma Import (C, SXNET_new, "SXNET_new");
 
-   SXNETID_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:510
+   SXNETID_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:510
    pragma Import (C, SXNETID_it, "SXNETID_it");
 
    function i2d_SXNETID (a : access SXNETID; c_out : System.Address) return int;  -- openssl/x509v3.h:510
@@ -828,21 +829,21 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function SXNET_add_id_INTEGER
      (psx     : System.Address;
-      izone   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      izone   : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       user    : Interfaces.C.Strings.chars_ptr;
       userlen : int) return int;  -- openssl/x509v3.h:514
    pragma Import (C, SXNET_add_id_INTEGER, "SXNET_add_id_INTEGER");
 
-   function SXNET_get_id_asc (sx : access SXNET; zone : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:516
+   function SXNET_get_id_asc (sx : access SXNET; zone : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:516
    pragma Import (C, SXNET_get_id_asc, "SXNET_get_id_asc");
 
-   function SXNET_get_id_ulong (sx : access SXNET; lzone : unsigned_long) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:517
+   function SXNET_get_id_ulong (sx : access SXNET; lzone : unsigned_long) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:517
    pragma Import (C, SXNET_get_id_ulong, "SXNET_get_id_ulong");
 
-   function SXNET_get_id_INTEGER (sx : access SXNET; zone : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:518
+   function SXNET_get_id_INTEGER (sx : access SXNET; zone : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:518
    pragma Import (C, SXNET_get_id_INTEGER, "SXNET_get_id_INTEGER");
 
-   AUTHORITY_KEYID_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:520
+   AUTHORITY_KEYID_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:520
    pragma Import (C, AUTHORITY_KEYID_it, "AUTHORITY_KEYID_it");
 
    function i2d_AUTHORITY_KEYID (a : access OpenSSL.Low_Level.x509v3_h.AUTHORITY_KEYID_st; c_out : System.Address) return int;  -- openssl/x509v3.h:520
@@ -860,7 +861,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function AUTHORITY_KEYID_new return access OpenSSL.Low_Level.x509v3_h.AUTHORITY_KEYID_st;  -- openssl/x509v3.h:520
    pragma Import (C, AUTHORITY_KEYID_new, "AUTHORITY_KEYID_new");
 
-   PKEY_USAGE_PERIOD_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:522
+   PKEY_USAGE_PERIOD_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:522
    pragma Import (C, PKEY_USAGE_PERIOD_it, "PKEY_USAGE_PERIOD_it");
 
    function i2d_PKEY_USAGE_PERIOD (a : access PKEY_USAGE_PERIOD; c_out : System.Address) return int;  -- openssl/x509v3.h:522
@@ -878,7 +879,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function PKEY_USAGE_PERIOD_new return access PKEY_USAGE_PERIOD;  -- openssl/x509v3.h:522
    pragma Import (C, PKEY_USAGE_PERIOD_new, "PKEY_USAGE_PERIOD_new");
 
-   GENERAL_NAME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:524
+   GENERAL_NAME_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:524
    pragma Import (C, GENERAL_NAME_it, "GENERAL_NAME_it");
 
    function i2d_GENERAL_NAME (a : access GENERAL_NAME; c_out : System.Address) return int;  -- openssl/x509v3.h:524
@@ -904,13 +905,13 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function v2i_ASN1_BIT_STRING
      (method : access X509V3_EXT_METHOD;
-      ctx    : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
-      nval   : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:530
+      ctx    : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
+      nval   : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:530
    pragma Import (C, v2i_ASN1_BIT_STRING, "v2i_ASN1_BIT_STRING");
 
    function i2v_ASN1_BIT_STRING
      (method  : access X509V3_EXT_METHOD;
-      bits    : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      bits    : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       extlist : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE) return access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE;  -- openssl/x509v3.h:532
    pragma Import (C, i2v_ASN1_BIT_STRING, "i2v_ASN1_BIT_STRING");
 
@@ -923,7 +924,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function GENERAL_NAME_print (c_out : access OpenSSL.Low_Level.bio_h.bio_st; gen : access GENERAL_NAME) return int;  -- openssl/x509v3.h:537
    pragma Import (C, GENERAL_NAME_print, "GENERAL_NAME_print");
 
-   GENERAL_NAMES_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:539
+   GENERAL_NAMES_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:539
    pragma Import (C, GENERAL_NAMES_it, "GENERAL_NAMES_it");
 
    function i2d_GENERAL_NAMES (a : access GENERAL_NAMES; c_out : System.Address) return int;  -- openssl/x509v3.h:539
@@ -949,11 +950,11 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function v2i_GENERAL_NAMES
      (method : System.Address;
-      ctx    : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx    : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       nval   : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE) return access GENERAL_NAMES;  -- openssl/x509v3.h:543
    pragma Import (C, v2i_GENERAL_NAMES, "v2i_GENERAL_NAMES");
 
-   OTHERNAME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:546
+   OTHERNAME_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:546
    pragma Import (C, OTHERNAME_it, "OTHERNAME_it");
 
    function i2d_OTHERNAME (a : access OTHERNAME; c_out : System.Address) return int;  -- openssl/x509v3.h:546
@@ -971,7 +972,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function OTHERNAME_new return access OTHERNAME;  -- openssl/x509v3.h:546
    pragma Import (C, OTHERNAME_new, "OTHERNAME_new");
 
-   EDIPARTYNAME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:547
+   EDIPARTYNAME_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:547
    pragma Import (C, EDIPARTYNAME_it, "EDIPARTYNAME_it");
 
    function i2d_EDIPARTYNAME (a : access EDIPARTYNAME; c_out : System.Address) return int;  -- openssl/x509v3.h:547
@@ -1003,8 +1004,8 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function GENERAL_NAME_set0_othername
      (gen   : access GENERAL_NAME;
-      oid   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
-      value : access OpenSSL.Low_Level.asn1_h.asn1_type_st) return int;  -- openssl/x509v3.h:551
+      oid   : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
+      value : access OpenSSL.Low_Level.asnl_h.asn1_type_st) return int;  -- openssl/x509v3.h:551
    pragma Import (C, GENERAL_NAME_set0_othername, "GENERAL_NAME_set0_othername");
 
    function GENERAL_NAME_get0_otherName
@@ -1013,16 +1014,16 @@ package OpenSSL.Low_Level.x509v3_h is
       pvalue : System.Address) return int;  -- openssl/x509v3.h:553
    pragma Import (C, GENERAL_NAME_get0_otherName, "GENERAL_NAME_get0_otherName");
 
-   function i2s_ASN1_OCTET_STRING (method : access X509V3_EXT_METHOD; ia5 : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:556
+   function i2s_ASN1_OCTET_STRING (method : access X509V3_EXT_METHOD; ia5 : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:556
    pragma Import (C, i2s_ASN1_OCTET_STRING, "i2s_ASN1_OCTET_STRING");
 
    function s2i_ASN1_OCTET_STRING
      (method : access X509V3_EXT_METHOD;
-      ctx    : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
-      str    : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:557
+      ctx    : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
+      str    : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:557
    pragma Import (C, s2i_ASN1_OCTET_STRING, "s2i_ASN1_OCTET_STRING");
 
-   EXTENDED_KEY_USAGE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:559
+   EXTENDED_KEY_USAGE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:559
    pragma Import (C, EXTENDED_KEY_USAGE_it, "EXTENDED_KEY_USAGE_it");
 
    function i2d_EXTENDED_KEY_USAGE (a : access EXTENDED_KEY_USAGE; c_out : System.Address) return int;  -- openssl/x509v3.h:559
@@ -1043,7 +1044,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function i2a_ACCESS_DESCRIPTION (bp : access OpenSSL.Low_Level.bio_h.bio_st; a : access ACCESS_DESCRIPTION) return int;  -- openssl/x509v3.h:560
    pragma Import (C, i2a_ACCESS_DESCRIPTION, "i2a_ACCESS_DESCRIPTION");
 
-   CERTIFICATEPOLICIES_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:562
+   CERTIFICATEPOLICIES_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:562
    pragma Import (C, CERTIFICATEPOLICIES_it, "CERTIFICATEPOLICIES_it");
 
    function i2d_CERTIFICATEPOLICIES (a : access CERTIFICATEPOLICIES; c_out : System.Address) return int;  -- openssl/x509v3.h:562
@@ -1061,7 +1062,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function CERTIFICATEPOLICIES_new return access CERTIFICATEPOLICIES;  -- openssl/x509v3.h:562
    pragma Import (C, CERTIFICATEPOLICIES_new, "CERTIFICATEPOLICIES_new");
 
-   POLICYINFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:563
+   POLICYINFO_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:563
    pragma Import (C, POLICYINFO_it, "POLICYINFO_it");
 
    function i2d_POLICYINFO (a : access POLICYINFO; c_out : System.Address) return int;  -- openssl/x509v3.h:563
@@ -1079,7 +1080,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function POLICYINFO_new return access POLICYINFO;  -- openssl/x509v3.h:563
    pragma Import (C, POLICYINFO_new, "POLICYINFO_new");
 
-   POLICYQUALINFO_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:564
+   POLICYQUALINFO_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:564
    pragma Import (C, POLICYQUALINFO_it, "POLICYQUALINFO_it");
 
    function i2d_POLICYQUALINFO (a : access POLICYQUALINFO; c_out : System.Address) return int;  -- openssl/x509v3.h:564
@@ -1097,7 +1098,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function POLICYQUALINFO_new return access POLICYQUALINFO;  -- openssl/x509v3.h:564
    pragma Import (C, POLICYQUALINFO_new, "POLICYQUALINFO_new");
 
-   USERNOTICE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:565
+   USERNOTICE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:565
    pragma Import (C, USERNOTICE_it, "USERNOTICE_it");
 
    function i2d_USERNOTICE (a : access USERNOTICE; c_out : System.Address) return int;  -- openssl/x509v3.h:565
@@ -1115,7 +1116,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function USERNOTICE_new return access USERNOTICE;  -- openssl/x509v3.h:565
    pragma Import (C, USERNOTICE_new, "USERNOTICE_new");
 
-   NOTICEREF_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:566
+   NOTICEREF_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:566
    pragma Import (C, NOTICEREF_it, "NOTICEREF_it");
 
    function i2d_NOTICEREF (a : access NOTICEREF; c_out : System.Address) return int;  -- openssl/x509v3.h:566
@@ -1133,7 +1134,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function NOTICEREF_new return access NOTICEREF;  -- openssl/x509v3.h:566
    pragma Import (C, NOTICEREF_new, "NOTICEREF_new");
 
-   CRL_DIST_POINTS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:568
+   CRL_DIST_POINTS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:568
    pragma Import (C, CRL_DIST_POINTS_it, "CRL_DIST_POINTS_it");
 
    function i2d_CRL_DIST_POINTS (a : access CRL_DIST_POINTS; c_out : System.Address) return int;  -- openssl/x509v3.h:568
@@ -1151,7 +1152,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function CRL_DIST_POINTS_new return access CRL_DIST_POINTS;  -- openssl/x509v3.h:568
    pragma Import (C, CRL_DIST_POINTS_new, "CRL_DIST_POINTS_new");
 
-   DIST_POINT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:569
+   DIST_POINT_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:569
    pragma Import (C, DIST_POINT_it, "DIST_POINT_it");
 
    function i2d_DIST_POINT (a : access OpenSSL.Low_Level.x509v3_h.DIST_POINT_st; c_out : System.Address) return int;  -- openssl/x509v3.h:569
@@ -1169,7 +1170,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function DIST_POINT_new return access OpenSSL.Low_Level.x509v3_h.DIST_POINT_st;  -- openssl/x509v3.h:569
    pragma Import (C, DIST_POINT_new, "DIST_POINT_new");
 
-   DIST_POINT_NAME_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:570
+   DIST_POINT_NAME_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:570
    pragma Import (C, DIST_POINT_NAME_it, "DIST_POINT_NAME_it");
 
    function i2d_DIST_POINT_NAME (a : access DIST_POINT_NAME; c_out : System.Address) return int;  -- openssl/x509v3.h:570
@@ -1187,7 +1188,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function DIST_POINT_NAME_new return access DIST_POINT_NAME;  -- openssl/x509v3.h:570
    pragma Import (C, DIST_POINT_NAME_new, "DIST_POINT_NAME_new");
 
-   ISSUING_DIST_POINT_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:571
+   ISSUING_DIST_POINT_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:571
    pragma Import (C, ISSUING_DIST_POINT_it, "ISSUING_DIST_POINT_it");
 
    function i2d_ISSUING_DIST_POINT (a : access OpenSSL.Low_Level.x509v3_h.ISSUING_DIST_POINT_st; c_out : System.Address) return int;  -- openssl/x509v3.h:571
@@ -1211,7 +1212,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function NAME_CONSTRAINTS_check (x : access OpenSSL.Low_Level.x509_h.x509_st; nc : access OpenSSL.Low_Level.x509v3_h.NAME_CONSTRAINTS_st) return int;  -- openssl/x509v3.h:575
    pragma Import (C, NAME_CONSTRAINTS_check, "NAME_CONSTRAINTS_check");
 
-   ACCESS_DESCRIPTION_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:577
+   ACCESS_DESCRIPTION_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:577
    pragma Import (C, ACCESS_DESCRIPTION_it, "ACCESS_DESCRIPTION_it");
 
    function i2d_ACCESS_DESCRIPTION (a : access ACCESS_DESCRIPTION; c_out : System.Address) return int;  -- openssl/x509v3.h:577
@@ -1229,7 +1230,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function ACCESS_DESCRIPTION_new return access ACCESS_DESCRIPTION;  -- openssl/x509v3.h:577
    pragma Import (C, ACCESS_DESCRIPTION_new, "ACCESS_DESCRIPTION_new");
 
-   AUTHORITY_INFO_ACCESS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:578
+   AUTHORITY_INFO_ACCESS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:578
    pragma Import (C, AUTHORITY_INFO_ACCESS_it, "AUTHORITY_INFO_ACCESS_it");
 
    function i2d_AUTHORITY_INFO_ACCESS (a : access AUTHORITY_INFO_ACCESS; c_out : System.Address) return int;  -- openssl/x509v3.h:578
@@ -1247,7 +1248,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function AUTHORITY_INFO_ACCESS_new return access AUTHORITY_INFO_ACCESS;  -- openssl/x509v3.h:578
    pragma Import (C, AUTHORITY_INFO_ACCESS_new, "AUTHORITY_INFO_ACCESS_new");
 
-   POLICY_MAPPING_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:580
+   POLICY_MAPPING_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:580
    pragma Import (C, POLICY_MAPPING_it, "POLICY_MAPPING_it");
 
    procedure POLICY_MAPPING_free (a : access POLICY_MAPPING);  -- openssl/x509v3.h:581
@@ -1256,10 +1257,10 @@ package OpenSSL.Low_Level.x509v3_h is
    function POLICY_MAPPING_new return access POLICY_MAPPING;  -- openssl/x509v3.h:581
    pragma Import (C, POLICY_MAPPING_new, "POLICY_MAPPING_new");
 
-   POLICY_MAPPINGS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:582
+   POLICY_MAPPINGS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:582
    pragma Import (C, POLICY_MAPPINGS_it, "POLICY_MAPPINGS_it");
 
-   GENERAL_SUBTREE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:584
+   GENERAL_SUBTREE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:584
    pragma Import (C, GENERAL_SUBTREE_it, "GENERAL_SUBTREE_it");
 
    procedure GENERAL_SUBTREE_free (a : access GENERAL_SUBTREE);  -- openssl/x509v3.h:585
@@ -1268,7 +1269,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function GENERAL_SUBTREE_new return access GENERAL_SUBTREE;  -- openssl/x509v3.h:585
    pragma Import (C, GENERAL_SUBTREE_new, "GENERAL_SUBTREE_new");
 
-   NAME_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:587
+   NAME_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:587
    pragma Import (C, NAME_CONSTRAINTS_it, "NAME_CONSTRAINTS_it");
 
    procedure NAME_CONSTRAINTS_free (a : access OpenSSL.Low_Level.x509v3_h.NAME_CONSTRAINTS_st);  -- openssl/x509v3.h:588
@@ -1283,13 +1284,13 @@ package OpenSSL.Low_Level.x509v3_h is
    function POLICY_CONSTRAINTS_new return access POLICY_CONSTRAINTS;  -- openssl/x509v3.h:590
    pragma Import (C, POLICY_CONSTRAINTS_new, "POLICY_CONSTRAINTS_new");
 
-   POLICY_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:591
+   POLICY_CONSTRAINTS_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:591
    pragma Import (C, POLICY_CONSTRAINTS_it, "POLICY_CONSTRAINTS_it");
 
    function a2i_GENERAL_NAME
      (c_out    : access GENERAL_NAME;
       method   : System.Address;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       gen_type : int;
       value    : Interfaces.C.Strings.chars_ptr;
       is_nc    : int) return access GENERAL_NAME;  -- openssl/x509v3.h:593
@@ -1297,14 +1298,14 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function v2i_GENERAL_NAME
      (method : System.Address;
-      ctx    : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx    : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       cnf    : access OpenSSL.Low_Level.conf_h.CONF_VALUE) return access GENERAL_NAME;  -- openssl/x509v3.h:598
    pragma Import (C, v2i_GENERAL_NAME, "v2i_GENERAL_NAME");
 
    function v2i_GENERAL_NAME_ex
      (c_out  : access GENERAL_NAME;
       method : System.Address;
-      ctx    : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx    : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       cnf    : access OpenSSL.Low_Level.conf_h.CONF_VALUE;
       is_nc  : int) return access GENERAL_NAME;  -- openssl/x509v3.h:600
    pragma Import (C, v2i_GENERAL_NAME_ex, "v2i_GENERAL_NAME_ex");
@@ -1314,77 +1315,77 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function X509V3_EXT_nconf_nid
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       ext_nid  : int;
       value    : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/x509v3.h:605
    pragma Import (C, X509V3_EXT_nconf_nid, "X509V3_EXT_nconf_nid");
 
    function X509V3_EXT_nconf
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       name     : Interfaces.C.Strings.chars_ptr;
       value    : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/x509v3.h:606
    pragma Import (C, X509V3_EXT_nconf, "X509V3_EXT_nconf");
 
    function X509V3_EXT_add_nconf_sk
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section  : Interfaces.C.Strings.chars_ptr;
       sk       : System.Address) return int;  -- openssl/x509v3.h:607
    pragma Import (C, X509V3_EXT_add_nconf_sk, "X509V3_EXT_add_nconf_sk");
 
    function X509V3_EXT_add_nconf
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section  : Interfaces.C.Strings.chars_ptr;
       cert     : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509v3.h:608
    pragma Import (C, X509V3_EXT_add_nconf, "X509V3_EXT_add_nconf");
 
    function X509V3_EXT_REQ_add_nconf
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section  : Interfaces.C.Strings.chars_ptr;
       req      : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/x509v3.h:609
    pragma Import (C, X509V3_EXT_REQ_add_nconf, "X509V3_EXT_REQ_add_nconf");
 
    function X509V3_EXT_CRL_add_nconf
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
-      ctx      : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx      : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section  : Interfaces.C.Strings.chars_ptr;
       crl      : access OpenSSL.Low_Level.x509_h.X509_crl_st) return int;  -- openssl/x509v3.h:610
    pragma Import (C, X509V3_EXT_CRL_add_nconf, "X509V3_EXT_CRL_add_nconf");
 
    function X509V3_EXT_conf_nid
      (conf    : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
-      ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       ext_nid : int;
       value   : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/x509v3.h:612
    pragma Import (C, X509V3_EXT_conf_nid, "X509V3_EXT_conf_nid");
 
    function X509V3_EXT_conf
      (conf  : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
-      ctx   : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx   : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       name  : Interfaces.C.Strings.chars_ptr;
       value : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/x509v3.h:614
    pragma Import (C, X509V3_EXT_conf, "X509V3_EXT_conf");
 
    function X509V3_EXT_add_conf
      (conf    : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
-      ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section : Interfaces.C.Strings.chars_ptr;
       cert    : access OpenSSL.Low_Level.x509_h.x509_st) return int;  -- openssl/x509v3.h:616
    pragma Import (C, X509V3_EXT_add_conf, "X509V3_EXT_add_conf");
 
    function X509V3_EXT_REQ_add_conf
      (conf    : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
-      ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section : Interfaces.C.Strings.chars_ptr;
       req     : access OpenSSL.Low_Level.x509_h.X509_req_st) return int;  -- openssl/x509v3.h:618
    pragma Import (C, X509V3_EXT_REQ_add_conf, "X509V3_EXT_REQ_add_conf");
 
    function X509V3_EXT_CRL_add_conf
      (conf    : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE;
-      ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+      ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       section : Interfaces.C.Strings.chars_ptr;
       crl     : access OpenSSL.Low_Level.x509_h.X509_crl_st) return int;  -- openssl/x509v3.h:620
    pragma Import (C, X509V3_EXT_CRL_add_conf, "X509V3_EXT_CRL_add_conf");
@@ -1401,29 +1402,29 @@ package OpenSSL.Low_Level.x509v3_h is
    function X509V3_get_value_int (value : access OpenSSL.Low_Level.conf_h.CONF_VALUE; aint : System.Address) return int;  -- openssl/x509v3.h:626
    pragma Import (C, X509V3_get_value_int, "X509V3_get_value_int");
 
-   procedure X509V3_set_nconf (ctx : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX; the_conf : access OpenSSL.Low_Level.conf_h.conf_st);  -- openssl/x509v3.h:627
+   procedure X509V3_set_nconf (ctx : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx; the_conf : access OpenSSL.Low_Level.conf_h.conf_st);  -- openssl/x509v3.h:627
    pragma Import (C, X509V3_set_nconf, "X509V3_set_nconf");
 
-   procedure X509V3_set_conf_lhash (ctx : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX; lhash : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE);  -- openssl/x509v3.h:628
+   procedure X509V3_set_conf_lhash (ctx : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx; lhash : access OpenSSL.Low_Level.conf_h.lhash_st_CONF_VALUE);  -- openssl/x509v3.h:628
    pragma Import (C, X509V3_set_conf_lhash, "X509V3_set_conf_lhash");
 
    function X509V3_get_string
-     (ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+     (ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       name    : Interfaces.C.Strings.chars_ptr;
       section : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:631
    pragma Import (C, X509V3_get_string, "X509V3_get_string");
 
-   function X509V3_get_section (ctx : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX; section : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE;  -- openssl/x509v3.h:632
+   function X509V3_get_section (ctx : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx; section : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE;  -- openssl/x509v3.h:632
    pragma Import (C, X509V3_get_section, "X509V3_get_section");
 
-   procedure X509V3_string_free (ctx : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX; str : Interfaces.C.Strings.chars_ptr);  -- openssl/x509v3.h:633
+   procedure X509V3_string_free (ctx : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx; str : Interfaces.C.Strings.chars_ptr);  -- openssl/x509v3.h:633
    pragma Import (C, X509V3_string_free, "X509V3_string_free");
 
-   procedure X509V3_section_free (ctx : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX; section : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE);  -- openssl/x509v3.h:634
+   procedure X509V3_section_free (ctx : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx; section : access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE);  -- openssl/x509v3.h:634
    pragma Import (C, X509V3_section_free, "X509V3_section_free");
 
    procedure X509V3_set_ctx
-     (ctx     : access OpenSSL.Low_Level.x509_h.x509_stV3_CTX;
+     (ctx     : access OpenSSL.Low_Level.x509v3_h.v3_ext_ctx;
       issuer  : access OpenSSL.Low_Level.x509_h.x509_st;
       subject : access OpenSSL.Low_Level.x509_h.x509_st;
       req     : access OpenSSL.Low_Level.x509_h.X509_req_st;
@@ -1451,20 +1452,20 @@ package OpenSSL.Low_Level.x509v3_h is
 
    function X509V3_add_value_int
      (name    : Interfaces.C.Strings.chars_ptr;
-      aint    : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      aint    : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       extlist : System.Address) return int;  -- openssl/x509v3.h:644
    pragma Import (C, X509V3_add_value_int, "X509V3_add_value_int");
 
-   function i2s_ASN1_INTEGER (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:646
+   function i2s_ASN1_INTEGER (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:646
    pragma Import (C, i2s_ASN1_INTEGER, "i2s_ASN1_INTEGER");
 
-   function s2i_ASN1_INTEGER (meth : access X509V3_EXT_METHOD; value : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:647
+   function s2i_ASN1_INTEGER (meth : access X509V3_EXT_METHOD; value : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:647
    pragma Import (C, s2i_ASN1_INTEGER, "s2i_ASN1_INTEGER");
 
-   function i2s_ASN1_ENUMERATED (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:648
+   function i2s_ASN1_ENUMERATED (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:648
    pragma Import (C, i2s_ASN1_ENUMERATED, "i2s_ASN1_ENUMERATED");
 
-   function i2s_ASN1_ENUMERATED_TABLE (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:649
+   function i2s_ASN1_ENUMERATED_TABLE (meth : access X509V3_EXT_METHOD; aint : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return Interfaces.C.Strings.chars_ptr;  -- openssl/x509v3.h:649
    pragma Import (C, i2s_ASN1_ENUMERATED_TABLE, "i2s_ASN1_ENUMERATED_TABLE");
 
    function X509V3_EXT_add (ext : access X509V3_EXT_METHOD) return int;  -- openssl/x509v3.h:650
@@ -1491,8 +1492,8 @@ package OpenSSL.Low_Level.x509v3_h is
    function X509V3_parse_list (line : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.conf_h.stack_st_CONF_VALUE;  -- openssl/x509v3.h:658
    pragma Import (C, X509V3_parse_list, "X509V3_parse_list");
 
-   function X509V3_EXT_d2i (ext : access OpenSSL.Low_Level.x509_h.X509_extension_st) return System.Address;  -- openssl/x509v3.h:659
-   pragma Import (C, X509V3_EXT_D2I, "X509V3_EXT_d2i");
+   function X509V3_EXT_d2i_2 (ext : access OpenSSL.Low_Level.x509_h.X509_extension_st) return System.Address;  -- openssl/x509v3.h:659
+   pragma Import (C, X509V3_EXT_d2i_2, "X509V3_EXT_d2i");
 
    function X509V3_get_d2i
      (x    : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;
@@ -1501,11 +1502,11 @@ package OpenSSL.Low_Level.x509v3_h is
       idx  : access int) return System.Address;  -- openssl/x509v3.h:660
    pragma Import (C, X509V3_get_d2i, "X509V3_get_d2i");
 
-   function X509V3_EXT_i2d
+   function X509V3_EXT_i2d_2
      (ext_nid   : int;
       crit      : int;
       ext_struc : System.Address) return access OpenSSL.Low_Level.x509_h.X509_extension_st;  -- openssl/x509v3.h:663
-   pragma Import (C, X509V3_EXT_I2D, "X509V3_EXT_i2d");
+   pragma Import (C, X509V3_EXT_i2d_2, "X509V3_EXT_i2d");
 
    function X509V3_add1_i2d
      (x     : System.Address;
@@ -1626,10 +1627,10 @@ package OpenSSL.Low_Level.x509v3_h is
    function X509_get1_ocsp (x : access OpenSSL.Low_Level.x509_h.x509_st) return access OpenSSL.Low_Level.safestack_h.stack_st_OPENSSL_STRING;  -- openssl/x509v3.h:699
    pragma Import (C, X509_get1_ocsp, "X509_get1_ocsp");
 
-   function a2i_IPADDRESS (ipasc : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:701
+   function a2i_IPADDRESS (ipasc : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:701
    pragma Import (C, a2i_IPADDRESS, "a2i_IPADDRESS");
 
-   function a2i_IPADDRESS_NC (ipasc : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:702
+   function a2i_IPADDRESS_NC (ipasc : Interfaces.C.Strings.chars_ptr) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:702
    pragma Import (C, a2i_IPADDRESS_NC, "a2i_IPADDRESS_NC");
 
    function a2i_ipadd (ipout : access unsigned_char; ipasc : Interfaces.C.Strings.chars_ptr) return int;  -- openssl/x509v3.h:703
@@ -1653,8 +1654,8 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Convention (C_Pass_By_Copy, stack_st_X509_POLICY_NODE);  -- openssl/x509v3.h:708
 
    type ASRange_st is record
-      min : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:713
-      max : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:713
+      min : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:713
+      max : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:713
    end record;
    pragma Convention (C_Pass_By_Copy, ASRange_st);  -- openssl/x509v3.h:712
 
@@ -1663,7 +1664,7 @@ package OpenSSL.Low_Level.x509v3_h is
    type anon_47 (discr : unsigned := 0) is record
       case discr is
          when 0 =>
-            id      : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:722
+            id      : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:722
          when others =>
             c_range : access ASRange;  -- openssl/x509v3.h:723
       end case;
@@ -1712,7 +1713,7 @@ package OpenSSL.Low_Level.x509v3_h is
 
    subtype ASIdentifiers is ASIdentifiers_st;
 
-   ASRange_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:745
+   ASRange_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:745
    pragma Import (C, ASRange_it, "ASRange_it");
 
    function i2d_ASRange (a : access ASRange; c_out : System.Address) return int;  -- openssl/x509v3.h:745
@@ -1730,7 +1731,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function ASRange_new return access ASRange;  -- openssl/x509v3.h:745
    pragma Import (C, ASRange_new, "ASRange_new");
 
-   ASIdOrRange_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:746
+   ASIdOrRange_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:746
    pragma Import (C, ASIdOrRange_it, "ASIdOrRange_it");
 
    function i2d_ASIdOrRange (a : access ASIdOrRange; c_out : System.Address) return int;  -- openssl/x509v3.h:746
@@ -1748,7 +1749,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function ASIdOrRange_new return access ASIdOrRange;  -- openssl/x509v3.h:746
    pragma Import (C, ASIdOrRange_new, "ASIdOrRange_new");
 
-   ASIdentifierChoice_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:747
+   ASIdentifierChoice_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:747
    pragma Import (C, ASIdentifierChoice_it, "ASIdentifierChoice_it");
 
    function i2d_ASIdentifierChoice (a : access ASIdentifierChoice; c_out : System.Address) return int;  -- openssl/x509v3.h:747
@@ -1766,7 +1767,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function ASIdentifierChoice_new return access ASIdentifierChoice;  -- openssl/x509v3.h:747
    pragma Import (C, ASIdentifierChoice_new, "ASIdentifierChoice_new");
 
-   ASIdentifiers_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:748
+   ASIdentifiers_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:748
    pragma Import (C, ASIdentifiers_it, "ASIdentifiers_it");
 
    function i2d_ASIdentifiers (a : access ASIdentifiers; c_out : System.Address) return int;  -- openssl/x509v3.h:748
@@ -1785,8 +1786,8 @@ package OpenSSL.Low_Level.x509v3_h is
    pragma Import (C, ASIdentifiers_new, "ASIdentifiers_new");
 
    type IPAddressRange_st is record
-      min : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:752
-      max : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:752
+      min : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:752
+      max : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:752
    end record;
    pragma Convention (C_Pass_By_Copy, IPAddressRange_st);  -- openssl/x509v3.h:751
 
@@ -1795,7 +1796,7 @@ package OpenSSL.Low_Level.x509v3_h is
    type anon_49 (discr : unsigned := 0) is record
       case discr is
          when 0 =>
-            addressPrefix : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:761
+            addressPrefix : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:761
          when others =>
             addressRange  : access IPAddressRange;  -- openssl/x509v3.h:762
       end case;
@@ -1837,7 +1838,7 @@ package OpenSSL.Low_Level.x509v3_h is
    subtype IPAddressChoice is IPAddressChoice_st;
 
    type IPAddressFamily_st is record
-      addressFamily       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/x509v3.h:781
+      addressFamily       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/x509v3.h:781
       the_ipAddressChoice : access IPAddressChoice;  -- openssl/x509v3.h:782
    end record;
    pragma Convention (C_Pass_By_Copy, IPAddressFamily_st);  -- openssl/x509v3.h:780
@@ -1852,7 +1853,7 @@ package OpenSSL.Low_Level.x509v3_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_IPAddressFamily);  -- openssl/x509v3.h:786
 
-   IPAddressRange_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:788
+   IPAddressRange_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:788
    pragma Import (C, IPAddressRange_it, "IPAddressRange_it");
 
    function i2d_IPAddressRange (a : access IPAddressRange; c_out : System.Address) return int;  -- openssl/x509v3.h:788
@@ -1870,7 +1871,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function IPAddressRange_new return access IPAddressRange;  -- openssl/x509v3.h:788
    pragma Import (C, IPAddressRange_new, "IPAddressRange_new");
 
-   IPAddressOrRange_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:789
+   IPAddressOrRange_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:789
    pragma Import (C, IPAddressOrRange_it, "IPAddressOrRange_it");
 
    function i2d_IPAddressOrRange (a : access IPAddressOrRange; c_out : System.Address) return int;  -- openssl/x509v3.h:789
@@ -1888,7 +1889,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function IPAddressOrRange_new return access IPAddressOrRange;  -- openssl/x509v3.h:789
    pragma Import (C, IPAddressOrRange_new, "IPAddressOrRange_new");
 
-   IPAddressChoice_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:790
+   IPAddressChoice_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:790
    pragma Import (C, IPAddressChoice_it, "IPAddressChoice_it");
 
    function i2d_IPAddressChoice (a : access IPAddressChoice; c_out : System.Address) return int;  -- openssl/x509v3.h:790
@@ -1906,7 +1907,7 @@ package OpenSSL.Low_Level.x509v3_h is
    function IPAddressChoice_new return access IPAddressChoice;  -- openssl/x509v3.h:790
    pragma Import (C, IPAddressChoice_new, "IPAddressChoice_new");
 
-   IPAddressFamily_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/x509v3.h:791
+   IPAddressFamily_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/x509v3.h:791
    pragma Import (C, IPAddressFamily_it, "IPAddressFamily_it");
 
    function i2d_IPAddressFamily (a : access IPAddressFamily; c_out : System.Address) return int;  -- openssl/x509v3.h:791
@@ -1930,8 +1931,8 @@ package OpenSSL.Low_Level.x509v3_h is
    function v3_asid_add_id_or_range
      (asid  : access ASIdentifiers;
       which : int;
-      min   : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
-      max   : access OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/x509v3.h:814
+      min   : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
+      max   : access OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/x509v3.h:814
    pragma Import (C, v3_asid_add_id_or_range, "v3_asid_add_id_or_range");
 
    function v3_addr_add_inherit

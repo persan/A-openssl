@@ -1,5 +1,5 @@
 with Interfaces.C; use Interfaces.C;
-with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.asnl_h;
 --  with bn_h;
 with OpenSSL.Low_Level.buffer_h;
 with OpenSSL.Low_Level.evp_h;
@@ -17,35 +17,35 @@ with OpenSSL.Low_Level.ocsp_h;
 
 package OpenSSL.Low_Level.ossl_typ_h is
 
-   subtype ASN1_INTEGER is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_INTEGER is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_ENUMERATED is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_ENUMERATED is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_BIT_STRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_BIT_STRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_OCTET_STRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_OCTET_STRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_PRINTABLESTRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_PRINTABLESTRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_T61STRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_T61STRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_IA5STRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_IA5STRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_GENERALSTRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_GENERALSTRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_UNIVERSALSTRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_UNIVERSALSTRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_BMPSTRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_BMPSTRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_UTCTIME is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_UTCTIME is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_TIME is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_TIME is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_GENERALIZEDTIME is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_GENERALIZEDTIME is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_VISIBLESTRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_VISIBLESTRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
-   subtype ASN1_UTF8STRING is OpenSSL.Low_Level.asn1_h.asn1_string_st;
+   subtype ASN1_UTF8STRING is OpenSSL.Low_Level.asnl_h.asn1_string_st;
 
    subtype ASN1_BOOLEAN is int;  -- openssl/ossl_typ.h:94
 

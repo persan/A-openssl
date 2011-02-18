@@ -3,8 +3,8 @@ with Interfaces.C.Strings;
 with System;
 with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.stack_h;
-limited with OpenSSL.Low_Level.asn1_h;
-package OpenSSL.Low_Level.asn1t_h is
+limited with OpenSSL.Low_Level.asnl_h;
+package OpenSSL.Low_Level.asnlt_h is
    package defs is
 
       --  arg-macro: function ASN1_ADB_ptr (iptr)
@@ -192,12 +192,13 @@ package OpenSSL.Low_Level.asn1t_h is
       --  arg-macro: procedure IMPLEMENT_ASN1_FUNCTIONS_const_fname (stname, itname,IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
       --    IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
    end defs;
+   type ASN1_ITEM_st;
    type ASN1_TEMPLATE_st is record
       flags      : aliased unsigned_long;  -- openssl/asn1t.h:447
       tag        : aliased long;  -- openssl/asn1t.h:448
       offset     : aliased unsigned_long;  -- openssl/asn1t.h:449
       field_name : Interfaces.C.Strings.chars_ptr;  -- openssl/asn1t.h:451
-      item       : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st_EXP;  -- openssl/asn1t.h:453
+      item       : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:453
    end record;
    pragma Convention (C_Pass_By_Copy, ASN1_TEMPLATE_st);  -- openssl/asn1t.h:446
 
@@ -213,8 +214,8 @@ package OpenSSL.Low_Level.asn1t_h is
       app_items  : System.Address;  -- openssl/asn1t.h:467
       tbl        : System.Address;  -- openssl/asn1t.h:468
       tblcount   : aliased long;  -- openssl/asn1t.h:469
-      default_tt : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;  -- openssl/asn1t.h:470
-      null_tt    : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;  -- openssl/asn1t.h:471
+      default_tt : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;  -- openssl/asn1t.h:470
+      null_tt    : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;  -- openssl/asn1t.h:471
    end record;
    pragma Convention (C_Pass_By_Copy, ASN1_ADB_st);  -- openssl/asn1t.h:464
 
@@ -222,14 +223,14 @@ package OpenSSL.Low_Level.asn1t_h is
 
    type ASN1_ADB_TABLE_st is record
       value : aliased long;  -- openssl/asn1t.h:475
-      tt    : aliased OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;  -- openssl/asn1t.h:476
+      tt    : aliased OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;  -- openssl/asn1t.h:476
    end record;
    pragma Convention (C_Pass_By_Copy, ASN1_ADB_TABLE_st);  -- openssl/asn1t.h:474
 
    type ASN1_ITEM_st is record
       itype     : aliased char;  -- openssl/asn1t.h:569
       utype     : aliased long;  -- openssl/asn1t.h:570
-      templates : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;  -- openssl/asn1t.h:571
+      templates : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;  -- openssl/asn1t.h:571
       tcount    : aliased long;  -- openssl/asn1t.h:572
       funcs     : System.Address;  -- openssl/asn1t.h:573
       size      : aliased long;  -- openssl/asn1t.h:574
@@ -286,22 +287,22 @@ package OpenSSL.Low_Level.asn1t_h is
 
    type ASN1_EXTERN_FUNCS_st is record
       app_data      : System.Address;  -- openssl/asn1t.h:682
-      asn1_ex_new   : access function (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:683
-      asn1_ex_free  : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:684
-      asn1_ex_clear : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:685
+      asn1_ex_new   : access function (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:683
+      asn1_ex_free  : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:684
+      asn1_ex_clear : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:685
       asn1_ex_d2i   : access function
         (arg1 : System.Address;
          arg2          : System.Address;
          arg3          : long;
-         arg4          : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+         arg4          : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
          arg5          : int;
          arg6          : int;
          arg7          : char;
-         arg8          : access OpenSSL.Low_Level.asn1_h.ASN1_TLC) return int;  -- openssl/asn1t.h:686
+         arg8          : access OpenSSL.Low_Level.asnlt_h.ASN1_TLC_st) return int;  -- openssl/asn1t.h:686
       asn1_ex_i2d   : access function
         (arg1 : System.Address;
          arg2          : System.Address;
-         arg3          : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+         arg3          : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
          arg4          : int;
          arg5          : int) return int;  -- openssl/asn1t.h:687
       asn1_ex_print : access function
@@ -318,25 +319,25 @@ package OpenSSL.Low_Level.asn1t_h is
    type ASN1_PRIMITIVE_FUNCS_st is record
       app_data   : System.Address;  -- openssl/asn1t.h:692
       flags      : aliased unsigned_long;  -- openssl/asn1t.h:693
-      prim_new   : access function (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:694
-      prim_free  : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:695
-      prim_clear : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:696
+      prim_new   : access function (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:694
+      prim_free  : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:695
+      prim_clear : access procedure (arg1 : System.Address; arg2 : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:696
       prim_c2i   : access function
         (arg1 : System.Address;
          arg2       : access unsigned_char;
          arg3       : int;
          arg4       : int;
          arg5       : Interfaces.C.Strings.chars_ptr;
-         arg6       : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:697
+         arg6       : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:697
       prim_i2c   : access function
         (arg1 : System.Address;
          arg2       : access unsigned_char;
          arg3       : access int;
-         arg4       : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:698
+         arg4       : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:698
       prim_print : access function
         (arg1 : access OpenSSL.Low_Level.bio_h.bio_st;
          arg2       : System.Address;
-         arg3       : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+         arg3       : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
          arg4       : int;
          arg5       : System.Address) return int;  -- openssl/asn1t.h:699
    end record;
@@ -354,7 +355,7 @@ package OpenSSL.Low_Level.asn1t_h is
       asn1_cb    : access function
         (arg1 : int;
          arg2       : System.Address;
-         arg3       : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+         arg3       : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
          arg4       : System.Address) return int;  -- openssl/asn1t.h:727
       enc_offset : aliased int;  -- openssl/asn1t.h:728
    end record;
@@ -380,28 +381,28 @@ package OpenSSL.Low_Level.asn1t_h is
 
    subtype ASN1_STREAM_ARG is ASN1_STREAM_ARG_st;
 
-   ASN1_BOOLEAN_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:913
+   ASN1_BOOLEAN_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:913
    pragma Import (C, ASN1_BOOLEAN_it, "ASN1_BOOLEAN_it");
 
-   ASN1_TBOOLEAN_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:914
+   ASN1_TBOOLEAN_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:914
    pragma Import (C, ASN1_TBOOLEAN_it, "ASN1_TBOOLEAN_it");
 
-   ASN1_FBOOLEAN_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:915
+   ASN1_FBOOLEAN_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:915
    pragma Import (C, ASN1_FBOOLEAN_it, "ASN1_FBOOLEAN_it");
 
-   ASN1_SEQUENCE_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:916
+   ASN1_SEQUENCE_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:916
    pragma Import (C, ASN1_SEQUENCE_it, "ASN1_SEQUENCE_it");
 
-   CBIGNUM_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:917
+   CBIGNUM_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:917
    pragma Import (C, CBIGNUM_it, "CBIGNUM_it");
 
-   BIGNUM_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:918
+   BIGNUM_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:918
    pragma Import (C, BIGNUM_it, "BIGNUM_it");
 
-   LONG_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:919
+   LONG_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:919
    pragma Import (C, LONG_it, "LONG_it");
 
-   ZLONG_it : aliased OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;  -- openssl/asn1t.h:920
+   ZLONG_it : aliased OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;  -- openssl/asn1t.h:920
    pragma Import (C, ZLONG_it, "ZLONG_it");
 
    type stack_st_ASN1_VALUE is record
@@ -409,43 +410,43 @@ package OpenSSL.Low_Level.asn1t_h is
    end record;
    pragma Convention (C_Pass_By_Copy, stack_st_ASN1_VALUE);  -- openssl/asn1t.h:922
 
-   function ASN1_item_ex_new (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:926
+   function ASN1_item_ex_new (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:926
    pragma Import (C, ASN1_item_ex_new, "ASN1_item_ex_new");
 
-   procedure ASN1_item_ex_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:927
+   procedure ASN1_item_ex_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:927
    pragma Import (C, ASN1_item_ex_free, "ASN1_item_ex_free");
 
-   function ASN1_template_new (pval : System.Address; tt : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE) return int;  -- openssl/asn1t.h:928
+   function ASN1_template_new (pval : System.Address; tt : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st) return int;  -- openssl/asn1t.h:928
    pragma Import (C, ASN1_template_new, "ASN1_template_new");
 
-   function ASN1_primitive_new (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:929
+   function ASN1_primitive_new (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:929
    pragma Import (C, ASN1_primitive_new, "ASN1_primitive_new");
 
-   procedure ASN1_template_free (pval : System.Address; tt : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE);  -- openssl/asn1t.h:931
+   procedure ASN1_template_free (pval : System.Address; tt : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st);  -- openssl/asn1t.h:931
    pragma Import (C, ASN1_template_free, "ASN1_template_free");
 
    function ASN1_template_d2i
      (pval : System.Address;
       c_in : System.Address;
       len  : long;
-      tt   : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE) return int;  -- openssl/asn1t.h:932
+      tt   : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st) return int;  -- openssl/asn1t.h:932
    pragma Import (C, ASN1_template_d2i, "ASN1_template_d2i");
 
    function ASN1_item_ex_d2i
      (pval   : System.Address;
       c_in   : System.Address;
       len    : long;
-      it     : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+      it     : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
       tag    : int;
       aclass : int;
       opt    : char;
-      ctx    : access OpenSSL.Low_Level.asn1_h.ASN1_TLC) return int;  -- openssl/asn1t.h:933
+      ctx    : access OpenSSL.Low_Level.asnlt_h.ASN1_TLC_st) return int;  -- openssl/asn1t.h:933
    pragma Import (C, ASN1_item_ex_d2i, "ASN1_item_ex_d2i");
 
    function ASN1_item_ex_i2d
      (pval   : System.Address;
       c_out  : System.Address;
-      it     : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st;
+      it     : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st;
       tag    : int;
       aclass : int) return int;  -- openssl/asn1t.h:936
    pragma Import (C, ASN1_item_ex_i2d, "ASN1_item_ex_i2d");
@@ -453,17 +454,17 @@ package OpenSSL.Low_Level.asn1t_h is
    function ASN1_template_i2d
      (pval  : System.Address;
       c_out : System.Address;
-      tt    : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE) return int;  -- openssl/asn1t.h:937
+      tt    : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st) return int;  -- openssl/asn1t.h:937
    pragma Import (C, ASN1_template_i2d, "ASN1_template_i2d");
 
-   procedure ASN1_primitive_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:938
+   procedure ASN1_primitive_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:938
    pragma Import (C, ASN1_primitive_free, "ASN1_primitive_free");
 
    function asn1_ex_i2c
      (pval   : System.Address;
       cont   : access unsigned_char;
       putype : access int;
-      it     : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:940
+      it     : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:940
    pragma Import (C, asn1_ex_i2c, "asn1_ex_i2c");
 
    function asn1_ex_c2i
@@ -472,51 +473,52 @@ package OpenSSL.Low_Level.asn1t_h is
       len       : int;
       utype     : int;
       free_cont : Interfaces.C.Strings.chars_ptr;
-      it        : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:941
+      it        : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:941
    pragma Import (C, asn1_ex_c2i, "asn1_ex_c2i");
 
-   function asn1_get_choice_selector (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:943
+   function asn1_get_choice_selector (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:943
    pragma Import (C, asn1_get_choice_selector, "asn1_get_choice_selector");
 
    function asn1_set_choice_selector
      (pval  : System.Address;
       value : int;
-      it    : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:944
+      it    : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:944
    pragma Import (C, asn1_set_choice_selector, "asn1_set_choice_selector");
 
-   function asn1_get_field_ptr (pval : System.Address; tt : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE) return System.Address;  -- openssl/asn1t.h:946
+   function asn1_get_field_ptr (pval : System.Address; tt : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st) return System.Address;  -- openssl/asn1t.h:946
    pragma Import (C, asn1_get_field_ptr, "asn1_get_field_ptr");
 
    function asn1_do_adb
      (pval    : System.Address;
-      tt      : access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;
-      nullerr : int) return access constant OpenSSL.Low_Level.asn1_h.ASN1_TEMPLATE;  -- openssl/asn1t.h:948
+      tt      : access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;
+      nullerr : int) return access constant OpenSSL.Low_Level.asnlt_h.ASN1_TEMPLATE_st;  -- openssl/asn1t.h:948
    pragma Import (C, asn1_do_adb, "asn1_do_adb");
 
    function asn1_do_lock
      (pval : System.Address;
       op   : int;
-      it   : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:950
+      it   : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:950
    pragma Import (C, asn1_do_lock, "asn1_do_lock");
 
-   procedure asn1_enc_init (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:952
+   procedure asn1_enc_init (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:952
    pragma Import (C, asn1_enc_init, "asn1_enc_init");
 
-   procedure asn1_enc_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st);  -- openssl/asn1t.h:953
+   procedure asn1_enc_free (pval : System.Address; it : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st);  -- openssl/asn1t.h:953
    pragma Import (C, asn1_enc_free, "asn1_enc_free");
 
    function asn1_enc_restore
      (len   : access int;
       c_out : System.Address;
       pval  : System.Address;
-      it    : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:954
+      it    : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:954
    pragma Import (C, asn1_enc_restore, "asn1_enc_restore");
 
    function asn1_enc_save
      (pval  : System.Address;
       c_in  : access unsigned_char;
       inlen : int;
-      it    : access constant OpenSSL.Low_Level.asn1t_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:955
+      it    : access constant OpenSSL.Low_Level.asnlt_h.ASN1_ITEM_st) return int;  -- openssl/asn1t.h:955
    pragma Import (C, asn1_enc_save, "asn1_enc_save");
 
-end OpenSSL.Low_Level.asn1t_h;
+end OpenSSL.Low_Level.asnlt_h;
+

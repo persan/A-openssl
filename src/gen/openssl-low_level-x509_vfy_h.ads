@@ -4,7 +4,7 @@ with Interfaces.C.Strings;
 --  with OpenSSL.Low_Level.ossl_typ_h;
 with OpenSSL.Low_Level.stack_h;
 --  with time_h;
-limited with OpenSSL.Low_Level.asn1_h;
+limited with OpenSSL.Low_Level.asnl_h;
 limited with OpenSSL.Low_Level.x509_h;
 limited with OpenSSL.Low_Level.x509v3_h;
 limited with OpenSSL.Low_Level.evp_h;
@@ -199,7 +199,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
         (arg1 : access X509_LOOKUP;
          arg2                 : int;
          arg3                 : access OpenSSL.Low_Level.x509_h.X509_name_st;
-         arg4                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+         arg4                 : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
          arg5                 : access X509_OBJECT) return int;  -- openssl/x509_vfy.h:153
       get_by_fingerprint   : access function
         (arg1 : access X509_LOOKUP;
@@ -226,7 +226,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
       purpose    : aliased int;  -- openssl/x509_vfy.h:172
       trust      : aliased int;  -- openssl/x509_vfy.h:173
       depth      : aliased int;  -- openssl/x509_vfy.h:174
-      policies   : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;  -- openssl/x509_vfy.h:175
+      policies   : access OpenSSL.Low_Level.asnl_h.stack_st_ASN1_OBJECT;  -- openssl/x509_vfy.h:175
    end record;
    pragma Convention (C_Pass_By_Copy, X509_VERIFY_PARAM_st);  -- openssl/x509_vfy.h:166
 
@@ -475,7 +475,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
      (ctx    : access X509_LOOKUP;
       c_type : int;
       name   : access OpenSSL.Low_Level.x509_h.X509_name_st;
-      serial : access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      serial : access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       ret    : access X509_OBJECT) return int;  -- openssl/x509_vfy.h:461
    pragma Import (C, X509_LOOKUP_by_issuer_serial, "X509_LOOKUP_by_issuer_serial");
 
@@ -654,10 +654,10 @@ package OpenSSL.Low_Level.x509_vfy_h is
    procedure X509_VERIFY_PARAM_set_time (param : access X509_VERIFY_PARAM; t : time_h.time_t);  -- openssl/x509_vfy.h:524
    pragma Import (C, X509_VERIFY_PARAM_set_time, "X509_VERIFY_PARAM_set_time");
 
-   function X509_VERIFY_PARAM_add0_policy (param : access X509_VERIFY_PARAM; policy : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/x509_vfy.h:525
+   function X509_VERIFY_PARAM_add0_policy (param : access X509_VERIFY_PARAM; policy : access OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/x509_vfy.h:525
    pragma Import (C, X509_VERIFY_PARAM_add0_policy, "X509_VERIFY_PARAM_add0_policy");
 
-   function X509_VERIFY_PARAM_set1_policies (param : access X509_VERIFY_PARAM; policies : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT) return int;  -- openssl/x509_vfy.h:527
+   function X509_VERIFY_PARAM_set1_policies (param : access X509_VERIFY_PARAM; policies : access OpenSSL.Low_Level.asnl_h.stack_st_ASN1_OBJECT) return int;  -- openssl/x509_vfy.h:527
    pragma Import (C, X509_VERIFY_PARAM_set1_policies, "X509_VERIFY_PARAM_set1_policies");
 
    function X509_VERIFY_PARAM_get_depth (param : System.Address) return int;  -- openssl/x509_vfy.h:529
@@ -676,7 +676,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
      (ptree            : System.Address;
       pexplicit_policy : access int;
       certs            : access OpenSSL.Low_Level.x509_h.stack_st_X509;
-      policy_oids      : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;
+      policy_oids      : access OpenSSL.Low_Level.asnl_h.stack_st_ASN1_OBJECT;
       flags            : unsigned) return int;  -- openssl/x509_vfy.h:535
    pragma Import (C, X509_policy_check, "X509_policy_check");
 
@@ -701,7 +701,7 @@ package OpenSSL.Low_Level.x509_vfy_h is
    function X509_policy_level_get0_node (level : System.Address; i : int) return System.Address;  -- openssl/x509_vfy.h:554
    pragma Import (C, X509_policy_level_get0_node, "X509_policy_level_get0_node");
 
-   function X509_policy_node_get0_policy (node : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/x509_vfy.h:556
+   function X509_policy_node_get0_policy (node : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/x509_vfy.h:556
    pragma Import (C, X509_policy_node_get0_policy, "X509_policy_node_get0_policy");
 
    function X509_policy_node_get0_qualifiers (node : System.Address) return access OpenSSL.Low_Level.x509v3_h.stack_st_POLICYQUALINFO;  -- openssl/x509_vfy.h:559

@@ -1,5 +1,5 @@
 with Interfaces.C; use Interfaces.C;
-limited with OpenSSL.Low_Level.asn1_h;
+limited with OpenSSL.Low_Level.asnl_h;
 
 package OpenSSL.Low_Level.asn1_mac_h is
    package defs is
@@ -156,7 +156,7 @@ package OpenSSL.Low_Level.asn1_mac_h is
       --  arg-macro: procedure M_ASN1_I2D_finish ()
       --    *pp:=p; return(r);
    end defs;
-   function asn1_GetSequence (c : access OpenSSL.Low_Level.asn1_h.asn1_const_ctx_st; length : access long) return int;  -- openssl/asn1_mac.h:572
+   function asn1_GetSequence (c : access OpenSSL.Low_Level.asnl_h.asn1_const_ctx_st; length : access long) return int;  -- openssl/asn1_mac.h:572
    pragma Import (C, asn1_GetSequence, "asn1_GetSequence");
 
    procedure asn1_add_error (address : access unsigned_char; offset : int);  -- openssl/asn1_mac.h:573

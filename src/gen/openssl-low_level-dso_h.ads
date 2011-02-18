@@ -97,13 +97,13 @@ package OpenSSL.Low_Level.dso_h is
      (arg1 : access DSO;
       arg2 : Interfaces.C.Strings.chars_ptr;
       arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- openssl/dso.h:132
-
+   type Handler_Proc is access procedure;
    type dso_meth_st is record
       name               : Interfaces.C.Strings.chars_ptr;  -- openssl/dso.h:136
       dso_load           : access function (arg1 : access DSO) return int;  -- openssl/dso.h:140
       dso_unload         : access function (arg1 : access DSO) return int;  -- openssl/dso.h:142
       dso_bind_var       : access function (arg1 : access DSO; arg2 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- openssl/dso.h:144
-      dso_bind_func      : access function (arg1 : access DSO; arg2 : Interfaces.C.Strings.chars_ptr) return access procedure;  -- openssl/dso.h:151
+      dso_bind_func      : access function (arg1 : access DSO; arg2 : Interfaces.C.Strings.chars_ptr) return Handler_Proc;  -- openssl/dso.h:151
       dso_ctrl           : access function
         (arg1 : access DSO;
          arg2               : int;

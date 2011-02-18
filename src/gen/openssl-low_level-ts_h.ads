@@ -1,5 +1,5 @@
 with Interfaces.C; use Interfaces.C;
-with OpenSSL.Low_Level.asn1_h;
+with OpenSSL.Low_Level.asnl_h;
 with OpenSSL.Low_Level.x509_h;
 with OpenSSL.Low_Level.x509v3_h;
 with OpenSSL.Low_Level.stack_h;
@@ -147,17 +147,17 @@ package OpenSSL.Low_Level.ts_h is
    end defs;
    type TS_msg_imprint_st is record
       hash_algo  : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:112
-      hashed_msg : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:113
+      hashed_msg : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:113
    end record;
    pragma Convention (C_Pass_By_Copy, TS_msg_imprint_st);  -- openssl/ts.h:110
 
    subtype TS_MSG_IMPRINT is TS_msg_imprint_st;
 
    type TS_req_st is record
-      version     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:130
+      version     : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:130
       msg_imprint : access TS_MSG_IMPRINT;  -- openssl/ts.h:131
-      policy_id   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:132
-      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:133
+      policy_id   : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:132
+      nonce       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:133
       cert_req    : aliased Interfaces.C.int;  -- openssl/ts.h:134
       extensions  : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:135
    end record;
@@ -166,23 +166,23 @@ package OpenSSL.Low_Level.ts_h is
    subtype TS_REQ is TS_req_st;
 
    type TS_accuracy_st is record
-      seconds : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:147
-      millis  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:148
-      micros  : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:149
+      seconds : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:147
+      millis  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:148
+      micros  : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:149
    end record;
    pragma Convention (C_Pass_By_Copy, TS_accuracy_st);  -- openssl/ts.h:145
 
    subtype TS_ACCURACY is TS_accuracy_st;
 
    type TS_tst_info_st is record
-      version     : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:174
-      policy_id   : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:175
+      version     : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:174
+      policy_id   : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:175
       msg_imprint : access TS_MSG_IMPRINT;  -- openssl/ts.h:176
-      serial      : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:177
-      time        : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:178
+      serial      : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:177
+      time        : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:178
       accuracy    : access TS_ACCURACY;  -- openssl/ts.h:179
       ordering    : aliased Interfaces.C.int;  -- openssl/ts.h:180
-      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:181
+      nonce       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:181
       tsa         : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:182
       extensions  : access OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION;  -- openssl/ts.h:183
    end record;
@@ -192,9 +192,9 @@ package OpenSSL.Low_Level.ts_h is
 
    type stack_st_ASN1_UTF8STRING;
    type TS_status_info_st is record
-      status       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:221
+      status       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:221
       text         : access stack_st_ASN1_UTF8STRING;  -- openssl/ts.h:222
-      failure_info : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:223
+      failure_info : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:223
    end record;
    pragma Convention (C_Pass_By_Copy, TS_status_info_st);  -- openssl/ts.h:219
 
@@ -216,12 +216,12 @@ package OpenSSL.Low_Level.ts_h is
 
    type ESS_issuer_serial is record
       issuer : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:253
-      serial : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:254
+      serial : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:254
    end record;
    pragma Convention (C_Pass_By_Copy, ESS_issuer_serial);  -- openssl/ts.h:251
 
    type ESS_cert_id is record
-      hash          : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:266
+      hash          : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:266
       issuer_serial : access ESS_issuer_serial;  -- openssl/ts.h:267
    end record;
    pragma Convention (C_Pass_By_Copy, ESS_cert_id);  -- openssl/ts.h:264
@@ -474,19 +474,19 @@ package OpenSSL.Low_Level.ts_h is
       len : int) return int;  -- openssl/ts.h:384
    pragma Import (C, TS_MSG_IMPRINT_set_msg, "TS_MSG_IMPRINT_set_msg");
 
-   function TS_MSG_IMPRINT_get_msg (a : access TS_MSG_IMPRINT) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:385
+   function TS_MSG_IMPRINT_get_msg (a : access TS_MSG_IMPRINT) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:385
    pragma Import (C, TS_MSG_IMPRINT_get_msg, "TS_MSG_IMPRINT_get_msg");
 
-   function TS_REQ_set_policy_id (a : access TS_REQ; policy : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/ts.h:387
+   function TS_REQ_set_policy_id (a : access TS_REQ; policy : access OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/ts.h:387
    pragma Import (C, TS_REQ_set_policy_id, "TS_REQ_set_policy_id");
 
-   function TS_REQ_get_policy_id (a : access TS_REQ) return access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:388
+   function TS_REQ_get_policy_id (a : access TS_REQ) return access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:388
    pragma Import (C, TS_REQ_get_policy_id, "TS_REQ_get_policy_id");
 
-   function TS_REQ_set_nonce (a : access TS_REQ; nonce : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:390
+   function TS_REQ_set_nonce (a : access TS_REQ; nonce : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:390
    pragma Import (C, TS_REQ_set_nonce, "TS_REQ_set_nonce");
 
-   function TS_REQ_get_nonce (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:391
+   function TS_REQ_get_nonce (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:391
    pragma Import (C, TS_REQ_get_nonce, "TS_REQ_get_nonce");
 
    function TS_REQ_set_cert_req (a : access TS_REQ; cert_req : int) return int;  -- openssl/ts.h:393
@@ -512,7 +512,7 @@ package OpenSSL.Low_Level.ts_h is
 
    function TS_REQ_get_ext_by_OBJ
      (a       : access TS_REQ;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ts.h:400
    pragma Import (C, TS_REQ_get_ext_by_OBJ, "TS_REQ_get_ext_by_OBJ");
 
@@ -568,10 +568,10 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_get_version (a : System.Address) return long;  -- openssl/ts.h:422
    pragma Import (C, TS_TST_INFO_get_version, "TS_TST_INFO_get_version");
 
-   function TS_TST_INFO_set_policy_id (a : access TS_TST_INFO; policy_id : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/ts.h:424
+   function TS_TST_INFO_set_policy_id (a : access TS_TST_INFO; policy_id : access OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/ts.h:424
    pragma Import (C, TS_TST_INFO_set_policy_id, "TS_TST_INFO_set_policy_id");
 
-   function TS_TST_INFO_get_policy_id (a : access TS_TST_INFO) return access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:425
+   function TS_TST_INFO_get_policy_id (a : access TS_TST_INFO) return access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:425
    pragma Import (C, TS_TST_INFO_get_policy_id, "TS_TST_INFO_get_policy_id");
 
    function TS_TST_INFO_set_msg_imprint (a : access TS_TST_INFO; msg_imprint : access TS_MSG_IMPRINT) return int;  -- openssl/ts.h:427
@@ -580,16 +580,16 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_get_msg_imprint (a : access TS_TST_INFO) return access TS_MSG_IMPRINT;  -- openssl/ts.h:428
    pragma Import (C, TS_TST_INFO_get_msg_imprint, "TS_TST_INFO_get_msg_imprint");
 
-   function TS_TST_INFO_set_serial (a : access TS_TST_INFO; serial : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:430
+   function TS_TST_INFO_set_serial (a : access TS_TST_INFO; serial : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:430
    pragma Import (C, TS_TST_INFO_set_serial, "TS_TST_INFO_set_serial");
 
-   function TS_TST_INFO_get_serial (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:431
+   function TS_TST_INFO_get_serial (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:431
    pragma Import (C, TS_TST_INFO_get_serial, "TS_TST_INFO_get_serial");
 
-   function TS_TST_INFO_set_time (a : access TS_TST_INFO; gtime : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:433
+   function TS_TST_INFO_set_time (a : access TS_TST_INFO; gtime : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:433
    pragma Import (C, TS_TST_INFO_set_time, "TS_TST_INFO_set_time");
 
-   function TS_TST_INFO_get_time (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:434
+   function TS_TST_INFO_get_time (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:434
    pragma Import (C, TS_TST_INFO_get_time, "TS_TST_INFO_get_time");
 
    function TS_TST_INFO_set_accuracy (a : access TS_TST_INFO; accuracy : access TS_ACCURACY) return int;  -- openssl/ts.h:436
@@ -598,22 +598,22 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_get_accuracy (a : access TS_TST_INFO) return access TS_ACCURACY;  -- openssl/ts.h:437
    pragma Import (C, TS_TST_INFO_get_accuracy, "TS_TST_INFO_get_accuracy");
 
-   function TS_ACCURACY_set_seconds (a : access TS_ACCURACY; seconds : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:439
+   function TS_ACCURACY_set_seconds (a : access TS_ACCURACY; seconds : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:439
    pragma Import (C, TS_ACCURACY_set_seconds, "TS_ACCURACY_set_seconds");
 
-   function TS_ACCURACY_get_seconds (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:440
+   function TS_ACCURACY_get_seconds (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:440
    pragma Import (C, TS_ACCURACY_get_seconds, "TS_ACCURACY_get_seconds");
 
-   function TS_ACCURACY_set_millis (a : access TS_ACCURACY; millis : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:442
+   function TS_ACCURACY_set_millis (a : access TS_ACCURACY; millis : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:442
    pragma Import (C, TS_ACCURACY_set_millis, "TS_ACCURACY_set_millis");
 
-   function TS_ACCURACY_get_millis (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:443
+   function TS_ACCURACY_get_millis (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:443
    pragma Import (C, TS_ACCURACY_get_millis, "TS_ACCURACY_get_millis");
 
-   function TS_ACCURACY_set_micros (a : access TS_ACCURACY; micros : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:445
+   function TS_ACCURACY_set_micros (a : access TS_ACCURACY; micros : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:445
    pragma Import (C, TS_ACCURACY_set_micros, "TS_ACCURACY_set_micros");
 
-   function TS_ACCURACY_get_micros (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:446
+   function TS_ACCURACY_get_micros (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:446
    pragma Import (C, TS_ACCURACY_get_micros, "TS_ACCURACY_get_micros");
 
    function TS_TST_INFO_set_ordering (a : access TS_TST_INFO; ordering : int) return int;  -- openssl/ts.h:448
@@ -622,10 +622,10 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_get_ordering (a : System.Address) return int;  -- openssl/ts.h:449
    pragma Import (C, TS_TST_INFO_get_ordering, "TS_TST_INFO_get_ordering");
 
-   function TS_TST_INFO_set_nonce (a : access TS_TST_INFO; nonce : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:451
+   function TS_TST_INFO_set_nonce (a : access TS_TST_INFO; nonce : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:451
    pragma Import (C, TS_TST_INFO_set_nonce, "TS_TST_INFO_set_nonce");
 
-   function TS_TST_INFO_get_nonce (a : System.Address) return access constant OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:452
+   function TS_TST_INFO_get_nonce (a : System.Address) return access constant OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:452
    pragma Import (C, TS_TST_INFO_get_nonce, "TS_TST_INFO_get_nonce");
 
    function TS_TST_INFO_set_tsa (a : access TS_TST_INFO; tsa : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME) return int;  -- openssl/ts.h:454
@@ -651,7 +651,7 @@ package OpenSSL.Low_Level.ts_h is
 
    function TS_TST_INFO_get_ext_by_OBJ
      (a       : access TS_TST_INFO;
-      obj     : access OpenSSL.Low_Level.asn1_h.asn1_object_st;
+      obj     : access OpenSSL.Low_Level.asnl_h.asn1_object_st;
       lastpos : int) return int;  -- openssl/ts.h:461
    pragma Import (C, TS_TST_INFO_get_ext_by_OBJ, "TS_TST_INFO_get_ext_by_OBJ");
 
@@ -680,7 +680,7 @@ package OpenSSL.Low_Level.ts_h is
       idx  : access int) return System.Address;  -- openssl/ts.h:466
    pragma Import (C, TS_TST_INFO_get_ext_d2i, "TS_TST_INFO_get_ext_d2i");
 
-   type TS_serial_cb is access function (arg1 : System.Address; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:489
+   type TS_serial_cb is access function (arg1 : System.Address; arg2 : System.Address) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:489
 
    type TS_time_cb is access function
      (arg1 : System.Address;
@@ -698,15 +698,15 @@ package OpenSSL.Low_Level.ts_h is
       signer_cert            : access OpenSSL.Low_Level.x509_h.x509_st;  -- openssl/ts.h:505
       signer_key             : access OpenSSL.Low_Level.evp_h.evp_pkey_st;  -- openssl/ts.h:506
       certs                  : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:507
-      policies               : access OpenSSL.Low_Level.asn1_h.stack_st_ASN1_OBJECT;  -- openssl/ts.h:508
-      default_policy         : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:509
+      policies               : access OpenSSL.Low_Level.asnl_h.stack_st_ASN1_OBJECT;  -- openssl/ts.h:508
+      default_policy         : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:509
       mds                    : access stack_st_EVP_MD;  -- openssl/ts.h:510
-      seconds                : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:511
-      millis                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:512
-      micros                 : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:513
+      seconds                : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:511
+      millis                 : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:512
+      micros                 : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:513
       clock_precision_digits : aliased unsigned;  -- openssl/ts.h:514
       flags                  : aliased unsigned;  -- openssl/ts.h:516
-      serial_cb              : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:519
+      serial_cb              : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:519
       serial_cb_data         : System.Address;  -- openssl/ts.h:520
       time_cb                : access function
         (arg1 : access TS_resp_ctx;
@@ -742,13 +742,13 @@ package OpenSSL.Low_Level.ts_h is
    function TS_RESP_CTX_set_signer_key (ctx : access TS_RESP_CTX; key : access OpenSSL.Low_Level.evp_h.evp_pkey_st) return int;  -- openssl/ts.h:545
    pragma Import (C, TS_RESP_CTX_set_signer_key, "TS_RESP_CTX_set_signer_key");
 
-   function TS_RESP_CTX_set_def_policy (ctx : access TS_RESP_CTX; def_policy : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/ts.h:548
+   function TS_RESP_CTX_set_def_policy (ctx : access TS_RESP_CTX; def_policy : access OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/ts.h:548
    pragma Import (C, TS_RESP_CTX_set_def_policy, "TS_RESP_CTX_set_def_policy");
 
    function TS_RESP_CTX_set_certs (ctx : access TS_RESP_CTX; certs : access OpenSSL.Low_Level.x509_h.stack_st_X509) return int;  -- openssl/ts.h:551
    pragma Import (C, TS_RESP_CTX_set_certs, "TS_RESP_CTX_set_certs");
 
-   function TS_RESP_CTX_add_policy (ctx : access TS_RESP_CTX; policy : access OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/ts.h:555
+   function TS_RESP_CTX_add_policy (ctx : access TS_RESP_CTX; policy : access OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/ts.h:555
    pragma Import (C, TS_RESP_CTX_add_policy, "TS_RESP_CTX_add_policy");
 
    function TS_RESP_CTX_add_md (ctx : access TS_RESP_CTX; md : access constant OpenSSL.Low_Level.evp_h.env_md_st) return int;  -- openssl/ts.h:559
@@ -769,7 +769,7 @@ package OpenSSL.Low_Level.ts_h is
 
    procedure TS_RESP_CTX_set_serial_cb
      (ctx  : access TS_RESP_CTX;
-      cb   : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      cb   : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       data : System.Address);  -- openssl/ts.h:576
    pragma Import (C, TS_RESP_CTX_set_serial_cb, "TS_RESP_CTX_set_serial_cb");
 
@@ -827,12 +827,12 @@ package OpenSSL.Low_Level.ts_h is
       flags       : aliased unsigned;  -- openssl/ts.h:658
       store       : access OpenSSL.Low_Level.x509_vfy_h.x509_store_st;  -- openssl/ts.h:661
       certs       : access OpenSSL.Low_Level.x509_h.stack_st_X509;  -- openssl/ts.h:662
-      policy      : access OpenSSL.Low_Level.asn1_h.asn1_object_st;  -- openssl/ts.h:665
+      policy      : access OpenSSL.Low_Level.asnl_h.asn1_object_st;  -- openssl/ts.h:665
       md_alg      : access OpenSSL.Low_Level.x509_h.X509_algor_st;  -- openssl/ts.h:669
       imprint     : access unsigned_char;  -- openssl/ts.h:670
       imprint_len : aliased unsigned;  -- openssl/ts.h:671
       data        : access OpenSSL.Low_Level.bio_h.bio_st;  -- openssl/ts.h:674
-      nonce       : access OpenSSL.Low_Level.asn1_h.asn1_string_st;  -- openssl/ts.h:677
+      nonce       : access OpenSSL.Low_Level.asnl_h.asn1_string_st;  -- openssl/ts.h:677
       tsa_name    : access OpenSSL.Low_Level.x509v3_h.stack_st_GENERAL_NAME;  -- openssl/ts.h:680
    end record;
    pragma Convention (C_Pass_By_Copy, TS_verify_ctx);  -- openssl/ts.h:655
@@ -867,10 +867,10 @@ package OpenSSL.Low_Level.ts_h is
    function TS_TST_INFO_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; a : access TS_TST_INFO) return int;  -- openssl/ts.h:719
    pragma Import (C, TS_TST_INFO_print_bio, "TS_TST_INFO_print_bio");
 
-   function TS_ASN1_INTEGER_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; num : access constant OpenSSL.Low_Level.asn1_h.asn1_string_st) return int;  -- openssl/ts.h:723
+   function TS_ASN1_INTEGER_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; num : access constant OpenSSL.Low_Level.asnl_h.asn1_string_st) return int;  -- openssl/ts.h:723
    pragma Import (C, TS_ASN1_INTEGER_print_bio, "TS_ASN1_INTEGER_print_bio");
 
-   function TS_OBJ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; obj : access constant OpenSSL.Low_Level.asn1_h.asn1_object_st) return int;  -- openssl/ts.h:724
+   function TS_OBJ_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; obj : access constant OpenSSL.Low_Level.asnl_h.asn1_object_st) return int;  -- openssl/ts.h:724
    pragma Import (C, TS_OBJ_print_bio, "TS_OBJ_print_bio");
 
    function TS_ext_print_bio (the_bio : access OpenSSL.Low_Level.bio_h.bio_st; extensions : access constant OpenSSL.Low_Level.x509_h.stack_st_X509_EXTENSION) return int;  -- openssl/ts.h:725
@@ -897,7 +897,7 @@ package OpenSSL.Low_Level.ts_h is
    function TS_CONF_set_serial
      (the_conf : access OpenSSL.Low_Level.conf_h.conf_st;
       section  : Interfaces.C.Strings.chars_ptr;
-      cb       : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asn1_h.asn1_string_st;
+      cb       : access function (arg1 : access TS_resp_ctx; arg2 : System.Address) return access OpenSSL.Low_Level.asnl_h.asn1_string_st;
       ctx      : access TS_RESP_CTX) return int;  -- openssl/ts.h:736
    pragma Import (C, TS_CONF_set_serial, "TS_CONF_set_serial");
 

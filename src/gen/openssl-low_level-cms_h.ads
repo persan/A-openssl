@@ -9,7 +9,6 @@ with Interfaces.C_Streams;
 with OpenSSL.Low_Level.evp_h;
 with OpenSSL.Low_Level.x509_vfy_h;
 with OpenSSL.Low_Level.asnlt_h;
---  with stddef_h;
 
 package OpenSSL.Low_Level.cms_h is
 

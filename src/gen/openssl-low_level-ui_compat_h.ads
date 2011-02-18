@@ -1,4 +1,3 @@
-with Interfaces.C; use Interfaces.C;
 
 package OpenSSL.Low_Level.ui_compat_h is
 

@@ -3,7 +3,6 @@ with Interfaces.C.Strings;
 with System;
 with OpenSSL.Low_Level.bio_h;
 with OpenSSL.Low_Level.stack_h;
-limited with OpenSSL.Low_Level.asnl_h;
 package OpenSSL.Low_Level.asnlt_h is
    package defs is
 

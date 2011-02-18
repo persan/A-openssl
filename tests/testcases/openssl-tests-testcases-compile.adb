@@ -1,8 +1,6 @@
 with GNAT.Source_Info;
-with AUnit.Assertions;
 package body OpenSSL.Tests.Testcases.Compile is
    use AUnit;
-   use AUnit.Assertions;
 
    --  Fixture elements
 
@@ -25,9 +23,8 @@ package body OpenSSL.Tests.Testcases.Compile is
    procedure SampleTest (Test : in out AUnit.Test_Cases.Test_Case'Class);
    procedure SampleTest (Test : in out AUnit.Test_Cases.Test_Case'Class) is
       T : Test_Case renames Test_Case (Test);
-      pragma Unreferenced (T);
    begin
-      Assert (False, "TODO Implement Test");
+      T.Assert (False, "TODO Implement Test");
    end SampleTest;
 
    --------------------

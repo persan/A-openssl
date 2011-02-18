@@ -30,4 +30,5 @@ package body OpenSSL.Tests.TestSuits.Test_All is
       return Result'Access;
    end Suite;
 
-end OpenSSL.Tests.TestSuits.Test_All;-- ---------------------------------------------
+end OpenSSL.Tests.TestSuits.Test_All;
+

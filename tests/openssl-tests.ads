@@ -5,4 +5,4 @@
 --
 -- ---------------------------------------------
 package OpenSSL.Tests is
-end OpenSSL.Tests;-- ---------------------------------------------
+end OpenSSL.Tests;

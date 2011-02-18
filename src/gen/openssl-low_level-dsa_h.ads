@@ -7,7 +7,6 @@ with OpenSSL.Low_Level.dh_h;
 with Interfaces.C_Streams;
 with OpenSSL.Low_Level.bn_h;
 with OpenSSL.Low_Level.crypto_h;
-with OpenSSL.Low_Level.crypto_h;
 package OpenSSL.Low_Level.dsa_h is
 
    package defs is

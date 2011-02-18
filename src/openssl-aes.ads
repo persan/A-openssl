@@ -1,6 +1,5 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
-with System;
 private with OpenSSL.Low_Level.aes_h;
 package OpenSSL.aes is
    package defs is

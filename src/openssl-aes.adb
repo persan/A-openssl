@@ -1,15 +1,12 @@
 package body OpenSSL.aes is
-
+   use OpenSSL.Low_Level.aes_h;
    -------------
    -- options --
    -------------
 
    function options return Interfaces.C.Strings.chars_ptr is
    begin
-      --  Generated stub: replace with real body!
-      pragma Compile_Time_Warning (Standard.True, "options unimplemented");
-      raise Program_Error with "Unimplemented function options";
-      return options;
+      return AES_options;
    end options;
 
    ---------------------
@@ -23,10 +20,7 @@ package body OpenSSL.aes is
       return int
    is
    begin
-      --  Generated stub: replace with real body!
-      pragma Compile_Time_Warning (Standard.True, "set_encrypt_key unimplemented");
-      raise Program_Error with "Unimplemented function set_encrypt_key";
-      return set_encrypt_key (userKey, bits, key);
+      return AES_set_encrypt_key (userKey, bits, key.data'Unrestricted_Access);
    end set_encrypt_key;
 
    ---------------------
@@ -40,10 +34,7 @@ package body OpenSSL.aes is
       return int
    is
    begin
-      --  Generated stub: replace with real body!
-      pragma Compile_Time_Warning (Standard.True, "set_decrypt_key unimplemented");
-      raise Program_Error with "Unimplemented function set_decrypt_key";
-      return set_decrypt_key (userKey, bits, key);
+      return AES_set_decrypt_key (userKey, bits, key.data'Unrestricted_Access);
    end set_decrypt_key;
 
    -------------
